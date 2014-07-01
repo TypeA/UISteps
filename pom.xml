@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.livejournal</groupId>
-    <artifactId>uisteps</artifactId>
+    <artifactId>com.livejournal.uisteps</artifactId>
     <version>0.1</version>
     <packaging>jar</packaging>
 
