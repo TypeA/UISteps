@@ -29,9 +29,9 @@
         </license>
     </licenses>
 
-    </parent>
+    <parent>
         <groupId>org.sonatype.oss</groupId>
-        <artefactId>oss-parent</artefactId>
+        <artifactId>oss-parent</artifactId>
         <version>7</version>
     </parent>
 
