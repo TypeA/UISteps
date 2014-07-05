@@ -1,8 +1,2 @@
-!../target/
-../target/site
-../target/classes
-../target/failsaife-reports
-../target/generated-sources
-../target/maven-archiver
-../target/surefire
-!../target/uisteps*.jar
+/target/*
+!/target/uisteps*.jar
