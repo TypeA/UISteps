@@ -44,7 +44,7 @@
 
     <scm>
         <url>https://github.com/Solyankin/UISteps</url>
-        <connection>csm:git:https://github.com/Solyankin/UISteps</connection>
+        <connection>csm:git:git@github.com/Solyankin/UISteps</connection>
         <developerConnection>csm:git:git@github.com:/Solyankin/UISteps.git</developerConnection>
     </scm>
 
