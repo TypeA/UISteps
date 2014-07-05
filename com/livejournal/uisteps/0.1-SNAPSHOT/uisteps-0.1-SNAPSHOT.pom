@@ -28,13 +28,13 @@
             <distribution>repo</distribution>
         </license>
     </licenses>
-
+<!--
     <parent>
         <groupId>org.sonatype.oss</groupId>
         <artifactId>oss-parent</artifactId>
         <version>9</version>
     </parent>
-
+-->
     <scm>
         <url>https://github.com/Solyankin/UISteps/tags/uisteps-0.2</url>
         <connection>https://git@github.com/Solyankin/UISteps/tags/uisteps-0.2</connection>
@@ -254,6 +254,7 @@
                 </plugins>
             </build>
         </profile>
+        <!--
         <profile>
             <id>release-sign-artifacts</id>
             <activation>
@@ -281,5 +282,6 @@
                 </plugins>
             </build>
         </profile>
+        -->
     </profiles>
 </project>
