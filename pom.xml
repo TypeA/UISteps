@@ -3,8 +3,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.livejournal</groupId>
-    <artifactId>uisteps</artifactId>
-    <version>0.2-SNAPSHOT</version>
+    <artifactId>com.livejournal.uisteps</artifactId>
+    <version>0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>UISteps</name>
