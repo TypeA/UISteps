@@ -4,7 +4,7 @@
 
     <groupId>com.livejournal</groupId>
     <artifactId>uisteps</artifactId>
-    <version>0.1-SNAPSHOT</version>
+    <version>uisteps-0.1-SNAPSHOTS</version>
     <packaging>jar</packaging>
 
     <name>UISteps</name>
@@ -37,8 +37,8 @@
     
     <scm>
         <url>https://github.com/Solyankin/UISteps/</url>
-        <connection>csm:git:git@github.com/Solyankin/UISteps/</connection>
-        <developerConnection>csm:git:git@github.com:/Solyankin/UISteps.git</developerConnection>
+        <connection>csm:git:ssh://git@github.com/Solyankin/UISteps/</connection>
+        <developerConnection>csm:git:ssh://git@github.com:/Solyankin/UISteps.git</developerConnection>
     </scm>
 
     <developers>
