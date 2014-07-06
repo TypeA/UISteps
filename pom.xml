@@ -37,8 +37,8 @@
     
     <scm>
         <url>https://github.com/Solyankin/UISteps/</url>
-        <connection>scm:git:git@github.com/Solyankin/UISteps.git</connection>
-        <developerConnection>scm:git:git@github.com/Solyankin/UISteps.git</developerConnection>
+        <connection>scm:git:git@github.com:/Solyankin/UISteps.git</connection>
+        <developerConnection>scm:git:git@github.com:/Solyankin/UISteps.git</developerConnection>
     <tag>uisteps-0.1</tag>
   </scm>
 
