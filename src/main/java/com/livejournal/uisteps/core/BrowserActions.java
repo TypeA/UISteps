@@ -13,6 +13,7 @@ public class BrowserActions {
     }
 
     public <T extends BasePage> T open(T page) {
+        browser.setCurrent(page);
         openUrl(page.getUrl());
         page.initialize(browser.getDriver());
         return page;
@@ -20,6 +21,7 @@ public class BrowserActions {
 
     public <T extends UIContainer> T onOpened(T uiContainer) {
         if (!browser.isCurrent(uiContainer)) {
+            browser.setCurrent(uiContainer);
             uiContainer.initialize(browser.getDriver());
         }
         return uiContainer;
