@@ -1,7 +1,10 @@
 package com.livejournal.uisteps.thucydides.elements;
 
-import com.livejournal.uisteps.thucydides.UIActions;
+import com.livejournal.uisteps.core.TestActions;
 import com.livejournal.uisteps.core.UIContainer;
+import com.livejournal.uisteps.thucydides.ThucydidesTestActionsFactory;
+import com.livejournal.uisteps.thucydides.ThucydidesUtils;
+import com.livejournal.uisteps.thucydides.UIActions;
 import org.openqa.selenium.WebElement;
 import ru.yandex.qatools.htmlelements.element.TypifiedElement;
 
@@ -11,30 +14,32 @@ import ru.yandex.qatools.htmlelements.element.TypifiedElement;
  */
 public class UIElement extends TypifiedElement {
 
-    private final UIActions actions;
+    private final UIActions uiActions;
 
     public UIElement(WebElement wrappedElement) {
         super(wrappedElement);
-        actions = new UIActions();
+        uiActions = ThucydidesUtils.getNewStepLibrary(UIActions.class);
+        TestActions testActions = new ThucydidesTestActionsFactory().instantiateTestActions();
+        uiActions.setTestActions(testActions);
     }
 
     protected <T extends UIContainer> T on(Class<T> UIContainerClass) {
-        return actions.on(UIContainerClass);
+        return uiActions.on(UIContainerClass);
     }
 
     protected <T extends UIContainer> T on(T uiContainer) {
-        return actions.on(uiContainer);
+        return uiActions.on(uiContainer);
     }
 
     public void click() {
-        actions.click(this);
+        uiActions.click(this);
     }
 
     public void moveMouseOver() {
-        actions.moveMouseOver(this);
+        uiActions.moveMouseOver(this);
     }
-    
+
     protected UIActions getActions() {
-        return actions;
+        return uiActions;
     }
 }
