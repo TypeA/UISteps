@@ -4,7 +4,6 @@ import com.livejournal.uisteps.core.BaseTest;
 import com.livejournal.uisteps.thucydides.BaseStepsListener;
 import com.livejournal.uisteps.thucydides.ThucydidesTestActionsFactory;
 import com.livejournal.uisteps.thucydides.ThucydidesUtils;
-import com.livejournal.uisteps.thucydides.UIActions;
 
 /**
  *

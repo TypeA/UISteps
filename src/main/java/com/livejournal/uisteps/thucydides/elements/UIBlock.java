@@ -3,6 +3,7 @@ package com.livejournal.uisteps.thucydides.elements;
 import com.livejournal.uisteps.thucydides.UIActions;
 import com.livejournal.uisteps.core.BaseUIBlock;
 import com.livejournal.uisteps.core.UIContainer;
+import com.livejournal.uisteps.thucydides.NameConvertor;
 import com.livejournal.uisteps.thucydides.UIContainerInitializer;
 import org.openqa.selenium.WebDriver;
 import ru.yandex.qatools.htmlelements.element.HtmlElement;
@@ -46,5 +47,10 @@ public class UIBlock extends HtmlElement implements BaseUIBlock {
 
     public void moveMouseOver() {
         actions.moveMouseOver(this);
+    }
+    
+    @Override
+    public String toString() {
+        return NameConvertor.humanize(getClass());
     }
 }

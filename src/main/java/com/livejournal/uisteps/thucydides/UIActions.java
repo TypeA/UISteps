@@ -53,8 +53,6 @@ public class UIActions {
 
     @Step
     public void enterInto(WrapsElement input, CharSequence... text) {
-        System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-        System.out.println("ХУЙ!!");
         input.getWrappedElement().clear();
         input.getWrappedElement().sendKeys(text);
     }
