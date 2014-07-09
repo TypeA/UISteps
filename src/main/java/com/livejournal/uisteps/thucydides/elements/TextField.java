@@ -25,6 +25,7 @@ public class TextField extends UIElement {
     }
 
     public void enter(CharSequence... text) {
+        System.out.println("########################################");
         getActions().enterInto(this, text);
     }
 
