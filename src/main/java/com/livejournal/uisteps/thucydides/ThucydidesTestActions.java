@@ -2,7 +2,6 @@ package com.livejournal.uisteps.thucydides;
 
 import com.livejournal.uisteps.core.TestActions;
 import com.livejournal.uisteps.core.BrowserStorage;
-import com.livejournal.uisteps.core.WebBrowserList;
 import net.thucydides.core.annotations.Step;
 
 /**
@@ -12,7 +11,7 @@ import net.thucydides.core.annotations.Step;
 public class ThucydidesTestActions extends TestActions {
 
     public ThucydidesTestActions() {
-        super(new BrowserStorage(new WebBrowserList(), new ThucydidesBrowserFactory()));
+        super(new BrowserStorage(new ThucydidesWebBrowserList(), new ThucydidesBrowserFactory()));
     }
 
     @Step
@@ -38,7 +37,5 @@ public class ThucydidesTestActions extends TestActions {
     public void openBrowser(String name) {
         super.openBrowser(name);
     }
-    
-    
 
 }

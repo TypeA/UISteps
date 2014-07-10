@@ -2,6 +2,7 @@ package com.livejournal.uisteps.thucydides;
 
 import com.livejournal.uisteps.core.TestActions;
 import java.util.Map;
+import net.thucydides.core.Thucydides;
 import net.thucydides.core.model.DataTable;
 import net.thucydides.core.model.Story;
 import net.thucydides.core.model.TestOutcome;
