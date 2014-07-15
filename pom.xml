@@ -4,7 +4,7 @@
 
     <groupId>com.livejournal</groupId>
     <artifactId>uisteps</artifactId>
-    <version>0.2.4</version>
+    <version>0.2.5-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>UISteps</name>
@@ -39,7 +39,7 @@
         <url>https://github.com/Solyankin/UISteps/</url>
         <connection>scm:git:git@github.com:Solyankin/UISteps.git</connection>
         <developerConnection>scm:git:git@github.com:Solyankin/UISteps.git</developerConnection>
-    <tag>uisteps-0.2.4</tag>
+    <tag>HEAD</tag>
   </scm>
 
     <developers>
