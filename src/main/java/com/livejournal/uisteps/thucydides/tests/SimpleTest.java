@@ -1,7 +1,7 @@
 package com.livejournal.uisteps.thucydides.tests;
 
 import com.livejournal.uisteps.core.BaseTest;
-import com.livejournal.uisteps.thucydides.BaseStepsListener;
+import com.livejournal.uisteps.thucydides.ThucydidesBaseStepListener;
 import com.livejournal.uisteps.thucydides.ThucydidesTestActionsFactory;
 import com.livejournal.uisteps.thucydides.ThucydidesUtils;
 
@@ -13,8 +13,8 @@ public class SimpleTest extends BaseTest {
 
     public SimpleTest() {
         super(new ThucydidesTestActionsFactory());
-        BaseStepsListener stepsListener = new BaseStepsListener(getActions());
-        ThucydidesUtils.registerListner(stepsListener);
+        ThucydidesBaseStepListener stepListener = new ThucydidesBaseStepListener(getActions());
+        ThucydidesUtils.registerListner(stepListener);
     }
 
     public void openBrowser() {
