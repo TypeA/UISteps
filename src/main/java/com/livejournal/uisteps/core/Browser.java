@@ -1,6 +1,7 @@
 package com.livejournal.uisteps.core;
 
 import com.livejournal.uisteps.thucydides.DefaultUrlFactory;
+import net.thucydides.core.annotations.Step;
 import org.openqa.selenium.WebDriver;
 
 /**
@@ -9,26 +10,28 @@ import org.openqa.selenium.WebDriver;
  */
 public class Browser {
 
-    private final WebDriver driver;
-    private final UIContainerFactory uiContainerFactory;
-    private final BrowserActions actions;
-    private final UIContainerAnalizer uiContainerAnalizer;
-    private final UIContainerComparator uiContainerComparator;
+    private WebDriver driver;
+    private UIContainerFactory uiContainerFactory;
+    private UIContainerAnalizer uiContainerAnalizer;
+    private UIContainerComparator uiContainerComparator;
     private String name;
     private BasePage currentPage;
     private BaseUIBlock currentBlock;
 
-    public Browser(DriverFactory driverFactory,
+    public void init(WebDriver driver,
             UIContainerFactory uiContainerFactory,
-            BrowserActionsFactory browserActionsFactory,
-            UIContainerComparator uiContainerComparator) {
-        driver = driverFactory.instantiateDriver();
-        actions = browserActionsFactory.getBrowserActions(this);
+            UIContainerComparator uiContainerComparator,
+            UIContainerAnalizer uiContainerAnalizer) {
+        this.driver = driver;
         this.uiContainerFactory = uiContainerFactory;
-        uiContainerAnalizer = new UIContainerAnalizer();
         this.uiContainerComparator = uiContainerComparator;
+        this.uiContainerAnalizer = uiContainerAnalizer;
     }
 
+    public void setDriver(WebDriver driver)  {
+        this.driver = driver;
+    }
+    
     public WebDriver getDriver() {
         return driver;
     }
@@ -41,23 +44,21 @@ public class Browser {
         return name;
     }
 
-    public void close() {
-        actions.close();
-    }
-
+    @Step
     public void openUrl(String url) {
-        actions.openUrl(url);
+        getDriver().get(url);
     }
 
     public void openUrl(Url url) {
-        actions.openUrl(url);
+        String urlString = url.toString();
+        openUrl(urlString);
     }
 
     @SuppressWarnings("unchecked")
     public <T extends UIContainer> T on(Class<T> uiContainerClass) {
         T uiContainerCandidate = getIfCurrent(uiContainerClass);
         if (uiContainerCandidate != null) {
-            return actions.onOpened(uiContainerCandidate);
+            return onOpened(uiContainerCandidate);
         }
         uiContainerCandidate = uiContainerFactory.instantiateUIContainer(uiContainerClass);
         if (uiContainerAnalizer.isPage(uiContainerCandidate)) {
@@ -92,16 +93,38 @@ public class Browser {
         if (needCheckCurrent) {
             T uiContainerCandidate = (T) getIfCurrent(uiContainer.getClass());
             if (uiContainerCandidate != null) {
-                return actions.onOpened(uiContainerCandidate);
+                return onOpened(uiContainerCandidate);
             }
         }
         if (uiContainerAnalizer.isPage(uiContainer)) {
-            return (T) actions.open((BasePage) uiContainer);
+            return (T) open((BasePage) uiContainer);
         }
         if (uiContainerAnalizer.isBlock(uiContainer)) {
-            return actions.onOpened(uiContainer);
+            return onOpened(uiContainer);
         }
         throw new NotUIContainerException(uiContainer.getClass().getName());
+    }
+
+    @Step
+    public <T extends UIContainer> T onOpened(T uiContainer) {
+        if (!isCurrent(uiContainer)) {
+            setCurrent(uiContainer);
+            uiContainer.initialize(getDriver());
+        }
+        return uiContainer;
+    }
+
+    @Step
+    public <T extends BasePage> T open(T page) {
+        setCurrent(page);
+        openUrl(page.getUrl());
+        page.initialize(getDriver());
+        return page;
+    }
+
+    public void close() {
+        //     ThucydidesUtils.resetDriver(driver);
+        getDriver().quit();
     }
 
     void setCurrent(UIContainer uiContainer) {
@@ -125,8 +148,6 @@ public class Browser {
     public boolean isCurrent(Class<? extends UIContainer> klass) {
         return isCurrentPage(klass) || isCurrentBlock(klass);
     }
-
-    private static int i = 0;
 
     public boolean isCurrent(UIContainer uiContainer) {
         return isCurrent(uiContainer.getClass());

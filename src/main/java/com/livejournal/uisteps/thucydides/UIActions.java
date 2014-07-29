@@ -1,6 +1,6 @@
 package com.livejournal.uisteps.thucydides;
 
-import com.livejournal.uisteps.core.TestActions;
+import com.livejournal.uisteps.core.Browser;
 import com.livejournal.uisteps.core.UIContainer;
 import net.thucydides.core.annotations.Step;
 import org.openqa.selenium.interactions.Actions;
@@ -12,22 +12,24 @@ import org.openqa.selenium.internal.WrapsElement;
  */
 public class UIActions {
 
-    private TestActions testActions;
+    private final Browser browser;
+    
+    
 
-    public void setTestActions(TestActions actions) {
-        this.testActions = actions;
+    public UIActions(Browser browser) {
+        this.browser = browser;
     }
 
     public <T extends UIContainer> T on(Class<T> UIContainerClass) {
-        return testActions.on(UIContainerClass);
+        return browser.on(UIContainerClass);
     }
 
     public <T extends UIContainer> T on(T uiContainer) {
-        return testActions.on(uiContainer);
+        return browser.on(uiContainer);
     }
 
     public <T extends UIContainer> T on(Class<T> rootClass, String uiContainerClassName) {
-        return testActions.on(rootClass, uiContainerClassName);
+        return browser.on(rootClass, uiContainerClassName);
     }
 
     @Step
@@ -37,8 +39,8 @@ public class UIActions {
 
     @Step
     public void moveMouseOver(WrapsElement element) {
-        Actions actions = new Actions(testActions.getCurrentBrowser().getDriver());
-        actions.moveToElement(element.getWrappedElement()).build().perform();
+        Actions a = new Actions(browser.getDriver());
+        a.moveToElement(element.getWrappedElement()).build().perform();
     }
 
     @Step

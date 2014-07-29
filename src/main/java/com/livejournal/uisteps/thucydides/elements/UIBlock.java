@@ -4,6 +4,7 @@ import com.livejournal.uisteps.thucydides.UIActions;
 import com.livejournal.uisteps.core.BaseUIBlock;
 import com.livejournal.uisteps.core.UIContainer;
 import com.livejournal.uisteps.thucydides.NameConvertor;
+import com.livejournal.uisteps.thucydides.ThucydidesUtils;
 import com.livejournal.uisteps.thucydides.UIContainerInitializer;
 import org.openqa.selenium.WebDriver;
 import ru.yandex.qatools.htmlelements.element.HtmlElement;
@@ -19,7 +20,7 @@ public class UIBlock extends HtmlElement implements BaseUIBlock {
 
     public UIBlock() {
         initializer = new UIContainerInitializer();
-        actions = new UIActions();
+        actions = (UIActions) ThucydidesUtils.getFromSession("#UI_ACTIONS");
     }
 
     @Override

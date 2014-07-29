@@ -4,6 +4,7 @@ import com.livejournal.uisteps.core.BasePage;
 import com.livejournal.uisteps.core.UIContainer;
 import com.livejournal.uisteps.core.Url;
 import com.livejournal.uisteps.thucydides.NameConvertor;
+import com.livejournal.uisteps.thucydides.ThucydidesUtils;
 import com.livejournal.uisteps.thucydides.UIActions;
 import com.livejournal.uisteps.thucydides.UIContainerInitializer;
 import net.thucydides.core.pages.PageObject;
@@ -22,9 +23,10 @@ public class Page extends PageObject implements BasePage {
     public Page() {
         url = new Url();
         initializer = new UIContainerInitializer();
-        actions = new UIActions();
+        actions = (UIActions) ThucydidesUtils.getFromSession("#UI_ACTIONS");
     }
 
+    @Override
     public Url getUrl() {
         return url;
     }

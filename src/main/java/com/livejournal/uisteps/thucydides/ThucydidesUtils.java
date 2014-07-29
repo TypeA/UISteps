@@ -1,5 +1,6 @@
 package com.livejournal.uisteps.thucydides;
 
+import net.thucydides.core.Thucydides;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.steps.StepFactory;
@@ -22,6 +23,14 @@ public class ThucydidesUtils {
 
     public static String getBaseUrl() {
         return getConfiguration().getBaseUrl();
+    }
+
+    public static void putToSession(String key, Object value) {
+        Thucydides.getCurrentSession().put(key, value);
+    }
+
+    public static Object getFromSession(String key) {
+        return Thucydides.getCurrentSession().get(key);
     }
 
     public static SupportedWebDriver getSupportedDriver() {
