@@ -21,7 +21,7 @@ import org.openqa.selenium.WebDriver;
 public class SimpleTest {
 
     @Managed
-    WebDriver driver;
+    public WebDriver driver;
 
     @ManagedPages
     Pages pages;
