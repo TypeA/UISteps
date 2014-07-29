@@ -20,7 +20,7 @@ import org.openqa.selenium.WebDriver;
  */
 public class SimpleTest {
 
-    @Managed
+    @Managed(driver = "firefox")
     public WebDriver driver;
 
     @ManagedPages
