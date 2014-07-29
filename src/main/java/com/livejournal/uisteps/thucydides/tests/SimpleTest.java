@@ -20,23 +20,25 @@ import org.openqa.selenium.WebDriver;
  */
 public class SimpleTest {
 
-    @Managed(driver = "firefox")
-    public WebDriver driver;
+    @Managed
+    WebDriver driver;
 
     @ManagedPages
     Pages pages;
 
     @Steps
-    private Browser browser;
+    Browser browser;
+    @Steps
+    UIActions uiActions;
 
-    public void openBrowser()  {
+    public void openBrowser() {
         ThucydidesUIContainerFactory uiContainerFactory = new ThucydidesUIContainerFactory();
         ThucydidesUIContainerComparator uiContainerComparator = new ThucydidesUIContainerComparator();
         UIContainerAnalizer uiContainerAnalizer = new UIContainerAnalizer();
         browser.init(driver, uiContainerFactory, uiContainerComparator, uiContainerAnalizer);
-        UIActions uiActions = new UIActions(browser);
+        uiActions.init(browser);
         ThucydidesUtils.putToSession("#UI_ACTIONS", uiActions);
-        
+
     }
 
     public <T extends BasePage> T open(T page) {
@@ -62,6 +64,5 @@ public class SimpleTest {
     public Browser getCurrentBrowser() {
         return browser;
     }
-    
-}
 
+}

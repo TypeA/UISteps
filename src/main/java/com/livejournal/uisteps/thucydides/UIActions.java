@@ -12,11 +12,10 @@ import org.openqa.selenium.internal.WrapsElement;
  */
 public class UIActions {
 
-    private final Browser browser;
-    
-    
 
-    public UIActions(Browser browser) {
+    private Browser browser;
+
+    public void init(Browser browser) {
         this.browser = browser;
     }
 
