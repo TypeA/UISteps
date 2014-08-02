@@ -1,7 +1,6 @@
 package com.livejournal.uisteps.thucydides;
 
-import com.livejournal.uisteps.core.Browser;
-import com.livejournal.uisteps.thucydides.tests.SimpleTest;
+import com.livejournal.uisteps.thucydides.tests.WebTest;
 import java.util.Map;
 import net.thucydides.core.model.DataTable;
 import net.thucydides.core.model.Story;
@@ -16,9 +15,9 @@ import net.thucydides.core.steps.StepListener;
  */
 public class ThucydidesStepListener implements StepListener {
 
-    private SimpleTest test;
+    private final WebTest test;
 
-    public ThucydidesStepListener(SimpleTest test) {
+    public ThucydidesStepListener(WebTest test) {
         this.test = test;
     }
 
