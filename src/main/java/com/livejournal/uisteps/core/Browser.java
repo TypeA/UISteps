@@ -54,6 +54,11 @@ public class Browser {
         openUrl(urlString);
     }
 
+    private void openPageUrl(Url url) {
+        String urlString = url.toString();
+        getDriver().get(urlString);
+    }
+
     @SuppressWarnings("unchecked")
     public <T extends UIContainer> T on(Class<T> uiContainerClass) {
         T uiContainerCandidate = getIfCurrent(uiContainerClass);
@@ -117,13 +122,12 @@ public class Browser {
     @Step
     public <T extends BasePage> T open(T page) {
         setCurrent(page);
-        openUrl(page.getUrl());
+        openPageUrl(page.getUrl());
         page.initialize(getDriver());
         return page;
     }
 
     public void close() {
-        //     ThucydidesUtils.resetDriver(driver);
         getDriver().quit();
     }
 
