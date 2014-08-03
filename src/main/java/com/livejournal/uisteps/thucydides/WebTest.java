@@ -1,4 +1,4 @@
-package com.livejournal.uisteps.thucydides.tests;
+package com.livejournal.uisteps.thucydides;
 
 import com.livejournal.uisteps.core.BasePage;
 import com.livejournal.uisteps.core.Browser;
