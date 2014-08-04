@@ -4,15 +4,13 @@ import com.livejournal.uisteps.core.BasePage;
 import com.livejournal.uisteps.core.Browser;
 import com.livejournal.uisteps.core.UIContainer;
 import com.livejournal.uisteps.core.UIContainerAnalizer;
-import com.livejournal.uisteps.thucydides.ThucydidesUIContainerComparator;
-import com.livejournal.uisteps.thucydides.ThucydidesUIContainerFactory;
-import com.livejournal.uisteps.thucydides.ThucydidesUtils;
-import com.livejournal.uisteps.thucydides.UIActions;
 import net.thucydides.core.annotations.Managed;
 import net.thucydides.core.annotations.ManagedPages;
 import net.thucydides.core.annotations.Steps;
 import net.thucydides.core.pages.Pages;
 import org.openqa.selenium.WebDriver;
+import com.livejournal.uisteps.thucydides.Verifications.ExpectedResults;
+import com.livejournal.uisteps.thucydides.Verifications.SingleExpectedResult;
 
 /**
  *
@@ -30,6 +28,8 @@ public class WebTest {
     Browser browser;
     @Steps
     UIActions uiActions;
+    @Steps
+    Verifications verifications;
 
     public void openBrowser() {
         ThucydidesUIContainerFactory uiContainerFactory = new ThucydidesUIContainerFactory();
@@ -68,6 +68,14 @@ public class WebTest {
 
     public Browser getCurrentBrowser() {
         return browser;
+    }
+
+    public SingleExpectedResult verifyExpectedResult(String description, boolean condition) {
+        return verifications.verifyExpectedResult(description, condition);
+    }
+
+    public ExpectedResults verify() {
+        return verifications.verify();
     }
 
 }

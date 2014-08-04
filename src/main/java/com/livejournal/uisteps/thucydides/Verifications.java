@@ -9,7 +9,7 @@ import org.junit.Assert;
  *
  * @author ASolyankin
  */
-public class Verification {
+public class Verifications {
 
     private ExpectedResults expectedResults;
 
@@ -23,7 +23,7 @@ public class Verification {
     }
 
     @Step
-    void verifyExpectedResult(SingleExpectedResult expectedResult) {
+    public void verifyExpectedResult(SingleExpectedResult expectedResult) {
         Assert.assertTrue("Expected result doesn't match actual result: " + expectedResult.actualDescription,
                 expectedResult.condition);
     }
