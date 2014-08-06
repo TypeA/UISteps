@@ -98,6 +98,10 @@ public class Browser {
             }
         }
         if (uiContainerAnalizer.isPage(uiContainer)) {
+            if (uiContainerAnalizer.isPage(uiContainer)) {
+                DefaultUrlFactory defaultUrlFactory = new DefaultUrlFactory();
+                defaultUrlFactory.setDefaultUrlToPage((BasePage) uiContainer);
+            }
             return (T) open((BasePage) uiContainer);
         }
         if (uiContainerAnalizer.isBlock(uiContainer)) {
@@ -118,10 +122,6 @@ public class Browser {
     @Step
     public <T extends BasePage> T open(T page) {
         setCurrent(page);
-        if (uiContainerAnalizer.isPage(page)) {
-            DefaultUrlFactory defaultUrlFactory = new DefaultUrlFactory();
-            defaultUrlFactory.setDefaultUrlToPage((BasePage) page);
-        }
         openPageUrl(page.getUrl());
         page.initialize(getDriver());
         return page;
