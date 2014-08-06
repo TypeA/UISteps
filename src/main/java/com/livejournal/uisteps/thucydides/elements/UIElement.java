@@ -3,6 +3,8 @@ package com.livejournal.uisteps.thucydides.elements;
 import com.livejournal.uisteps.core.UIContainer;
 import com.livejournal.uisteps.thucydides.ThucydidesUtils;
 import com.livejournal.uisteps.thucydides.UIActions;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.openqa.selenium.WebElement;
 import ru.yandex.qatools.htmlelements.element.TypifiedElement;
 
@@ -31,8 +33,13 @@ public class UIElement extends TypifiedElement {
         actions.click(this);
     }
 
-    public void moveMouseOver() {
+    public void moveMouseOver(){
         actions.moveMouseOver(this);
+        try {
+            Thread.sleep(300);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(UIElement.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     protected UIActions getActions() {
