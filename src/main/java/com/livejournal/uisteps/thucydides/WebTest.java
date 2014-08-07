@@ -17,13 +17,7 @@ import org.openqa.selenium.WebDriver;
  *
  * @author ASolyankin
  */
-public class WebTest extends ThucydidesJUnitStory{
-
-    @Managed
-    WebDriver driver;
-
-    @ManagedPages
-    Pages pages;
+public class WebTest extends ThucydidesJUnitStory {
 
     @Steps
     Browser browser;
@@ -36,7 +30,8 @@ public class WebTest extends ThucydidesJUnitStory{
         ThucydidesUIContainerFactory uiContainerFactory = new ThucydidesUIContainerFactory();
         ThucydidesUIContainerComparator uiContainerComparator = new ThucydidesUIContainerComparator();
         UIContainerAnalizer uiContainerAnalizer = new UIContainerAnalizer();
-        browser.init(driver, uiContainerFactory, uiContainerComparator, uiContainerAnalizer);
+        browser.init(uiContainerFactory, uiContainerComparator, uiContainerAnalizer);
+        //   browser.init(driver, uiContainerFactory, uiContainerComparator, uiContainerAnalizer);
         uiActions.init(browser);
         ThucydidesUtils.putToSession("#UI_ACTIONS", uiActions);
 
