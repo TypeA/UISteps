@@ -4,19 +4,20 @@ import com.livejournal.uisteps.core.BasePage;
 import com.livejournal.uisteps.core.Browser;
 import com.livejournal.uisteps.core.UIContainer;
 import com.livejournal.uisteps.core.UIContainerAnalizer;
+import com.livejournal.uisteps.thucydides.Verifications.ExpectedResults;
+import com.livejournal.uisteps.thucydides.Verifications.SingleExpectedResult;
 import net.thucydides.core.annotations.Managed;
 import net.thucydides.core.annotations.ManagedPages;
 import net.thucydides.core.annotations.Steps;
 import net.thucydides.core.pages.Pages;
+import net.thucydides.jbehave.ThucydidesJUnitStory;
 import org.openqa.selenium.WebDriver;
-import com.livejournal.uisteps.thucydides.Verifications.ExpectedResults;
-import com.livejournal.uisteps.thucydides.Verifications.SingleExpectedResult;
 
 /**
  *
  * @author ASolyankin
  */
-public class WebTest {
+public class WebTest extends ThucydidesJUnitStory {
 
     @Managed
     WebDriver driver;
