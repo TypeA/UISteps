@@ -17,7 +17,7 @@ import org.openqa.selenium.WebDriver;
  *
  * @author ASolyankin
  */
-public class WebTest{
+public class WebTest extends ThucydidesJUnitStory{
 
     @Managed
     WebDriver driver;

@@ -27,12 +27,14 @@ public class UIElement extends TypifiedElement {
         return actions.on(uiContainer);
     }
 
-    public void click() {
+    public Object click() {
         actions.click(this);
+        return null;
     }
 
-    public void moveMouseOver(){
+    public Object moveMouseOver(){
         actions.moveMouseOver(this);
+        return this;
     }
 
     protected UIActions getActions() {
