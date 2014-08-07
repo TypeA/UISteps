@@ -45,7 +45,7 @@ public class ThucydidesUtils {
         WebdriverProxyFactory.resetDriver(driver);
     }
 
-    public static void registerListner(StepListener stepsListener) {
+    public static void registerListener(StepListener stepsListener) {
         StepEventBus.getEventBus().registerListener(stepsListener);
     }
 
