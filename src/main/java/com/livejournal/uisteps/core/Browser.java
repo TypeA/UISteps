@@ -172,8 +172,4 @@ public class Browser {
     public String toString() {
         return name;
     }
-    
-    public void clearCurrentPage() {
-        currentPage = null;
-    }
 }
