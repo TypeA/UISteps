@@ -2,15 +2,14 @@ package com.livejournal.uisteps.core;
 
 import com.livejournal.uisteps.thucydides.DefaultUrlFactory;
 import net.thucydides.core.annotations.Step;
-import org.openqa.selenium.WebDriver;
+import net.thucydides.core.steps.ScenarioSteps;
 
 /**
  *
  * @author ASolyankin
  */
-public class Browser {
+public class Browser extends ScenarioSteps{
 
-    private WebDriver driver;
     private UIContainerFactory uiContainerFactory;
     private UIContainerAnalizer uiContainerAnalizer;
     private UIContainerComparator uiContainerComparator;
@@ -18,24 +17,19 @@ public class Browser {
     private BasePage currentPage;
     private BaseUIBlock currentBlock;
 
-    public void init(WebDriver driver,
+    public void clearCache() {
+        currentPage = null;
+        currentBlock = null;
+    }
+    
+    public void init(
             UIContainerFactory uiContainerFactory,
             UIContainerComparator uiContainerComparator,
             UIContainerAnalizer uiContainerAnalizer) {
-        this.driver = driver;
         this.uiContainerFactory = uiContainerFactory;
         this.uiContainerComparator = uiContainerComparator;
         this.uiContainerAnalizer = uiContainerAnalizer;
     }
-
-    public void setDriver(WebDriver driver) {
-        this.driver = driver;
-    }
-
-    public WebDriver getDriver() {
-        return driver;
-    }
-
     public void setName(String name) {
         this.name = name;
     }
