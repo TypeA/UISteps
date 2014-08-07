@@ -10,6 +10,7 @@ import net.thucydides.core.annotations.Managed;
 import net.thucydides.core.annotations.ManagedPages;
 import net.thucydides.core.annotations.Steps;
 import net.thucydides.core.pages.Pages;
+import net.thucydides.core.steps.BaseStepListener;
 import net.thucydides.jbehave.ThucydidesJUnitStory;
 import org.openqa.selenium.WebDriver;
 
@@ -31,10 +32,8 @@ public class WebTest extends ThucydidesJUnitStory {
         ThucydidesUIContainerComparator uiContainerComparator = new ThucydidesUIContainerComparator();
         UIContainerAnalizer uiContainerAnalizer = new UIContainerAnalizer();
         browser.init(uiContainerFactory, uiContainerComparator, uiContainerAnalizer);
-        //   browser.init(driver, uiContainerFactory, uiContainerComparator, uiContainerAnalizer);
         uiActions.init(browser);
         ThucydidesUtils.putToSession("#UI_ACTIONS", uiActions);
-
     }
 
     public <T extends BasePage> T open(T page) {
