@@ -57,7 +57,7 @@ public class Browser extends ScenarioSteps{
     public <T extends UIContainer> T on(Class<T> uiContainerClass) {
         T uiContainerCandidate = getIfCurrent(uiContainerClass);
         if (uiContainerCandidate != null) {
-            return onOpened(uiContainerCandidate);
+            return onOpenedContainer(uiContainerCandidate);
         }
         uiContainerCandidate = uiContainerFactory.instantiateUIContainer(uiContainerClass);
         return on(uiContainerCandidate, false);
@@ -88,7 +88,7 @@ public class Browser extends ScenarioSteps{
         if (needCheckCurrent) {
             T uiContainerCandidate = (T) getIfCurrent(uiContainer.getClass());
             if (uiContainerCandidate != null) {
-                return onOpened(uiContainerCandidate);
+                return onOpenedContainer(uiContainerCandidate);
             }
         }
         if (uiContainerAnalizer.isPage(uiContainer)) {
@@ -99,17 +99,23 @@ public class Browser extends ScenarioSteps{
             return (T) open((BasePage) uiContainer);
         }
         if (uiContainerAnalizer.isBlock(uiContainer)) {
-            return onOpened(uiContainer);
+            return onOpenedContainer(uiContainer);
         }
         throw new NotUIContainerException(uiContainer.getClass().getName());
     }
 
+    public <T extends UIContainer> T onOpenedContainer(T uiContainer) {
+        if(!isCurrent(uiContainer)) {
+            return onOpened(uiContainer);
+        } else {
+            return uiContainer;
+        }
+    }
+    
     @Step
     public <T extends UIContainer> T onOpened(T uiContainer) {
-        if (!isCurrent(uiContainer)) {
-            setCurrent(uiContainer);
-            uiContainer.initialize(getDriver());
-        }
+        setCurrent(uiContainer);
+        uiContainer.initialize(getDriver());
         return uiContainer;
     }
 
