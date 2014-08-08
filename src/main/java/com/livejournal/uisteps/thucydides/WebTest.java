@@ -6,13 +6,8 @@ import com.livejournal.uisteps.core.UIContainer;
 import com.livejournal.uisteps.core.UIContainerAnalizer;
 import com.livejournal.uisteps.thucydides.Verifications.ExpectedResults;
 import com.livejournal.uisteps.thucydides.Verifications.SingleExpectedResult;
-import net.thucydides.core.annotations.Managed;
-import net.thucydides.core.annotations.ManagedPages;
 import net.thucydides.core.annotations.Steps;
-import net.thucydides.core.pages.Pages;
-import net.thucydides.core.steps.BaseStepListener;
 import net.thucydides.jbehave.ThucydidesJUnitStory;
-import org.openqa.selenium.WebDriver;
 
 /**
  *
@@ -36,6 +31,14 @@ public class WebTest extends ThucydidesJUnitStory {
         ThucydidesUtils.putToSession("#UI_ACTIONS", uiActions);
     }
 
+    public <T extends UIContainer> T open(Class<T> uiContainerClass) {
+        return browser.open(uiContainerClass);
+    }
+
+    public <T extends UIContainer> T open(Class<T> rootClass, String uiContainerClassName) {
+        return browser.open(rootClass, uiContainerClassName);
+    }
+    
     public <T extends BasePage> T open(T page) {
         openBrowser();
         return browser.open(page);

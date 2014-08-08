@@ -52,7 +52,18 @@ public class Browser extends ScenarioSteps{
         String urlString = url.toString();
         getDriver().get(urlString);
     }
+    
+    
+    public <T extends UIContainer> T open(Class<T> uiContainerClass) {
+        clearCache();
+        return on(uiContainerClass);
+    }
 
+    public <T extends UIContainer> T open(Class<T> rootClass, String uiContainerClassName) {
+        clearCache();
+        return on(rootClass, uiContainerClassName);
+    }
+    
     @SuppressWarnings("unchecked")
     public <T extends UIContainer> T on(Class<T> uiContainerClass) {
         T uiContainerCandidate = getIfCurrent(uiContainerClass);
