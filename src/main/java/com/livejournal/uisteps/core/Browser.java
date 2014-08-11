@@ -183,7 +183,6 @@ public class Browser extends ScenarioSteps {
         if (isCurrentBlock(klass)) {
             return (T) currentBlock;
         }
-        System.out.println("####################################111111");
         return null;
     }
 
