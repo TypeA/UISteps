@@ -1,6 +1,8 @@
 package com.livejournal.uisteps.core;
 
 import com.livejournal.uisteps.thucydides.DefaultUrlFactory;
+import com.livejournal.uisteps.thucydides.ThucydidesStepListener;
+import com.livejournal.uisteps.thucydides.ThucydidesUtils;
 import net.thucydides.core.annotations.Step;
 import net.thucydides.core.steps.ScenarioSteps;
 
@@ -8,7 +10,7 @@ import net.thucydides.core.steps.ScenarioSteps;
  *
  * @author ASolyankin
  */
-public class Browser extends ScenarioSteps{
+public class Browser extends ScenarioSteps {
 
     private UIContainerFactory uiContainerFactory;
     private UIContainerAnalizer uiContainerAnalizer;
@@ -16,12 +18,26 @@ public class Browser extends ScenarioSteps{
     private String name;
     private BasePage currentPage;
     private BaseUIBlock currentBlock;
+    private boolean opened;
 
+    public Browser() {
+        ThucydidesStepListener listener = new ThucydidesStepListener(this);
+        ThucydidesUtils.registerListener(listener);
+    }
+   
     public void clearCache() {
         currentPage = null;
         currentBlock = null;
     }
-    
+
+    public boolean isOpened() {
+        return opened;
+    }
+
+    public void setOpened() {
+        opened = true;
+    }
+
     public void init(
             UIContainerFactory uiContainerFactory,
             UIContainerComparator uiContainerComparator,
@@ -29,7 +45,9 @@ public class Browser extends ScenarioSteps{
         this.uiContainerFactory = uiContainerFactory;
         this.uiContainerComparator = uiContainerComparator;
         this.uiContainerAnalizer = uiContainerAnalizer;
+        clearCache();
     }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -52,18 +70,7 @@ public class Browser extends ScenarioSteps{
         String urlString = url.toString();
         getDriver().get(urlString);
     }
-    
-    
-    public <T extends UIContainer> T open(Class<T> uiContainerClass) {
-        clearCache();
-        return on(uiContainerClass);
-    }
 
-    public <T extends UIContainer> T open(Class<T> rootClass, String uiContainerClassName) {
-        clearCache();
-        return on(rootClass, uiContainerClassName);
-    }
-    
     @SuppressWarnings("unchecked")
     public <T extends UIContainer> T on(Class<T> uiContainerClass) {
         T uiContainerCandidate = getIfCurrent(uiContainerClass);
@@ -115,14 +122,14 @@ public class Browser extends ScenarioSteps{
         throw new NotUIContainerException(uiContainer.getClass().getName());
     }
 
-    public <T extends UIContainer> T onOpenedContainer(T uiContainer) {
-        if(!isCurrent(uiContainer)) {
+    private <T extends UIContainer> T onOpenedContainer(T uiContainer) {
+        if (!isCurrent(uiContainer)) {
             return onOpened(uiContainer);
         } else {
             return uiContainer;
         }
     }
-    
+
     @Step
     public <T extends UIContainer> T onOpened(T uiContainer) {
         setCurrent(uiContainer);
@@ -142,7 +149,7 @@ public class Browser extends ScenarioSteps{
         getDriver().quit();
     }
 
-    void setCurrent(UIContainer uiContainer) {
+    private void setCurrent(UIContainer uiContainer) {
         if (uiContainerAnalizer.isPage(uiContainer)) {
             currentPage = (BasePage) uiContainer;
         } else if (uiContainerAnalizer.isBlock(uiContainer)) {
@@ -176,6 +183,7 @@ public class Browser extends ScenarioSteps{
         if (isCurrentBlock(klass)) {
             return (T) currentBlock;
         }
+        System.out.println("####################################111111");
         return null;
     }
 

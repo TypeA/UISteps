@@ -22,35 +22,24 @@ public class WebTest extends ThucydidesJUnitStory {
     @Steps
     Verifications verifications;
 
+    public WebTest() {
+        ThucydidesStepListener listener = new ThucydidesStepListener(browser);
+        ThucydidesUtils.registerListener(listener);
+    }
+
     public void openBrowser() {
-        ThucydidesUIContainerFactory uiContainerFactory = new ThucydidesUIContainerFactory();
-        ThucydidesUIContainerComparator uiContainerComparator = new ThucydidesUIContainerComparator();
-        UIContainerAnalizer uiContainerAnalizer = new UIContainerAnalizer();
-        browser.init(uiContainerFactory, uiContainerComparator, uiContainerAnalizer);
-        uiActions.init(browser);
-        ThucydidesUtils.putToSession("#UI_ACTIONS", uiActions);
-    }
-
-    public <T extends UIContainer> T open(Class<T> uiContainerClass) {
-        return browser.open(uiContainerClass);
-    }
-
-    public <T extends UIContainer> T open(Class<T> rootClass, String uiContainerClassName) {
-        return browser.open(rootClass, uiContainerClassName);
-    }
-    
-    public <T extends BasePage> T open(T page) {
-        openBrowser();
-        return browser.open(page);
-    }
-
-    public <T extends UIContainer> T onOpened(T uiContainer) {
-        openBrowser();
-        return browser.onOpened(uiContainer);
+        if (!browser.isOpened()) {
+            ThucydidesUIContainerFactory uiContainerFactory = new ThucydidesUIContainerFactory();
+            ThucydidesUIContainerComparator uiContainerComparator = new ThucydidesUIContainerComparator();
+            UIContainerAnalizer uiContainerAnalizer = new UIContainerAnalizer();
+            browser.init(uiContainerFactory, uiContainerComparator, uiContainerAnalizer);
+            uiActions.init(browser); 
+            ThucydidesUtils.putToSession("#UI_ACTIONS", uiActions);
+            browser.setOpened();
+        }
     }
 
     public void openUrl(String url) {
-        openBrowser();
         browser.openUrl(url);
     }
 
