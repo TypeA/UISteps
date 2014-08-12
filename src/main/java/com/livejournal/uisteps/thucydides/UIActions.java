@@ -31,6 +31,22 @@ public class UIActions {
         return browser.on(rootClass, uiContainerClassName);
     }
 
+    public void switchToNextWindow() {
+        browser.switchToNextWindow();
+    }
+
+    public void switchToPreviousWindow() {
+        browser.switchToPreviousWindow();
+    }
+
+    public void switchToDefaultWindow() {
+        browser.switchToWindowByIndex(0);
+    }
+
+    public void switchToWindowByIndex(int index) {
+        browser.switchToWindowByIndex(index);
+    }
+    
     @Step
     public void click(WrapsElement element) {
         element.getWrappedElement().click();

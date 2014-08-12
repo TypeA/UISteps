@@ -52,16 +52,36 @@ public class WebTest extends ThucydidesJUnitStory {
         return browser.on(uiContainerClass);
     }
 
-    public Browser getCurrentBrowser() {
-        return browser;
+    public String getCurrentUrl() {
+        return browser.getDriver().getCurrentUrl();
     }
-
+    
+    public String getCurrentTitle() {
+        return browser.getDriver().getTitle();
+    }
+    
     public SingleExpectedResult verifyExpectedResult(String description, boolean condition) {
         return verifications.verifyExpectedResult(description, condition);
     }
 
     public ExpectedResults verify() {
         return verifications.verify();
+    }
+    
+    public void switchToNextWindow() {
+        browser.switchToNextWindow();
+    }
+
+    public void switchToPreviousWindow() {
+        browser.switchToPreviousWindow();
+    }
+
+    public void switchToDefaultWindow() {
+        browser.switchToWindowByIndex(0);
+    }
+
+    public void switchToWindowByIndex(int index) {
+        browser.switchToWindowByIndex(index);
     }
 
 }

@@ -40,4 +40,20 @@ public class UIElement extends TypifiedElement {
     protected UIActions getActions() {
         return actions;
     }
+      
+    public void switchToNextWindow() {
+        actions.switchToNextWindow();
+    }
+
+    public void switchToPreviousWindow() {
+        actions.switchToPreviousWindow();
+    }
+
+    public void switchToDefaultWindow() {
+        actions.switchToWindowByIndex(0);
+    }
+
+    public void switchToWindowByIndex(int index) {
+        actions.switchToWindowByIndex(index);
+    }
 }
