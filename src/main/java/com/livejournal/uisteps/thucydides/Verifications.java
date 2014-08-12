@@ -81,7 +81,11 @@ public class Verifications {
 
         private final List<OneOfExpectedResults> expectedResultList = new ArrayList<>();
         private boolean resultCondition = true;
-        private String resultMessage = "<table border='1' cellpadding='2'><tr><th>Expected result</th><th>Actual result</th><th>Status</th></tr>";
+        private final String resultMessage = "<table border='1' cellpadding='2'>"
+                + "<tr>"
+                + "<th>Expected result</th>"
+                + "<th class='actual-result'>Actual result</th>"
+                + "<th>Status</th></tr>";
 
         public OneOfExpectedResults expectedResult(String description, boolean condition) {
             OneOfExpectedResults expectedResult = new OneOfExpectedResults(description, condition);
@@ -103,12 +107,26 @@ public class Verifications {
                 expectedResults.resultCondition &= expectedCondition;
                 String expectedDescription = expectedResult.expectedDescription;
                 if (expectedCondition) {
-                    resultMessage += "<tr><td>" + expectedDescription + "</td><td></td><td>SUCCESS</td></tr>";
+                    resultMessage += "<tr><td>" + expectedDescription + "</td><td class='actual-result'></td><td>SUCCESS</td></tr>";
                 } else {
-                    resultMessage += "<tr><td>" + expectedDescription + "</td><td>" + expectedResult.actualDescription + "</td><td>FAILURE</td></tr>";
+                    resultMessage += "<tr><td>" + expectedDescription + "</td><td class='actual-result'>" + expectedResult.actualDescription + "</td><td>FAILURE</td></tr>";
                 }
             }
-            resultMessage += "</table>";
+            resultMessage += "</table>"
+                    + "<script>"
+                    + " var flag = true;"
+                    + " var resultsTable = $('table').last();"
+                    + " resultsTable.find('td.actual-result').each(function() {"
+                    + "     if( $(this).text() !== '') {"
+                    + "     flag = false;"
+                    + "     }"
+                    + "     return flag;"
+                    + " });"
+                    + " if(flag) {"
+                    + "     resultsTable.find('.actual-result').css('display','none');"
+                    + " }"
+                    + "</script>";
+
             verifications(resultMessage);
         }
     }
