@@ -52,9 +52,7 @@ public class UIActions {
         WebElement wrappedElement = element.getWrappedElement();
         wrappedElement.click();
         String attrTarget = wrappedElement.getAttribute("target");
-        System.out.println("####################################"); 
-        System.out.println("#########" + attrTarget);
-        if (attrTarget != null && !attrTarget.equals("_self")) {
+        if (attrTarget != null && !attrTarget.equals("") && !attrTarget.equals("_self")) {
             switchToNextWindow();
         }
     }
