@@ -49,6 +49,7 @@ public class Browser extends ScenarioSteps {
     public void clearCache() {
         currentPage = null;
         currentBlock = null;
+        windowList.reloadCurrentIndexCounter();
     }
 
     public boolean isOpened() {

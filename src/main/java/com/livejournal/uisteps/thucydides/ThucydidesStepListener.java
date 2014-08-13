@@ -23,10 +23,13 @@ public class ThucydidesStepListener implements StepListener {
 
     @Override
     public void testSuiteStarted(Class<?> storyClass) {
+        System.out.println("####################################testSuiteStarted(Class<?> storyClass)");
     }
 
     @Override
     public void testSuiteStarted(Story story) {
+        
+            System.out.println("####################################testSuiteStarted(Story story)");
     }
 
     @Override
@@ -35,10 +38,22 @@ public class ThucydidesStepListener implements StepListener {
 
     @Override
     public void testStarted(String description) {
+        System.out.println("####################################testStarted");
+        if (browser != null) {
+            browser.clearCache();
+            System.out.println("####################################");
+   //         browser.switchToDefaultWindow();
+        }
     }
 
     @Override
     public void testFinished(TestOutcome result) {
+        System.out.println("####################################testFinished");
+        if (browser != null) {
+            browser.clearCache();
+            System.out.println("####################################");
+   //         browser.switchToDefaultWindow();
+        }
     }
 
     @Override
@@ -95,18 +110,15 @@ public class ThucydidesStepListener implements StepListener {
 
     @Override
     public void exampleStarted(Map<String, String> data) {
-        if (browser != null) {
-            browser.clearCache();
+  //      if (browser != null) {
+  //          browser.clearCache();
+  //          System.out.println("####################################");
    //         browser.switchToDefaultWindow();
-        }
+ //       }
     }
 
     @Override
     public void exampleFinished() {
-        if (browser != null) {
-            browser.clearCache();
-   //         browser.switchToDefaultWindow();
-        }
     }
 
     @Override

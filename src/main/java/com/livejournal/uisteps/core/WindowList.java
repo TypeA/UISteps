@@ -31,6 +31,10 @@ public class WindowList {
         switchToWindowByIndex(0);
     }
 
+    public void reloadCurrentIndexCounter() {
+        currentHandleIndex = 0;
+    }
+    
     public void switchToWindowByIndex(int index) {
         WebDriver driver = browser.getDriver();
         WebDriverWait wait = new WebDriverWait(driver, 5);
