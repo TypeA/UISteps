@@ -95,6 +95,7 @@ public class ThucydidesStepListener implements StepListener {
 
     @Override
     public void exampleStarted(Map<String, String> data) {
+ //       browser.switchToDefaultWindow();
         if(browser != null) {
             browser.clearCache();
         } 

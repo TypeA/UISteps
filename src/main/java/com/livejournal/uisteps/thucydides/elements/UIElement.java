@@ -32,7 +32,7 @@ public class UIElement extends TypifiedElement {
         return null;
     }
 
-    public Object moveMouseOver(){
+    public Object moveMouseOver() {
         actions.moveMouseOver(this);
         return this;
     }
@@ -40,7 +40,7 @@ public class UIElement extends TypifiedElement {
     protected UIActions getActions() {
         return actions;
     }
-      
+
     public void switchToNextWindow() {
         actions.switchToNextWindow();
     }

@@ -13,7 +13,6 @@ import org.openqa.selenium.internal.WrapsElement;
  */
 public class UIActions {
 
-
     private Browser browser;
 
     public void init(Browser browser) {
@@ -47,12 +46,15 @@ public class UIActions {
     public void switchToWindowByIndex(int index) {
         browser.switchToWindowByIndex(index);
     }
-    
+
     @Step
     public void click(WrapsElement element) {
         WebElement wrappedElement = element.getWrappedElement();
         wrappedElement.click();
-        if(!wrappedElement.getAttribute("target").equals("_self")) {
+        String attrTarget = wrappedElement.getAttribute("target");
+        System.out.println("####################################"); 
+        System.out.println("#########" + attrTarget);
+        if (attrTarget != null && !attrTarget.equals("_self")) {
             switchToNextWindow();
         }
     }
