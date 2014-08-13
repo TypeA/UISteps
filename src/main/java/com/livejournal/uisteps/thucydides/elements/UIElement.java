@@ -29,6 +29,9 @@ public class UIElement extends TypifiedElement {
 
     public Object click() {
         actions.click(this);
+        if(!getWrappedElement().getAttribute("target").equals("_self")) {
+            switchToNextWindow();
+        }
         return null;
     }
 
