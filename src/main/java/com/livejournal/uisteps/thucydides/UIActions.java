@@ -3,6 +3,7 @@ package com.livejournal.uisteps.thucydides;
 import com.livejournal.uisteps.core.Browser;
 import com.livejournal.uisteps.core.UIContainer;
 import net.thucydides.core.annotations.Step;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.internal.WrapsElement;
 
@@ -49,7 +50,11 @@ public class UIActions {
     
     @Step
     public void click(WrapsElement element) {
-        element.getWrappedElement().click();
+        WebElement wrappedElement = element.getWrappedElement();
+        wrappedElement.click();
+        if(!wrappedElement.getAttribute("target").equals("_self")) {
+            switchToNextWindow();
+        }
     }
 
     @Step
