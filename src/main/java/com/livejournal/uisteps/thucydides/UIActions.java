@@ -49,12 +49,7 @@ public class UIActions {
 
     @Step
     public void click(WrapsElement element) {
-        WebElement wrappedElement = element.getWrappedElement();
-        wrappedElement.click();
-        String attrTarget = wrappedElement.getAttribute("target");
-        if (attrTarget != null && !attrTarget.equals("") && !attrTarget.equals("_self")) {
-            switchToNextWindow();
-        }
+        element.getWrappedElement().click();
     }
 
     @Step
