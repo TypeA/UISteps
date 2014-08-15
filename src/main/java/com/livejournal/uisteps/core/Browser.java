@@ -50,10 +50,9 @@ public class Browser extends ScenarioSteps {
     public void clearCache() {
         currentPage = null;
         currentBlock = null;
-        // windowList.reloadCurrentIndexCounter();
-       // if (this.windowList.getCountOfWindows() > 1) {
-         //   switchToDefaultWindow();
-     //   }
+        if (windowList.getCountOfWindows() > 1) {
+            switchToDefaultWindow();
+        }
     }
 
     public boolean isOpened() {
