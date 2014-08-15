@@ -19,11 +19,12 @@ public class Browser extends ScenarioSteps {
     private BasePage currentPage;
     private BaseUIBlock currentBlock;
     private boolean opened;
-    private WindowList windowList;
+    private final WindowList windowList;
 
     public Browser() {
         ThucydidesStepListener listener = new ThucydidesStepListener(this);
-        ThucydidesUtils.registerListener(listener);
+        ThucydidesUtils.registerListener(listener);   
+        windowList = new WindowList(this);
     }
 
     @Step
@@ -49,7 +50,10 @@ public class Browser extends ScenarioSteps {
     public void clearCache() {
         currentPage = null;
         currentBlock = null;
-        windowList.reloadCurrentIndexCounter();
+        // windowList.reloadCurrentIndexCounter();
+        if (this.windowList.getCountOfWindows() > 1) {
+            switchToDefaultWindow();
+        }
     }
 
     public boolean isOpened() {
@@ -66,8 +70,7 @@ public class Browser extends ScenarioSteps {
             UIContainerAnalizer uiContainerAnalizer) {
         this.uiContainerFactory = uiContainerFactory;
         this.uiContainerComparator = uiContainerComparator;
-        this.uiContainerAnalizer = uiContainerAnalizer;     
-        windowList = new WindowList(this);
+        this.uiContainerAnalizer = uiContainerAnalizer;
     }
 
     public void setName(String name) {

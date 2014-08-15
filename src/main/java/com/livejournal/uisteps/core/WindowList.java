@@ -42,7 +42,6 @@ public class WindowList {
         if (index < 0 || index >= setHandles.size()) {
             Assert.fail("Cannot switch to window by index: " + index + "!\n");
         }
-        currentHandleIndex = index;
         wait.until(new ExpectedCondition<Boolean>() {
             @Override
             public Boolean apply(WebDriver d) {
@@ -54,5 +53,10 @@ public class WindowList {
         setHandles = driver.getWindowHandles();
         Object[] handles = setHandles.toArray();
         driver.switchTo().window((String) handles[index]);
+        currentHandleIndex = index;
     }
+    
+    public int getCountOfWindows(){
+        return this.browser.getDriver().getWindowHandles().size();
+    } 
 }

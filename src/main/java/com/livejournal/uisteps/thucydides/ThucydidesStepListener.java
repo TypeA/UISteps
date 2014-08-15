@@ -37,12 +37,16 @@ public class ThucydidesStepListener implements StepListener {
     public void testStarted(String description) {
         if (browser != null) {
             browser.clearCache();
-            browser.switchToDefaultWindow();
+         //   browser.switchToDefaultWindow();
         }
     }
 
     @Override
     public void testFinished(TestOutcome result) {
+    //    if (browser != null) {
+     //       browser.clearCache();
+       //     browser.switchToDefaultWindow();
+        //}
     }
 
     @Override
@@ -101,7 +105,7 @@ public class ThucydidesStepListener implements StepListener {
     public void exampleStarted(Map<String, String> data) {
         if (browser != null) {
             browser.clearCache();
-            browser.switchToDefaultWindow();
+        //    browser.switchToDefaultWindow();
         }
     }
 
