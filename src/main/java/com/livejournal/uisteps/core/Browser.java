@@ -51,9 +51,9 @@ public class Browser extends ScenarioSteps {
         currentPage = null;
         currentBlock = null;
         // windowList.reloadCurrentIndexCounter();
-        if (this.windowList.getCountOfWindows() > 1) {
-            switchToDefaultWindow();
-        }
+       // if (this.windowList.getCountOfWindows() > 1) {
+         //   switchToDefaultWindow();
+     //   }
     }
 
     public boolean isOpened() {

@@ -83,5 +83,9 @@ public class WebTest extends ThucydidesJUnitStory {
     public void switchToWindowByIndex(int index) {
         browser.switchToWindowByIndex(index);
     }
+    
+    public Browser getCurrentBrowser() {
+        return browser;
+    }
 
 }
