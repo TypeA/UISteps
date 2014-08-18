@@ -106,10 +106,11 @@ public class Verifications {
                 boolean expectedCondition = expectedResult.condition;
                 expectedResults.resultCondition &= expectedCondition;
                 String expectedDescription = expectedResult.expectedDescription;
+                resultMessage = "<tr><td>" + expectedDescription + "</td><td class='actual-result'>";
                 if (expectedCondition) {
-                    resultMessage += "<tr><td>" + expectedDescription + "</td><td class='actual-result'></td><td>SUCCESS</td></tr>";
+                    resultMessage += "</td><td>SUCCESS</td></tr>";
                 } else {
-                    resultMessage += "<tr><td>" + expectedDescription + "</td><td class='actual-result'>" + expectedResult.actualDescription + "</td><td>FAILURE</td></tr>";
+                    resultMessage += expectedResult.actualDescription + "</td><td>FAILURE</td></tr>";
                 }
             }
             resultMessage += "</table>"
