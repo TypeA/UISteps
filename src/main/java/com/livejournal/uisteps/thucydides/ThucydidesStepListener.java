@@ -32,13 +32,12 @@ public class ThucydidesStepListener implements StepListener {
     @Override
     public void testSuiteFinished() {
     }
-
+      
     @Override
     public void testStarted(String description) {
         if (browser != null) {
             browser.clearCache();
         }
-
     }
 
     @Override

@@ -1,6 +1,8 @@
 package com.livejournal.uisteps.thucydides;
 
 import com.livejournal.uisteps.core.UIContainer;
+import com.livejournal.uisteps.core.UIContainerAnalizer;
+import com.livejournal.uisteps.thucydides.elements.UIBlock;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -9,6 +11,8 @@ import java.util.Comparator;
 import java.util.List;
 import net.thucydides.core.annotations.WhenPageOpens;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import ru.yandex.qatools.htmlelements.loader.HtmlElementLoader;
 
 /**
@@ -17,8 +21,19 @@ import ru.yandex.qatools.htmlelements.loader.HtmlElementLoader;
  */
 public class UIContainerInitializer {
 
+    private final UIContainerAnalizer uiContainerAnalizer = new UIContainerAnalizer();
+    
     public void initializeUIContainer(UIContainer uiContainer, WebDriver driver) {
         HtmlElementLoader.populate(uiContainer, driver);
+        if(uiContainerAnalizer.isBlock(uiContainer)) {
+            WebDriverWait wait = new WebDriverWait(driver, 5);
+            wait.until(new ExpectedCondition<Boolean>() {
+                @Override
+                public Boolean apply(WebDriver d) {
+                    return ((UIBlock) uiContainer).isDisplayed();
+                }
+            });
+        }
     }
 
     public void callMethodsWhenOpens(UIContainer uiContainer) {
