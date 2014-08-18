@@ -35,17 +35,12 @@ public class ThucydidesStepListener implements StepListener {
       
     @Override
     public void testStarted(String description) {
-        if (browser != null) {
-            browser.clearCache();
-        }
+        cleareBrowserCache();
     }
 
     @Override
     public void testFinished(TestOutcome result) {
-        if (browser != null) {
-            browser.clearCache();
-        }
-
+        cleareBrowserCache();
     }
 
     @Override
@@ -102,22 +97,22 @@ public class ThucydidesStepListener implements StepListener {
 
     @Override
     public void exampleStarted(Map<String, String> data) {
-        if (browser != null) {
-            browser.clearCache();
-        }
-
+        cleareBrowserCache();
     }
 
     @Override
     public void exampleFinished() {
-        if (browser != null) {
-            browser.clearCache();
-        }
-
+        cleareBrowserCache();
     }
 
     @Override
     public void assumptionViolated(String message) {
+    }
+    
+    private void cleareBrowserCache() {
+        if (browser != null) {
+            browser.clearCache();
+        }
     }
 
 }
