@@ -2,6 +2,7 @@ package com.livejournal.uisteps.thucydides;
 
 import com.livejournal.uisteps.core.Browser;
 import com.livejournal.uisteps.core.UIContainer;
+import com.livejournal.uisteps.thucydides.elements.Link;
 import net.thucydides.core.annotations.Step;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -49,7 +50,17 @@ public class UIActions {
 
     @Step
     public void click(WrapsElement element) {
-        element.getWrappedElement().click();
+        WebElement webElement = element.getWrappedElement();
+        if (element instanceof Link) {
+            String attrTarget = webElement.getAttribute("target");
+            boolean needToSwitch = attrTarget != null && !attrTarget.equals("") && !attrTarget.equals("_self");
+            webElement.click();
+            if (needToSwitch) {
+                switchToNextWindow();
+            }
+        } else {
+            webElement.click();
+        }
     }
 
     @Step
