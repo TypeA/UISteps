@@ -1,4 +1,4 @@
-package com.livejournal.uisteps.core.utils;
+package com.livejournal.uisteps.core;
 
 import java.io.File;
 import org.openqa.selenium.WebElement;
