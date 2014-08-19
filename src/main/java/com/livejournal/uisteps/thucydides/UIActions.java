@@ -71,7 +71,7 @@ public class UIActions {
             Thread.sleep(300);
         } catch (InterruptedException ex) {
             throw new RuntimeException("Cannot move mouse over " + this + "\n" + ex);
-        }
+        } 
     }
 
     @Step

@@ -11,106 +11,97 @@ import org.junit.Assert;
  */
 public class Verifications {
 
-    private ExpectedResults expectedResults;
+    public class Condition {
 
-    public SingleExpectedResult verifyExpectedResult(String description, boolean condition) {
-        return new SingleExpectedResult(description, condition);
+        public final boolean value;
+        public final String expectedDescription;
+        public final String actualDescription;
+
+        public Condition(boolean value, String expectedDescription, String actualDescription) {
+            this.value = value;
+            this.expectedDescription = expectedDescription;
+            this.actualDescription = actualDescription;
+        }
     }
 
-    public ExpectedResults verify() {
-        expectedResults = new ExpectedResults();
-        return expectedResults;
+    public That verify() {
+        return new That(new ArrayList<>());
     }
 
-    @Step
-    public void verifyExpectedResult(SingleExpectedResult expectedResult) {
-        Assert.assertTrue("Expected result doesn't match actual result: " + expectedResult.actualDescription,
-                expectedResult.condition);
-    }
+    public class That {
 
-    @Step
-    public void verifications(String resultMessage) {
-        Assert.assertTrue(expectedResults.resultCondition);
+        private final List<Condition> conditions;
+
+        public That(List<Condition> conditions) {
+            this.conditions = conditions;
+        }
+
+        public ExpectedResult that(boolean condition) {
+            return new ExpectedResult(conditions, condition);
+        }
     }
 
     public class ExpectedResult {
 
-        protected final String expectedDescription;
-        protected String actualDescription;
-        protected final boolean condition;
+        private final List<Condition> conditions;
+        private final boolean condition;
 
-        public ExpectedResult(String description, boolean condition) {
-            expectedDescription = description;
+        public ExpectedResult(List<Condition> conditions, boolean condition) {
+            this.conditions = conditions;
             this.condition = condition;
+
         }
 
-        @Override
-        public String toString() {
-            return expectedDescription;
+        public ActualResult ifResultIsExpected(String expectedDescription) {
+            return new ActualResult(conditions, condition, expectedDescription);
         }
-
     }
 
-    public class SingleExpectedResult extends ExpectedResult {
+    public class ActualResult {
 
-        public SingleExpectedResult(String description, boolean condition) {
-            super(description, condition);
+        private final List<Condition> conditions;
+        private final boolean condition;
+        private final String expectedDescription;
+
+        public ActualResult(List<Condition> conditions, boolean condition, String expectedDescription) {
+            this.conditions = conditions;
+            this.condition = condition;
+            this.expectedDescription = expectedDescription;
         }
 
-        public void showMessageIfVerificationFailed(String description) {
-            actualDescription = description;
-            verifyExpectedResult(this);
-        }
-
-    }
-
-    public class OneOfExpectedResults extends ExpectedResult {
-
-        public OneOfExpectedResults(String description, boolean condition) {
-            super(description, condition);
-        }
-
-        public And showMessageIfVerificationFailed(String description) {
-            actualDescription = description;
-            return new And();
-        }
-
-    }
-
-    public class ExpectedResults {
-
-        private final List<OneOfExpectedResults> expectedResultList = new ArrayList<>();
-        private boolean resultCondition = true;
-        private final String resultMessage = "<table border='1' cellpadding='2'>"
-                + "<tr>"
-                + "<th>Expected result</th>"
-                + "<th class='actual-result'>Actual result</th>"
-                + "<th>Status</th></tr>";
-
-        public OneOfExpectedResults expectedResult(String description, boolean condition) {
-            OneOfExpectedResults expectedResult = new OneOfExpectedResults(description, condition);
-            expectedResultList.add(expectedResult);
-            return expectedResult;
+        public And ifElse(String actualDescription) {
+            conditions.add(new Condition(condition, expectedDescription, actualDescription));
+            return new And(conditions);
         }
     }
 
     public class And {
 
-        public ExpectedResults and() {
-            return expectedResults;
+        private final List<Condition> conditions;
+
+        public And(List<Condition> conditions) {
+            this.conditions = conditions;
+        }
+
+        public That and() {
+            return new That(conditions);
         }
 
         public void finish() {
-            String resultMessage = expectedResults.resultMessage;
-            for (OneOfExpectedResults expectedResult : expectedResults.expectedResultList) {
-                boolean expectedCondition = expectedResult.condition;
-                expectedResults.resultCondition &= expectedCondition;
-                String expectedDescription = expectedResult.expectedDescription;
-                resultMessage = "<tr><td>" + expectedDescription + "</td><td class='actual-result'>";
+            boolean resultCondition = true;
+            String resultMessage = "<table border='1' cellpadding='2'>"
+                    + "<tr>"
+                    + "<th>Expected result</th>"
+                    + "<th class='actual-result'>Actual result</th>"
+                    + "<th>Status</th></tr>";
+            for (Condition condition : conditions) {
+                boolean expectedCondition = condition.value;
+                resultCondition &= expectedCondition;
+                resultMessage += "<tr><td>" + condition.expectedDescription + "</td><td class='actual-result'>";
                 if (expectedCondition) {
                     resultMessage += "</td><td>SUCCESS</td></tr>";
                 } else {
-                    resultMessage += expectedResult.actualDescription + "</td><td>FAILURE</td></tr>";
+                    resultMessage += condition.actualDescription + "</td><td>FAILURE</td></tr>";
                 }
             }
             resultMessage += "</table>"
@@ -119,7 +110,7 @@ public class Verifications {
                     + " var resultsTable = $('table').last();"
                     + " resultsTable.find('td.actual-result').each(function() {"
                     + "     if( $(this).text() !== '') {"
-                    + "     flag = false;"
+                    + "         flag = false;"
                     + "     }"
                     + "     return flag;"
                     + " });"
@@ -128,8 +119,30 @@ public class Verifications {
                     + " }"
                     + "</script>";
 
-            verifications(resultMessage);
+            verifications(new ResultCondition(resultCondition, resultMessage));
         }
+    }
+
+    public class ResultCondition {
+
+        private final boolean resultCondition;
+        private final String resultMessage;
+
+        public ResultCondition(boolean resultCondition, String resultMessage) {
+            this.resultCondition = resultCondition;
+            this.resultMessage = resultMessage;
+        }
+
+        @Override
+        public String toString() {
+            return resultMessage;
+        }
+
+    }
+
+    @Step
+    public void verifications(ResultCondition resultCondition) {
+        Assert.assertTrue(resultCondition.resultCondition);
     }
 
 }

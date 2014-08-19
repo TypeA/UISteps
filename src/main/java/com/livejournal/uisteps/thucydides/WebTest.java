@@ -3,8 +3,7 @@ package com.livejournal.uisteps.thucydides;
 import com.livejournal.uisteps.core.Browser;
 import com.livejournal.uisteps.core.UIContainer;
 import com.livejournal.uisteps.core.UIContainerAnalizer;
-import com.livejournal.uisteps.thucydides.Verifications.ExpectedResults;
-import com.livejournal.uisteps.thucydides.Verifications.SingleExpectedResult;
+import com.livejournal.uisteps.thucydides.Verifications.That;
 import net.thucydides.core.annotations.Steps;
 import net.thucydides.jbehave.ThucydidesJUnitStory;
 
@@ -59,12 +58,8 @@ public class WebTest extends ThucydidesJUnitStory {
     public String getCurrentTitle() {
         return browser.getDriver().getTitle();
     }
-    
-    public SingleExpectedResult verifyExpectedResult(String description, boolean condition) {
-        return verifications.verifyExpectedResult(description, condition);
-    }
 
-    public ExpectedResults verify() {
+    public That verify() {
         return verifications.verify();
     }
     
