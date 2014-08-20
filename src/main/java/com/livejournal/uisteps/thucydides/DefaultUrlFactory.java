@@ -18,7 +18,12 @@ public class DefaultUrlFactory {
             String baseUrl = ThucydidesUtils.getBaseUrl();
             url.setHost(baseUrl);
         }
-        setUrlTo(page, page.getClass().getSuperclass());
+        Class<? extends BasePage> pageClass = page.getClass();
+        if (pageClass.getName().contains("$$")) {
+            setUrlTo(page, pageClass.getSuperclass());
+        } else {
+            setUrlTo(page, pageClass);
+        }
     }
 
     private void setUrlTo(BasePage page, Class<?> clazz) {

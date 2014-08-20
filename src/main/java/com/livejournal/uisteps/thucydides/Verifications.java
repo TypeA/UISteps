@@ -1,15 +1,17 @@
 package com.livejournal.uisteps.thucydides;
 
+import com.livejournal.uisteps.thucydides.elements.Page;
 import java.util.ArrayList;
 import java.util.List;
 import net.thucydides.core.annotations.Step;
+import net.thucydides.core.steps.ScenarioSteps;
 import org.junit.Assert;
 
 /**
  *
  * @author ASolyankin
  */
-public class Verifications {
+public class Verifications extends ScenarioSteps {
 
     public class Condition {
 
@@ -38,6 +40,22 @@ public class Verifications {
 
         public ExpectedResult that(boolean condition) {
             return new ExpectedResult(conditions, condition);
+        }
+
+        public And thatIsOn(Class<? extends Page> pageClass) {
+            try {
+                Page page = pageClass.newInstance();
+                DefaultUrlFactory defaultUrlFactory = new DefaultUrlFactory();
+                defaultUrlFactory.setDefaultUrlToPage(page);
+                String currentUrl = getPages().getDriver().getCurrentUrl();
+                boolean condition = currentUrl.equals(page.getUrl().toString());
+                conditions.add(new Condition(condition, page + " is opened", 
+                        "Unexpected page by url <a href='" + currentUrl + "'>" + currentUrl + "</a> is opened."));
+
+            } catch (InstantiationException | IllegalAccessException ex) {
+                Assert.fail("Cannot instantiate page!\n" + ex);
+            }
+            return new And(conditions);
         }
     }
 
@@ -114,9 +132,9 @@ public class Verifications {
                     + "     }"
                     + "     return flag;"
                     + " });"
-                    + " if(flag) {"
+                    + "     if(flag) {"
                     + "     resultsTable.find('.actual-result').css('display','none');"
-                    + " }"
+                    + "     }"
                     + "</script>";
 
             verifications(new ResultCondition(resultCondition, resultMessage));
@@ -144,5 +162,4 @@ public class Verifications {
     public void verifications(ResultCondition resultCondition) {
         Assert.assertTrue(resultCondition.resultCondition);
     }
-
 }
