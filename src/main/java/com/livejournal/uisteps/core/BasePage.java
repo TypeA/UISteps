@@ -7,4 +7,6 @@ package com.livejournal.uisteps.core;
 public interface BasePage extends UIContainer {
 
     Url getUrl();
+
+    void setUrl(Url url);
 }

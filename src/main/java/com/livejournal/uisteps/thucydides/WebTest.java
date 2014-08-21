@@ -1,8 +1,10 @@
 package com.livejournal.uisteps.thucydides;
 
+import com.livejournal.uisteps.core.BasePage;
 import com.livejournal.uisteps.core.Browser;
 import com.livejournal.uisteps.core.UIContainer;
 import com.livejournal.uisteps.core.UIContainerAnalizer;
+import com.livejournal.uisteps.core.Url;
 import com.livejournal.uisteps.thucydides.Verifications.That;
 import net.thucydides.core.annotations.Steps;
 import net.thucydides.jbehave.ThucydidesJUnitStory;
@@ -31,7 +33,7 @@ public class WebTest extends ThucydidesJUnitStory {
             ThucydidesUIContainerComparator uiContainerComparator = new ThucydidesUIContainerComparator();
             UIContainerAnalizer uiContainerAnalizer = new UIContainerAnalizer();
             browser.init(uiContainerFactory, uiContainerComparator, uiContainerAnalizer);
-            uiActions.init(browser); 
+            uiActions.init(browser);
             ThucydidesUtils.putToSession("#UI_ACTIONS", uiActions);
             browser.setOpened();
         }
@@ -51,18 +53,22 @@ public class WebTest extends ThucydidesJUnitStory {
         return browser.on(uiContainerClass);
     }
 
-    public String getCurrentUrl() {
-        return browser.getDriver().getCurrentUrl();
+    public <T extends BasePage> T on(Class<T> pageClass, Url url) {
+        return browser.on(pageClass, url);
     }
-    
+
+    public String getCurrentUrl() {
+        return browser.getCurrentUrl();
+    }
+
     public String getCurrentTitle() {
-        return browser.getDriver().getTitle();
+        return browser.getCurrentTitle();
     }
 
     public That verify() {
         return verifications.verify();
     }
-    
+
     public void switchToNextWindow() {
         browser.switchToNextWindow();
     }
@@ -78,7 +84,7 @@ public class WebTest extends ThucydidesJUnitStory {
     public void switchToWindowByIndex(int index) {
         browser.switchToWindowByIndex(index);
     }
-    
+
     public Browser getCurrentBrowser() {
         return browser;
     }

@@ -1,17 +1,23 @@
 package com.livejournal.uisteps.thucydides;
 
+import com.livejournal.uisteps.core.Browser;
 import com.livejournal.uisteps.thucydides.elements.Page;
 import java.util.ArrayList;
 import java.util.List;
 import net.thucydides.core.annotations.Step;
-import net.thucydides.core.steps.ScenarioSteps;
 import org.junit.Assert;
 
 /**
  *
  * @author ASolyankin
  */
-public class Verifications extends ScenarioSteps {
+public class Verifications {
+
+    private Browser browser;
+
+    public void init(Browser browser) {
+        this.browser = browser;
+    }
 
     public class Condition {
 
@@ -44,14 +50,10 @@ public class Verifications extends ScenarioSteps {
 
         public And thatIsOn(Class<? extends Page> pageClass) {
             try {
-                Page page = pageClass.newInstance();
-                DefaultUrlFactory defaultUrlFactory = new DefaultUrlFactory();
-                defaultUrlFactory.setDefaultUrlToPage(page);
-                String currentUrl = getPages().getDriver().getCurrentUrl();
-                boolean condition = currentUrl.equals(page.getUrl().toString());
-                conditions.add(new Condition(condition, page + " is opened", 
+                Page page = (Page) pageClass.newInstance();
+                String currentUrl = browser.getCurrentUrl();
+                conditions.add(new Condition(browser.isOn(page), page + " is opened",
                         "Unexpected page by url <a href='" + currentUrl + "'>" + currentUrl + "</a> is opened."));
-
             } catch (InstantiationException | IllegalAccessException ex) {
                 Assert.fail("Cannot instantiate page!\n" + ex);
             }

@@ -3,8 +3,11 @@ package com.livejournal.uisteps.core;
 import com.livejournal.uisteps.thucydides.DefaultUrlFactory;
 import com.livejournal.uisteps.thucydides.ThucydidesStepListener;
 import com.livejournal.uisteps.thucydides.ThucydidesUtils;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import net.thucydides.core.annotations.Step;
 import net.thucydides.core.steps.ScenarioSteps;
+import org.junit.Assert;
 
 /**
  *
@@ -23,7 +26,7 @@ public class Browser extends ScenarioSteps {
 
     public Browser() {
         ThucydidesStepListener listener = new ThucydidesStepListener(this);
-        ThucydidesUtils.registerListener(listener);   
+        ThucydidesUtils.registerListener(listener);
         windowList = new WindowList(this);
     }
 
@@ -97,13 +100,34 @@ public class Browser extends ScenarioSteps {
 
     @SuppressWarnings("unchecked")
     public <T extends UIContainer> T on(Class<T> uiContainerClass) {
+        return on(getUIContainerCandidate(uiContainerClass));
+
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T extends BasePage> T on(Class<T> pageClass, Url url) {
+        T pageCandidate = getUIContainerCandidate(pageClass);
+        Url pageUrl = pageCandidate.getUrl();
+        pageUrl.prependPrefix(url.getPrefix())
+                .appendPostfix(url.getPostfix());
+        String urlHost = url.getHost();
+        if (!urlHost.equals("")) {
+            pageUrl.setHost(urlHost);
+        }
+        Integer urlPort = url.getPort();
+        if (urlPort != -1) {
+            pageUrl.setPort(urlPort);
+        }
+        return on(pageCandidate);
+
+    }
+
+    private <T extends UIContainer> T getUIContainerCandidate(Class<T> uiContainerClass) {
         T uiContainerCandidate = getIfCurrent(uiContainerClass);
         if (uiContainerCandidate != null) {
             return onOpenedContainer(uiContainerCandidate);
         }
-        uiContainerCandidate = uiContainerFactory.instantiateUIContainer(uiContainerClass);
-        return on(uiContainerCandidate, false);
-
+        return uiContainerFactory.instantiateUIContainer(uiContainerClass);
     }
 
     @SuppressWarnings("unchecked")
@@ -122,22 +146,13 @@ public class Browser extends ScenarioSteps {
 
     @SuppressWarnings("unchecked")
     public <T extends UIContainer> T on(T uiContainer) {
-        return on(uiContainer, true);
-    }
-
-    @SuppressWarnings("unchecked")
-    private <T extends UIContainer> T on(T uiContainer, boolean needCheckCurrent) {
-        if (needCheckCurrent) {
-            T uiContainerCandidate = (T) getIfCurrent(uiContainer.getClass());
-            if (uiContainerCandidate != null) {
-                return onOpenedContainer(uiContainerCandidate);
-            }
+        T uiContainerCandidate = (T) getIfCurrent(uiContainer.getClass());
+        if (uiContainerCandidate != null) {
+            return onOpenedContainer(uiContainerCandidate);
         }
         if (uiContainerAnalizer.isPage(uiContainer)) {
-            if (uiContainerAnalizer.isPage(uiContainer)) {
-                DefaultUrlFactory defaultUrlFactory = new DefaultUrlFactory();
-                defaultUrlFactory.setDefaultUrlToPage((BasePage) uiContainer);
-            }
+            DefaultUrlFactory defaultUrlFactory = new DefaultUrlFactory();
+            defaultUrlFactory.setDefaultUrlToPage((BasePage) uiContainer);
             return (T) open((BasePage) uiContainer);
         }
         if (uiContainerAnalizer.isBlock(uiContainer)) {
@@ -207,7 +222,37 @@ public class Browser extends ScenarioSteps {
         if (isCurrentBlock(klass)) {
             return (T) currentBlock;
         }
+        if (uiContainerAnalizer.isPage(klass) && isOn(klass)) {
+            return uiContainerFactory.instantiateUIContainer(klass);
+        }
         return null;
+    }
+
+    public boolean isOn(Class<?> klass) {
+        try {
+            return isOn((BasePage) klass.newInstance());
+        } catch (InstantiationException | IllegalAccessException ex) {
+            Assert.fail("Cannot instantiate page!\n" + ex);
+            return false;
+        }
+    }
+
+    public boolean isOn(BasePage page) {
+        DefaultUrlFactory defaultUrlFactory = new DefaultUrlFactory();
+        defaultUrlFactory.getDefaultUrlOfPage(page);
+        String currentUrl = getCurrentUrl();
+        Url pageUrl = page.getUrl();
+        Pattern pattern = Pattern.compile(pageUrl.getProtocol() + pageUrl.getPrefix() + "(.*)" + pageUrl.getPostfix());
+        Matcher matcher = pattern.matcher(currentUrl);
+        return matcher.find();
+    }
+
+    public String getCurrentUrl() {
+        return getDriver().getCurrentUrl();
+    }
+
+    public String getCurrentTitle() {
+        return getDriver().getTitle();
     }
 
     @Override

@@ -12,18 +12,49 @@ import net.thucydides.core.annotations.DefaultUrl;
  */
 public class DefaultUrlFactory {
 
+    
+     public void getDefaultUrlOfPage(BasePage page) {
+        Url url = page.getUrl();
+        if (url.getHost().equals("")) {
+            String baseUrl = ThucydidesUtils.getBaseUrl();
+            url.setHost(baseUrl);
+        }
+        getUrlOf(url, getPageClass(page.getClass()));
+    }
+
+    private void getUrlOf(Url url, Class<?> clazz) {
+        if (!RootAnalizer.isRoot(clazz)) {
+            getUrlOf(url, clazz.getSuperclass());
+        }
+        if (clazz.isAnnotationPresent(DefaultUrl.class)) {
+            String defaultUrl = clazz.getAnnotation(DefaultUrl.class).value();
+            if (defaultUrl.contains("#HOST")) {
+                Pattern pattern = Pattern.compile("(.*)#HOST(.*)");
+                Matcher matcher = pattern.matcher(defaultUrl);
+                if (matcher.find()) {
+                    String prefix = matcher.group(1);
+                    String postfix = matcher.group(2);
+                    if (prefix != null) {
+                        url.prependPrefix(prefix);
+                    }
+                    if (postfix != null) {
+                        url.appendPostfix(postfix);
+                    }
+                }
+            } else {
+                url.appendPostfix(defaultUrl);
+            }
+        }
+    }
+    
+    
     public void setDefaultUrlToPage(BasePage page) {
         Url url = page.getUrl();
         if (url.getHost().equals("")) {
             String baseUrl = ThucydidesUtils.getBaseUrl();
             url.setHost(baseUrl);
         }
-        Class<? extends BasePage> pageClass = page.getClass();
-        if (pageClass.getName().contains("$$")) {
-            setUrlTo(page, pageClass.getSuperclass());
-        } else {
-            setUrlTo(page, pageClass);
-        }
+        setUrlTo(page, getPageClass(page.getClass()));
     }
 
     private void setUrlTo(BasePage page, Class<?> clazz) {
@@ -49,6 +80,14 @@ public class DefaultUrlFactory {
             } else {
                 url.appendPostfix(defaultUrl);
             }
+        }
+    }
+
+    private Class<?> getPageClass(Class<?> clazz) {
+        if (clazz.getName().contains("$$")) {
+            return getPageClass(clazz.getSuperclass());
+        } else {
+            return clazz;
         }
     }
 }

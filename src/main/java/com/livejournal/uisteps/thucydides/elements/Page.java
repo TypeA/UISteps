@@ -30,7 +30,8 @@ public class Page extends PageObject implements BasePage {
     public Url getUrl() {
         return url;
     }
-
+    
+    @Override
     public void setUrl(Url url) {
         this.url = url;
     }
@@ -57,6 +58,6 @@ public class Page extends PageObject implements BasePage {
     public String toString() {
         return NameConvertor.humanize(getClass())
                 .replace("dot", "\\.")
-                + " by url <a href='" + getUrl().toString() + "'>" + getUrl().toString() + "</a>";
+                + " by url <a href='" + getUrl() + "'>" + getUrl().toString().replace(getUrl().getHost(), "#HOST") + "</a>";
     }
 }
