@@ -19,6 +19,7 @@ public class Page extends PageObject implements BasePage {
     private Url url;
     private final UIContainerInitializer initializer;
     private final UIActions actions;
+    private boolean isInitialized;
 
     public Page() {
         url = new Url();
@@ -30,7 +31,7 @@ public class Page extends PageObject implements BasePage {
     public Url getUrl() {
         return url;
     }
-    
+
     @Override
     public void setUrl(Url url) {
         this.url = url;
@@ -58,6 +59,17 @@ public class Page extends PageObject implements BasePage {
     public String toString() {
         return NameConvertor.humanize(getClass())
                 .replace("dot", "\\.")
-                + " by url <a href='" + getUrl() + "'>" + getUrl().toString().replace(getUrl().getHost(), "#HOST") + "</a>";
+                + " by url <a href='" + getUrl() + "'>" + getUrl() + "</a>";
     }
+
+    @Override
+    public boolean isInitialized() {
+        return isInitialized;
+    }
+
+    @Override
+    public void initialized() {
+        isInitialized = true;
+    }
+
 }

@@ -13,13 +13,14 @@ import net.thucydides.core.annotations.DefaultUrl;
 public class DefaultUrlFactory {
 
     
-     public void getDefaultUrlOfPage(BasePage page) {
-        Url url = page.getUrl();
+     public Url getDefaultUrlOfPage(Class<?> pageClass) {
+        Url url = new Url();
         if (url.getHost().equals("")) {
             String baseUrl = ThucydidesUtils.getBaseUrl();
             url.setHost(baseUrl);
         }
-        getUrlOf(url, getPageClass(page.getClass()));
+        getUrlOf(url, getPageClass(pageClass));
+        return url;
     }
 
     private void getUrlOf(Url url, Class<?> clazz) {

@@ -7,6 +7,8 @@ package com.livejournal.uisteps.core;
 public class Url {
 
     private String protocol = "http";
+    private String user = "";
+    private String password = "";
     private String prefix = "";
     private String host = "";
     private Integer port = -1;
@@ -23,6 +25,28 @@ public class Url {
         return this;
     }
 
+    public String getUser() {
+        return user;
+    }
+
+    public Url setUser(String value) {
+        if (value != null) {
+            user = value;
+        }
+        return this;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public Url setPassword(String value) {
+        if (value != null) {
+            password = value;
+        }
+        return this;
+    }
+    
     public String getHost() {
         return host;
     }
@@ -97,8 +121,12 @@ public class Url {
 
     @Override
     public String toString() {
-        String url = protocol + "://" + prefix + host;
-        if (port != null && port > -1) {
+        String url = protocol + "://";
+        if(!user.equals("") && !password.equals("")) {
+            url += user + ":" + password + "@";
+        }
+        url += prefix + host;
+        if (port > -1) {
             url += ":" + port;
         }
         url += postfix;

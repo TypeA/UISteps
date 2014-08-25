@@ -11,10 +11,15 @@ public interface UIContainer {
     default void initialize(WebDriver driver) {
         initElements(driver);
         callMethodsWhenOpens();
+        initialized();
     }
 
     void initElements(WebDriver driver);
 
     void callMethodsWhenOpens();
+    
+    boolean isInitialized();
+    
+    void initialized();
 
 }

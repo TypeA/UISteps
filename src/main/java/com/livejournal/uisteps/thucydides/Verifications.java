@@ -49,14 +49,9 @@ public class Verifications {
         }
 
         public And thatIsOn(Class<? extends Page> pageClass) {
-            try {
-                Page page = (Page) pageClass.newInstance();
-                String currentUrl = browser.getCurrentUrl();
-                conditions.add(new Condition(browser.isOn(page), page + " is opened",
-                        "Unexpected page by url <a href='" + currentUrl + "'>" + currentUrl + "</a> is opened."));
-            } catch (InstantiationException | IllegalAccessException ex) {
-                Assert.fail("Cannot instantiate page!\n" + ex);
-            }
+            String currentUrl = browser.getCurrentUrl();
+            conditions.add(new Condition(browser.isOn(pageClass), NameConvertor.humanize(pageClass) + " is opened",
+                    "Unexpected page by url <a href='" + currentUrl + "'>" + currentUrl + "</a> is opened."));
             return new And(conditions);
         }
     }

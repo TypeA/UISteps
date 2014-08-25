@@ -18,6 +18,7 @@ public class UIBlock extends HtmlElement implements BaseUIBlock {
 
     private final UIContainerInitializer initializer;
     private final UIActions actions;
+    private boolean isInitialized;
 
     public UIBlock() {
         initializer = new UIContainerInitializer();
@@ -61,5 +62,15 @@ public class UIBlock extends HtmlElement implements BaseUIBlock {
             Assert.fail("Cannot get element!");
         }
         return element;
+    }
+
+    @Override
+    public boolean isInitialized() {
+        return isInitialized;
+    }
+
+    @Override
+    public void initialized() {
+        isInitialized = true;
     }
 }

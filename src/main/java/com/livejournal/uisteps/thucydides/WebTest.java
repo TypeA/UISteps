@@ -45,7 +45,12 @@ public class WebTest extends ThucydidesJUnitStory {
 
     public <T extends UIContainer> T on(T uiContainer) {
         openBrowser();
-        return browser.on(uiContainer);
+        return browser.on(uiContainer, null);
+    }
+    
+    public <T extends BasePage> T on(T page, Url url) {
+        openBrowser();
+        return browser.on(page, url);
     }
 
     public <T extends UIContainer> T on(Class<T> uiContainerClass) {
@@ -54,6 +59,7 @@ public class WebTest extends ThucydidesJUnitStory {
     }
 
     public <T extends BasePage> T on(Class<T> pageClass, Url url) {
+        openBrowser();
         return browser.on(pageClass, url);
     }
 
