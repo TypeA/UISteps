@@ -3,11 +3,8 @@ package com.livejournal.uisteps.core;
 import com.livejournal.uisteps.thucydides.DefaultUrlFactory;
 import com.livejournal.uisteps.thucydides.ThucydidesStepListener;
 import com.livejournal.uisteps.thucydides.ThucydidesUtils;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import junit.framework.Assert;
 import net.thucydides.core.annotations.Step;
 import net.thucydides.core.steps.ScenarioSteps;
 
