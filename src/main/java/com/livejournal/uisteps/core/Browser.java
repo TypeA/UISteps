@@ -60,6 +60,7 @@ public class Browser extends ScenarioSteps {
         if (windowList.getCountOfWindows() > 1) {
             switchToDefaultWindow();
         }
+        getDriver().manage().deleteAllCookies();
     }
 
     public boolean isOpened() {
