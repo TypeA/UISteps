@@ -47,7 +47,7 @@ public class WebTest extends ThucydidesJUnitStory {
         openBrowser();
         return browser.on(uiContainer, null);
     }
-    
+
     public <T extends BasePage> T on(T page, Url url) {
         openBrowser();
         return browser.on(page, url);
@@ -93,6 +93,10 @@ public class WebTest extends ThucydidesJUnitStory {
 
     public Browser getCurrentBrowser() {
         return browser;
+    }
+
+    public void refreshCurrentPage() {
+        browser.refreshCurrentPage();
     }
 
 }

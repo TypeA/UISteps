@@ -49,6 +49,11 @@ public class Browser extends ScenarioSteps {
         windowList.switchToWindowByIndex(index);
     }
 
+    @Step
+    public void refreshCurrentPage() {
+        getDriver().navigate().refresh();
+    }
+
     public void clearCache() {
         currentPage = null;
         currentBlock = null;
