@@ -4,6 +4,7 @@ import com.livejournal.uisteps.core.UIContainer;
 import com.livejournal.uisteps.thucydides.ThucydidesUtils;
 import com.livejournal.uisteps.thucydides.UIActions;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.internal.WrapsElement;
 import ru.yandex.qatools.htmlelements.element.TypifiedElement;
 
 /**
@@ -37,6 +38,11 @@ public class UIElement extends TypifiedElement {
         return this;
     }
 
+    public Object clickOnPoint(int x, int y) {
+        actions.clickOnPoint(this, x, y);
+        return this;
+    }
+
     protected UIActions getActions() {
         return actions;
     }
@@ -56,4 +62,5 @@ public class UIElement extends TypifiedElement {
     public void switchToWindowByIndex(int index) {
         actions.switchToWindowByIndex(index);
     }
+
 }

@@ -29,7 +29,7 @@ public class UIActions {
     public <T extends BasePage> T on(Class<T> pageClass, Url url) {
         return browser.on(pageClass, url);
     }
-    
+
     public <T extends UIContainer> T on(T uiContainer) {
         return browser.on(uiContainer, null);
     }
@@ -37,7 +37,7 @@ public class UIActions {
     public <T extends BasePage> T on(T page, Url url) {
         return browser.on(page, url);
     }
-    
+
     public <T extends UIContainer> T on(Class<T> rootClass, String uiContainerClassName) {
         return browser.on(rootClass, uiContainerClassName);
     }
@@ -74,6 +74,12 @@ public class UIActions {
     }
 
     @Step
+    public void clickOnPoint(WrapsElement element, int x, int y) {
+        Actions actions = new Actions(browser.getDriver());
+        actions.moveToElement(element.getWrappedElement(), x, y).click().build().perform();
+    }
+
+    @Step
     public void moveMouseOver(WrapsElement element) {
         Actions actions = new Actions(browser.getDriver());
         actions.moveToElement(element.getWrappedElement()).build().perform();
@@ -81,7 +87,7 @@ public class UIActions {
             Thread.sleep(300);
         } catch (InterruptedException ex) {
             throw new RuntimeException("Cannot move mouse over " + this + "\n" + ex);
-        } 
+        }
     }
 
     @Step
