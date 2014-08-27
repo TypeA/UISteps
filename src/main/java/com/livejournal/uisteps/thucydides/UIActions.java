@@ -83,11 +83,11 @@ public class UIActions {
     public void moveMouseOver(WrapsElement element) {
         Actions actions = new Actions(browser.getDriver());
         actions.moveToElement(element.getWrappedElement()).build().perform();
-        try {
+     /*   try {
             Thread.sleep(300);
         } catch (InterruptedException ex) {
             throw new RuntimeException("Cannot move mouse over " + this + "\n" + ex);
-        }
+        }*/
     }
 
     @Step
