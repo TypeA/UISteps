@@ -253,4 +253,6 @@ public class Browser extends ScenarioSteps {
     public String toString() {
         return name;
     }
+    
+    
 }
