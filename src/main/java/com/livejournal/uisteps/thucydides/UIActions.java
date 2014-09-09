@@ -5,6 +5,8 @@ import com.livejournal.uisteps.core.Browser;
 import com.livejournal.uisteps.core.UIContainer;
 import com.livejournal.uisteps.core.Url;
 import com.livejournal.uisteps.thucydides.elements.Link;
+import java.util.Arrays;
+import junit.framework.Assert;
 import net.thucydides.core.annotations.Step;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -60,53 +62,81 @@ public class UIActions {
 
     @Step
     public void click(WrapsElement element) {
-        WebElement webElement = element.getWrappedElement();
-        if (element instanceof Link) {
-            String attrTarget = webElement.getAttribute("target");
-            boolean needToSwitch = attrTarget != null && !attrTarget.equals("") && !attrTarget.equals("_self");
-            webElement.click();
-            if (needToSwitch) {
-                switchToNextWindow();
+        try {
+            WebElement webElement = element.getWrappedElement();
+            if (element instanceof Link) {
+                String attrTarget = webElement.getAttribute("target");
+                boolean needToSwitch = attrTarget != null && !attrTarget.equals("") && !attrTarget.equals("_self");
+                webElement.click();
+                if (needToSwitch) {
+                    switchToNextWindow();
+                }
+            } else {
+                webElement.click();
             }
-        } else {
-            webElement.click();
+        } catch (Exception ex) {
+            Assert.fail("Cannot click " + element + "\n" + ex);
         }
     }
 
     @Step
     public void clickOnPoint(WrapsElement element, int x, int y) {
-        Actions actions = new Actions(browser.getDriver());
-        actions.moveToElement(element.getWrappedElement(), x, y).click().build().perform();
+        try {
+            Actions actions = new Actions(browser.getDriver());
+            actions.moveToElement(element.getWrappedElement(), x, y).click().build().perform();
+
+        } catch (Exception ex) {
+            Assert.fail("Cannot click " + element + "on point (" + x + "; " + y + ") \n" + ex);
+        }
     }
 
     @Step
     public void moveMouseOver(WrapsElement element) {
-        Actions actions = new Actions(browser.getDriver());
-        actions.moveToElement(element.getWrappedElement()).build().perform();
-     /*   try {
+        try {
+            Actions actions = new Actions(browser.getDriver());
+            actions.moveToElement(element.getWrappedElement()).build().perform();
+
             Thread.sleep(300);
         } catch (InterruptedException ex) {
-            throw new RuntimeException("Cannot move mouse over " + this + "\n" + ex);
-        }*/
+            Assert.fail("Cannot move mouse over " + element + "\n" + ex);
+        }
     }
 
     @Step
     public void typeInto(WrapsElement input, CharSequence... keys) {
-        input.getWrappedElement().sendKeys(keys);
+        try {
+            input.getWrappedElement().sendKeys(keys);
+        } catch (Exception ex) {
+            Assert.fail("Cannot type " + Arrays.toString(keys) + " into " + input + "\n" + ex);
+        }
     }
 
     @Step
     public void clear(WrapsElement input) {
-        input.getWrappedElement().clear();
+        try {
+            input.getWrappedElement().clear();
+
+        } catch (Exception ex) {
+            Assert.fail("Cannot clear " + input + "\n" + ex);
+        }
     }
 
     @Step
     public void enterInto(WrapsElement input, CharSequence... text) {
-        input.getWrappedElement().clear();
-        input.getWrappedElement().sendKeys(text);
+        try {
+            input.getWrappedElement().clear();
+            input.getWrappedElement().sendKeys(text);
+        } catch (Exception ex) {
+            Assert.fail("Cannot enter " + Arrays.toString(text) + " into " + input + "\n" + ex);
+        }
     }
 
     public String getTextFrom(WrapsElement input) {
-        return input.getWrappedElement().getText();
+        try {
+            return input.getWrappedElement().getText();
+        } catch (Exception ex) {
+            Assert.fail("Cannot clear " + input + "\n" + ex);
+        }
+        return null;
     }
 }

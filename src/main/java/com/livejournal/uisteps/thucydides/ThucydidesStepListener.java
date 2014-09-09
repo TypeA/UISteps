@@ -112,6 +112,7 @@ public class ThucydidesStepListener implements StepListener {
     private void clearBrowserCache() {
         if (browser != null) {
             browser.clearCache();
+            browser.deleteCookies();
         }
     }
 

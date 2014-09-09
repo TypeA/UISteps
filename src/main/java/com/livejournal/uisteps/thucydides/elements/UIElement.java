@@ -4,7 +4,6 @@ import com.livejournal.uisteps.core.UIContainer;
 import com.livejournal.uisteps.thucydides.ThucydidesUtils;
 import com.livejournal.uisteps.thucydides.UIActions;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.internal.WrapsElement;
 import ru.yandex.qatools.htmlelements.element.TypifiedElement;
 
 /**
