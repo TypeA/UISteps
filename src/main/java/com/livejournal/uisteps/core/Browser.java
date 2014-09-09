@@ -122,8 +122,7 @@ public class Browser extends ScenarioSteps {
         if (uiContainerCandidate != null) {
             return uiContainerCandidate;
         } else {
-            uiContainerCandidate = uiContainerFactory.instantiateUIContainer(uiContainerClass);
-            return uiContainerCandidate;
+            return uiContainerFactory.instantiateUIContainer(uiContainerClass);
         }
 
     }

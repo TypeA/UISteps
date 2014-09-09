@@ -9,12 +9,7 @@ import com.livejournal.uisteps.core.UIContainerFactory;
  */
 public class ThucydidesUIContainerFactory implements UIContainerFactory {
 
-   
-
-    public ThucydidesUIContainerFactory() {
-    }
-    
-     @Override
+    @Override
     public <T extends UIContainer> T instantiateUIContainer(Class<T> uiContainerClass) {
         return ThucydidesUtils.getNewStepLibrary(uiContainerClass);
     }
