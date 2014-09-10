@@ -7,6 +7,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import net.thucydides.core.annotations.Step;
 import net.thucydides.core.steps.ScenarioSteps;
+import org.openqa.selenium.WebDriver;
 
 /**
  *
@@ -254,6 +255,11 @@ public class Browser extends ScenarioSteps {
     @Override
     public String toString() {
         return name;
+    }
+
+    @Override
+    public synchronized WebDriver getDriver() {
+        return super.getDriver(); 
     }
     
     
