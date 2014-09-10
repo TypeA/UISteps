@@ -95,9 +95,7 @@ public class UIActions {
         try {
             Actions actions = new Actions(browser.getDriver());
             actions.moveToElement(element.getWrappedElement()).build().perform();
-
-            Thread.sleep(300);
-        } catch (InterruptedException ex) {
+        } catch (Exception ex) {
             Assert.fail("Cannot move mouse over " + element + "\n" + ex);
         }
     }
