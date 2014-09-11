@@ -1,5 +1,6 @@
 package com.livejournal.uisteps.core;
 
+import com.livejournal.uisteps.thucydides.ThucydidesUtils;
 import java.util.Set;
 import junit.framework.Assert;
 import org.openqa.selenium.WebDriver;
@@ -37,7 +38,7 @@ public class WindowList {
     
     public void switchToWindowByIndex(int index) {
         WebDriver driver = browser.getDriver();
-        WebDriverWait wait = new WebDriverWait(driver, 5);
+        WebDriverWait wait = new WebDriverWait(driver, ThucydidesUtils.getImplementTimeout() / 1000);
         Set<String> setHandles = driver.getWindowHandles();
         if (index < 0 || index >= setHandles.size()) {
             Assert.fail("Cannot switch to window by index: " + index + "!\n");

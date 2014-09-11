@@ -1,6 +1,8 @@
 package com.livejournal.uisteps.thucydides;
 
 import net.thucydides.core.Thucydides;
+import net.thucydides.core.ThucydidesSystemProperties;
+import net.thucydides.core.ThucydidesSystemProperty;
 import net.thucydides.core.guice.Injectors;
 import net.thucydides.core.steps.StepEventBus;
 import net.thucydides.core.steps.StepFactory;
@@ -51,5 +53,9 @@ public class ThucydidesUtils {
 
     private static Configuration getConfiguration() {
         return Injectors.getInjector().getInstance(Configuration.class);
+    }
+    
+    public static Integer getImplementTimeout() {
+        return Integer.valueOf(ThucydidesSystemProperties.getProperties().getValue(ThucydidesSystemProperty.WEBDRIVER_TIMEOUTS_IMPLICITLYWAIT));
     }
 }
