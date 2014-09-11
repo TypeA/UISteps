@@ -19,6 +19,7 @@ public class UIBlock extends HtmlElement implements BaseUIBlock {
     private final UIContainerInitializer initializer;
     private final UIActions actions;
     private boolean isInitialized;
+    private WebDriver driver;
 
     public UIBlock() {
         initializer = new UIContainerInitializer();
@@ -27,6 +28,7 @@ public class UIBlock extends HtmlElement implements BaseUIBlock {
 
     @Override
     public void initElements(WebDriver driver) {
+        this.driver = driver;
         initializer.initializeUIContainer(this, driver);
     }
 
@@ -73,4 +75,10 @@ public class UIBlock extends HtmlElement implements BaseUIBlock {
     public void initialized() {
         isInitialized = true;
     }
+
+    @Override
+    public WebDriver getDriver() {
+        return driver;
+    }
+
 }

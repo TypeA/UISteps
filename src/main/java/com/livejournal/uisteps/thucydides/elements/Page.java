@@ -20,6 +20,7 @@ public class Page extends PageObject implements BasePage {
     private final UIContainerInitializer initializer;
     private final UIActions actions;
     private boolean isInitialized;
+    private WebDriver driver;
 
     public Page() {
         url = new Url();
@@ -39,6 +40,7 @@ public class Page extends PageObject implements BasePage {
 
     @Override
     public void initElements(WebDriver driver) {
+        this.driver = driver;
         initializer.initializeUIContainer(this, driver);
     }
 
@@ -72,4 +74,8 @@ public class Page extends PageObject implements BasePage {
         isInitialized = true;
     }
 
+    @Override
+    public WebDriver getDriver() {
+        return driver;
+    }
 }
