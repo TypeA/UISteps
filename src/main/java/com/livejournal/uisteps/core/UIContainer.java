@@ -21,5 +21,7 @@ public interface UIContainer {
     boolean isInitialized();
 
     void initialized();
+    
+    WebDriver getDriver();
 
 }

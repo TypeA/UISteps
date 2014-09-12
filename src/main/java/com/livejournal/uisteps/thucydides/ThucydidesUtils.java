@@ -61,7 +61,7 @@ public class ThucydidesUtils {
     }
     
     public static Integer getImplementTimeoutInSec() {
-        return getImplementTimeoutInSec();
+        return getImplementTimeout() / 1000;
     }
     
     public static String getHost() {
