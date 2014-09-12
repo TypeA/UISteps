@@ -57,7 +57,7 @@ public class ThucydidesUtils {
     
     public static Integer getImplementTimeout() {
         ThucydidesSystemProperties properties = ThucydidesSystemProperties.getProperties();
-        return properties.getIntegerValue(ThucydidesSystemProperty.WEBDRIVER_TIMEOUTS_IMPLICITLYWAIT, 5000);
+        return properties.getIntegerValue(ThucydidesSystemProperty.WEBDRIVER_TIMEOUTS_IMPLICITLYWAIT, 10000);
     }
     
     public static Integer getImplementTimeoutInSec() {

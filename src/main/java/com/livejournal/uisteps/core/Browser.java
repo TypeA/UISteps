@@ -59,7 +59,7 @@ public class Browser extends ScenarioSteps {
         currentPage = null;
         currentBlock = null;
         if (windowList.getCountOfWindows() > 1) {
-            windowList.switchToWindowByIndex(0);
+            switchToDefaultWindow();
         }
     }
 
