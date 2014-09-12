@@ -27,7 +27,7 @@ public class UIContainerInitializer {
     public void initializeUIContainer(UIContainer uiContainer, WebDriver driver) {
         HtmlElementLoader.populate(uiContainer, driver);
         if (uiContainerAnalizer.isBlock(uiContainer)) {
-            WebDriverWait wait = new WebDriverWait(driver, ThucydidesUtils.getImplementTimeout() / 1000);
+            WebDriverWait wait = new WebDriverWait(driver, ThucydidesUtils.getImplementTimeoutInSec());
             try {
                 wait.until(new ExpectedCondition<Boolean>() {
                     @Override

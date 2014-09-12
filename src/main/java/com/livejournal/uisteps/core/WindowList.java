@@ -38,7 +38,7 @@ public class WindowList {
     
     public void switchToWindowByIndex(int index) {
         WebDriver driver = browser.getDriver();
-        WebDriverWait wait = new WebDriverWait(driver, ThucydidesUtils.getImplementTimeout() / 1000);
+        WebDriverWait wait = new WebDriverWait(driver, ThucydidesUtils.getImplementTimeoutInSec());
         Set<String> setHandles = driver.getWindowHandles();
         if (index < 0 || index >= setHandles.size()) {
             Assert.fail("Cannot switch to window by index: " + index + "!\n");

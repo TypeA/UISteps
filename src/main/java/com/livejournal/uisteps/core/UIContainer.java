@@ -22,6 +22,4 @@ public interface UIContainer {
 
     void initialized();
 
-    WebDriver getDriver();
-
 }
