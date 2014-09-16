@@ -54,6 +54,7 @@ public class Verifications {
                     "Unexpected page by url <a href='" + currentUrl + "'>" + currentUrl + "</a> is opened."));
             return new And(conditions);
         }
+
     }
 
     public class ExpectedResult {
