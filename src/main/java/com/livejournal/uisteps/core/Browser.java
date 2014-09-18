@@ -42,7 +42,7 @@ public class Browser extends ScenarioSteps {
 
     @Step
     public void switchToDefaultWindow() {
-        windowList.switchToWindowByIndex(0);
+        windowList.switchToDefaultWindow();
     }
 
     @Step
@@ -58,8 +58,8 @@ public class Browser extends ScenarioSteps {
     public void clearCache() {
         currentPage = null;
         currentBlock = null;
-        if (windowList.getCountOfWindows() > 1) {
-            switchToDefaultWindow();
+        if (windowList.getCountOfWindows() > 1) { 
+            windowList.switchToDefaultWindow();
         }
     }
 
