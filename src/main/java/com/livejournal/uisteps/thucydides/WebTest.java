@@ -34,6 +34,7 @@ public class WebTest extends ThucydidesJUnitStory {
             UIContainerAnalizer uiContainerAnalizer = new UIContainerAnalizer();
             browser.init(uiContainerFactory, uiContainerComparator, uiContainerAnalizer);
             uiActions.init(browser);
+            verifications.init(browser);
             ThucydidesUtils.putToSession("#UI_ACTIONS", uiActions);
             browser.setOpened();
         }

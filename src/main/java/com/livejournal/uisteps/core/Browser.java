@@ -5,6 +5,7 @@ import com.livejournal.uisteps.thucydides.ThucydidesStepListener;
 import com.livejournal.uisteps.thucydides.ThucydidesUtils;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import net.thucydides.core.Thucydides;
 import net.thucydides.core.annotations.Step;
 import net.thucydides.core.steps.ScenarioSteps;
 import org.openqa.selenium.WebDriver;
@@ -58,7 +59,7 @@ public class Browser extends ScenarioSteps {
     public void clearCache() {
         currentPage = null;
         currentBlock = null;
-        if (windowList.getCountOfWindows() > 1) { 
+        if (windowList.getCountOfWindows() > 1) {
             windowList.switchToDefaultWindow();
         }
     }
@@ -66,7 +67,7 @@ public class Browser extends ScenarioSteps {
     public void deleteCookies() {
         getDriver().manage().deleteAllCookies();
     }
-    
+
     public boolean isOpened() {
         return opened;
     }
@@ -160,14 +161,22 @@ public class Browser extends ScenarioSteps {
         T uiContainerCandidate = (T) getIfCurrent(uiContainer.getClass());
         if (uiContainerCandidate != null) {
             if (!uiContainerCandidate.isInitialized()) {
-                return (T) open((BasePage) uiContainer);
+                if (isOn(uiContainer.getClass())) {
+                    return onOpened(uiContainer);
+                } else {
+                    return (T) open((BasePage) uiContainer);
+                }
             }
             return uiContainerCandidate;
         }
         if (uiContainerAnalizer.isPage(uiContainer)) {
             DefaultUrlFactory defaultUrlFactory = new DefaultUrlFactory();
             defaultUrlFactory.setDefaultUrlToPage((BasePage) uiContainer);
-            return (T) open((BasePage) uiContainer);
+            if (isOn(uiContainer.getClass())) {
+                return onOpened(uiContainer);
+            } else {
+                return (T) open((BasePage) uiContainer);
+            }
         }
         if (uiContainerAnalizer.isBlock(uiContainer)) {
             return onOpened(uiContainer);
@@ -259,8 +268,7 @@ public class Browser extends ScenarioSteps {
 
     @Override
     public synchronized WebDriver getDriver() {
-        return super.getDriver(); 
+        return super.getDriver();
     }
-    
-    
+
 }
