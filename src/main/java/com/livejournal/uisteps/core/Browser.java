@@ -5,10 +5,11 @@ import com.livejournal.uisteps.thucydides.ThucydidesStepListener;
 import com.livejournal.uisteps.thucydides.ThucydidesUtils;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import net.thucydides.core.Thucydides;
 import net.thucydides.core.annotations.Step;
 import net.thucydides.core.steps.ScenarioSteps;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 /**
  *
@@ -159,24 +160,17 @@ public class Browser extends ScenarioSteps {
             }
         }
         T uiContainerCandidate = (T) getIfCurrent(uiContainer.getClass());
-        if (uiContainerCandidate != null) {
-            if (!uiContainerCandidate.isInitialized()) {
-                if (isOn(uiContainer.getClass())) {
-                    return onOpened(uiContainer);
-                } else {
-                    return (T) open((BasePage) uiContainer);
-                }
-            }
+        if (uiContainerCandidate != null && uiContainerCandidate.isInitialized()) {
             return uiContainerCandidate;
         }
         if (uiContainerAnalizer.isPage(uiContainer)) {
+            currentBlock = null;
             DefaultUrlFactory defaultUrlFactory = new DefaultUrlFactory();
             defaultUrlFactory.setDefaultUrlToPage((BasePage) uiContainer);
-            if (isOn(uiContainer.getClass())) {
+            if (isOn(uiContainer.getClass()) && !((BasePage) uiContainer).getConditionToOpen()) {
                 return onOpened(uiContainer);
-            } else {
-                return (T) open((BasePage) uiContainer);
             }
+            return (T) open((BasePage) uiContainer);
         }
         if (uiContainerAnalizer.isBlock(uiContainer)) {
             return onOpened(uiContainer);
@@ -186,7 +180,7 @@ public class Browser extends ScenarioSteps {
 
     @Step
     public <T extends UIContainer> T onOpened(T uiContainer) {
-        uiContainer.initialize(getDriver());
+        uiContainer.initialize();
         setCurrent(uiContainer);
         return uiContainer;
     }
@@ -194,7 +188,7 @@ public class Browser extends ScenarioSteps {
     @Step
     public <T extends BasePage> T open(T page) {
         openPageUrl(page.getUrl());
-        page.initialize(getDriver());
+        page.initialize();
         setCurrent(page);
         return page;
     }
@@ -267,8 +261,22 @@ public class Browser extends ScenarioSteps {
     }
 
     @Override
-    public synchronized WebDriver getDriver() {
+    public WebDriver getDriver() {
         return super.getDriver();
     }
 
+    public void waitUntil(ExpectedCondition<Object> condition) {
+        WebDriverWait wait = new WebDriverWait(getDriver(), 10);
+        wait.until(condition);
+    }
+    
+    public void waitUntil(Boolean condition) {
+        WebDriverWait wait = new WebDriverWait(getDriver(), 10);
+        wait.until(new ExpectedCondition<Boolean>() {
+            public Boolean apply(WebDriver driver) {
+                return condition;
+            }
+        });
+    }
+    
 }

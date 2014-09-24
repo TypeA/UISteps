@@ -1,6 +1,7 @@
 package com.livejournal.uisteps.core;
 
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 
 /**
  *
@@ -8,20 +9,24 @@ import org.openqa.selenium.WebDriver;
  */
 public interface UIContainer {
 
-    default void initialize(WebDriver driver) {
-        initElements(driver);
+    default void initialize() {
+        initElements();
         callMethodsWhenOpens();
         initialized();
     }
 
-    void initElements(WebDriver driver);
+    void initElements();
 
     void callMethodsWhenOpens();
 
     boolean isInitialized();
 
     void initialized();
-    
+
     WebDriver getDriver();
+
+    void waitUntil(ExpectedCondition<Object> condition);
+
+    void waitUntil(Boolean condition);
 
 }

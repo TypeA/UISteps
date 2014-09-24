@@ -8,6 +8,7 @@ import com.livejournal.uisteps.core.Url;
 import com.livejournal.uisteps.thucydides.Verifications.That;
 import net.thucydides.core.annotations.Steps;
 import net.thucydides.jbehave.ThucydidesJUnitStory;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 
 /**
  *
@@ -54,6 +55,11 @@ public class WebTest extends ThucydidesJUnitStory {
         return browser.on(page, url);
     }
 
+    public <T extends BasePage> T on(Class<T> rootPageClass, String uiContainerClass) {
+        openBrowser();
+        return browser.on(rootPageClass, uiContainerClass);
+    }
+    
     public <T extends UIContainer> T on(Class<T> uiContainerClass) {
         openBrowser();
         return browser.on(uiContainerClass);
@@ -100,4 +106,11 @@ public class WebTest extends ThucydidesJUnitStory {
         browser.refreshCurrentPage();
     }
 
+    public void waitUntil(ExpectedCondition<Object> condition) {
+        browser.waitUntil(condition);
+    }
+    
+    public void waitUntil(Boolean condition) {
+        browser.waitUntil(condition);
+    }
 }

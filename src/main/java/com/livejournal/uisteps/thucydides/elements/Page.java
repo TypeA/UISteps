@@ -9,6 +9,7 @@ import com.livejournal.uisteps.thucydides.UIActions;
 import com.livejournal.uisteps.thucydides.UIContainerInitializer;
 import net.thucydides.core.pages.PageObject;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 
 /**
  *
@@ -20,12 +21,13 @@ public class Page extends PageObject implements BasePage {
     private final UIContainerInitializer initializer;
     private final UIActions actions;
     private boolean isInitialized;
-    private WebDriver driver;
+    private final WebDriver driver;
 
     public Page() {
         url = new Url();
         initializer = new UIContainerInitializer();
         actions = (UIActions) ThucydidesUtils.getFromSession("#UI_ACTIONS");
+        driver = actions.getBrowser().getDriver();
     }
 
     @Override
@@ -39,8 +41,7 @@ public class Page extends PageObject implements BasePage {
     }
 
     @Override
-    public void initElements(WebDriver driver) {
-        this.driver = driver;
+    public void initElements() {
         initializer.initializeUIContainer(this, driver);
     }
 
@@ -77,5 +78,18 @@ public class Page extends PageObject implements BasePage {
     @Override
     public WebDriver getDriver() {
         return driver;
+    }
+    
+    @Override
+    public boolean getConditionToOpen() {
+        return false;
+    }
+
+    public void waitUntil(ExpectedCondition<Object> condition) {
+        actions.waitUntil(condition);
+    }
+
+    public void waitUntil(Boolean condition) {
+        actions.waitUntil(condition);
     }
 }

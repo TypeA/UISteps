@@ -8,9 +8,12 @@ import com.livejournal.uisteps.thucydides.elements.Link;
 import java.util.Arrays;
 import junit.framework.Assert;
 import net.thucydides.core.annotations.Step;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.internal.WrapsElement;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 /**
  *
@@ -136,5 +139,17 @@ public class UIActions {
             Assert.fail("Cannot clear " + input + "\n" + ex);
         }
         return null;
+    }
+    
+    public Browser getBrowser() {
+        return browser;
+    }
+
+    public void waitUntil(ExpectedCondition<Object> condition) {
+        browser.waitUntil(condition);
+    }
+    
+    public void waitUntil(Boolean condition) {
+        browser.waitUntil(condition);
     }
 }
