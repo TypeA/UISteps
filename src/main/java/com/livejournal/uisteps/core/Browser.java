@@ -293,7 +293,11 @@ public class Browser extends ScenarioSteps {
         WebDriverWait wait = new WebDriverWait(getDriver(), 10);
         wait.until(new ExpectedCondition<Boolean>() {
             public Boolean apply(WebDriver driver) {
-                return condition;
+                try {
+                    return condition;
+                } catch(Exception ex) {
+                    return false;
+                }
             }
         });
     }
