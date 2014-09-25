@@ -7,6 +7,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import net.thucydides.core.annotations.Step;
 import net.thucydides.core.steps.ScenarioSteps;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -161,18 +162,27 @@ public class Browser extends ScenarioSteps {
         }
         T uiContainerCandidate = (T) getIfCurrent(uiContainer.getClass());
         if (uiContainerCandidate != null && uiContainerCandidate.isInitialized()) {
+            System.out.println("==============================================" + getUrlToTest(uiContainerCandidate));
             return uiContainerCandidate;
         }
         if (uiContainerAnalizer.isPage(uiContainer)) {
             currentBlock = null;
             DefaultUrlFactory defaultUrlFactory = new DefaultUrlFactory();
             defaultUrlFactory.setDefaultUrlToPage((BasePage) uiContainer);
-            if (isOn(uiContainer.getClass()) && !((BasePage) uiContainer).getConditionToOpen()) {
+            if (isOn(uiContainer.getClass()) && !((BasePage) uiContainer).needToOpenByUrl()) {
+                waitUntil(
+                        ((JavascriptExecutor) getDriver())
+                        .executeScript("return document.readyState").toString()
+                        .equals("complete")
+                );
+                System.out.println("==============================================" + getUrlToTest(uiContainer));
                 return onOpened(uiContainer);
             }
+                System.out.println("==============================================" + getUrlToTest(uiContainer));
             return (T) open((BasePage) uiContainer);
         }
         if (uiContainerAnalizer.isBlock(uiContainer)) {
+            System.out.println("==============================================" + getUrlToTest(uiContainer));
             return onOpened(uiContainer);
         }
         throw new NotUIContainerException(uiContainer.getClass().getName());
@@ -185,6 +195,15 @@ public class Browser extends ScenarioSteps {
         return uiContainer;
     }
 
+    private String getUrlToTest(UIContainer UIContainer) {
+        if(uiContainerAnalizer.isPage(UIContainer)) {
+            return ((BasePage) UIContainer).getUrl().toString();
+        } else {
+            return "THIS IS BLOCK!";
+        }
+    }
+    
+    
     @Step
     public <T extends BasePage> T open(T page) {
         openPageUrl(page.getUrl());
@@ -269,7 +288,7 @@ public class Browser extends ScenarioSteps {
         WebDriverWait wait = new WebDriverWait(getDriver(), 10);
         wait.until(condition);
     }
-    
+
     public void waitUntil(Boolean condition) {
         WebDriverWait wait = new WebDriverWait(getDriver(), 10);
         wait.until(new ExpectedCondition<Boolean>() {
@@ -278,5 +297,5 @@ public class Browser extends ScenarioSteps {
             }
         });
     }
-    
+
 }

@@ -81,14 +81,16 @@ public class Page extends PageObject implements BasePage {
     }
     
     @Override
-    public boolean getConditionToOpen() {
+    public boolean needToOpenByUrl() {
         return false;
     }
 
+    @Override
     public void waitUntil(ExpectedCondition<Object> condition) {
         actions.waitUntil(condition);
     }
 
+    @Override
     public void waitUntil(Boolean condition) {
         actions.waitUntil(condition);
     }

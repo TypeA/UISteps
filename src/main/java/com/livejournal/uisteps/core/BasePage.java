@@ -10,5 +10,5 @@ public interface BasePage extends UIContainer {
 
     void setUrl(Url url);
     
-    boolean getConditionToOpen();
+    boolean needToOpenByUrl();
 }
