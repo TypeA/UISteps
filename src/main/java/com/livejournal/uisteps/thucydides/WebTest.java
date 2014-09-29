@@ -37,7 +37,7 @@ public class WebTest extends ThucydidesJUnitStory {
             uiActions.init(browser);
             verifications.init(browser);
             ThucydidesUtils.putToSession("#UI_ACTIONS", uiActions);
-            browser.setOpened();
+            browser.setOpened(true);
         }
     }
 
@@ -106,11 +106,7 @@ public class WebTest extends ThucydidesJUnitStory {
         browser.refreshCurrentPage();
     }
 
-    public void waitUntil(ExpectedCondition<Object> condition) {
-        browser.waitUntil(condition);
-    }
-    
-    public void waitUntil(Boolean condition) {
+    public void waitUntil(ExpectedCondition<Boolean> condition) {
         browser.waitUntil(condition);
     }
 }

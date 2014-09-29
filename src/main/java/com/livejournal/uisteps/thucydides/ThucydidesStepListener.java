@@ -32,15 +32,15 @@ public class ThucydidesStepListener implements StepListener {
     @Override
     public void testSuiteFinished() {
     }
-      
+
     @Override
     public void testStarted(String description) {
-        clearBrowserCache();
+        //     clearBrowserCache();
     }
 
     @Override
     public void testFinished(TestOutcome result) {
-        clearBrowserCache();
+        //      clearBrowserCache();
     }
 
     @Override
@@ -108,11 +108,13 @@ public class ThucydidesStepListener implements StepListener {
     @Override
     public void assumptionViolated(String message) {
     }
-    
+
     private void clearBrowserCache() {
-        if (browser != null) {
+        if (browser != null && !browser.isInDefaultState()) {
             browser.clearCache();
             browser.deleteCookies();
+            browser.refreshCurrentPage();
+            browser.setInDefaultState(true);
         }
     }
 

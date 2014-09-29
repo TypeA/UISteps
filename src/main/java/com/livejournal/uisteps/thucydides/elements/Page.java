@@ -79,19 +79,14 @@ public class Page extends PageObject implements BasePage {
     public WebDriver getDriver() {
         return driver;
     }
-    
+
     @Override
-    public boolean needToOpenByUrl() {
-        return false;
+    public boolean isOnPage() {
+        return true;
     }
 
     @Override
-    public void waitUntil(ExpectedCondition<Object> condition) {
-        actions.waitUntil(condition);
-    }
-
-    @Override
-    public void waitUntil(Boolean condition) {
+    public void waitUntil(ExpectedCondition<Boolean> condition) {
         actions.waitUntil(condition);
     }
 }

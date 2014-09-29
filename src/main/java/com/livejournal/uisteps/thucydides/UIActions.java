@@ -145,11 +145,7 @@ public class UIActions {
         return browser;
     }
 
-    public void waitUntil(ExpectedCondition<Object> condition) {
-        browser.waitUntil(condition);
-    }
-    
-    public void waitUntil(Boolean condition) {
+    public void waitUntil(ExpectedCondition<Boolean> condition) {
         browser.waitUntil(condition);
     }
 }

@@ -25,8 +25,7 @@ public interface UIContainer {
 
     WebDriver getDriver();
 
-    void waitUntil(ExpectedCondition<Object> condition);
+    void waitUntil(ExpectedCondition<Boolean> condition);
 
-    void waitUntil(Boolean condition);
 
 }

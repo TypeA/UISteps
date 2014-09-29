@@ -83,12 +83,7 @@ public class UIBlock extends HtmlElement implements BaseUIBlock {
     }
 
     @Override
-    public void waitUntil(ExpectedCondition<Object> condition) {
-        actions.waitUntil(condition);
-    }
-
-    @Override
-    public void waitUntil(Boolean condition) {
+    public void waitUntil(ExpectedCondition<Boolean> condition) {
         actions.waitUntil(condition);
     }
 }

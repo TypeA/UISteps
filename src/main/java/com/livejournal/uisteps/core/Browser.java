@@ -24,8 +24,9 @@ public class Browser extends ScenarioSteps {
     private String name;
     private BasePage currentPage;
     private BaseUIBlock currentBlock;
-    private boolean opened;
+    private boolean isOpened;
     private final WindowList windowList;
+    private boolean isInDefaultState;
 
     public Browser() {
         ThucydidesStepListener listener = new ThucydidesStepListener(this);
@@ -33,6 +34,16 @@ public class Browser extends ScenarioSteps {
         windowList = new WindowList(this);
     }
 
+    public boolean isInDefaultState() {
+        return isInDefaultState;
+    }
+
+    public void setInDefaultState(boolean isInDefaultState) {
+        this.isInDefaultState = isInDefaultState;
+    }
+
+    
+    
     @Step
     public void switchToNextWindow() {
         windowList.switchToNextWindow();
@@ -71,11 +82,11 @@ public class Browser extends ScenarioSteps {
     }
 
     public boolean isOpened() {
-        return opened;
+        return isOpened;
     }
 
-    public void setOpened() {
-        opened = true;
+    public void setOpened(boolean isOpened) {
+        this.isOpened = isOpened;
     }
 
     public void init(
@@ -169,11 +180,16 @@ public class Browser extends ScenarioSteps {
             currentBlock = null;
             DefaultUrlFactory defaultUrlFactory = new DefaultUrlFactory();
             defaultUrlFactory.setDefaultUrlToPage((BasePage) uiContainer);
-            if (isOn(uiContainer.getClass()) && !((BasePage) uiContainer).needToOpenByUrl()) {
-                waitUntil(
-                        ((JavascriptExecutor) getDriver())
+            if (isOn(uiContainer.getClass()) && ((BasePage) uiContainer).isOnPage()) {
+                waitUntil(new ExpectedCondition<Boolean>() {
+                    @Override
+                    public Boolean apply(WebDriver driver) {
+                        return ((JavascriptExecutor) driver)
                         .executeScript("return document.readyState").toString()
-                        .equals("complete")
+                        .equals("complete");
+                    }
+                    
+                }
                 );
                 System.out.println("==============================================" + getUrlToTest(uiContainer));
                 return onOpened(uiContainer);
@@ -284,17 +300,12 @@ public class Browser extends ScenarioSteps {
         return super.getDriver();
     }
 
-    public void waitUntil(ExpectedCondition<Object> condition) {
-        WebDriverWait wait = new WebDriverWait(getDriver(), 10);
-        wait.until(condition);
-    }
-
-    public void waitUntil(Boolean condition) {
+    public void waitUntil(ExpectedCondition<Boolean> condition) {
         WebDriverWait wait = new WebDriverWait(getDriver(), 10);
         wait.until(new ExpectedCondition<Boolean>() {
             public Boolean apply(WebDriver driver) {
                 try {
-                    return condition;
+                    return condition.apply(driver);
                 } catch(Exception ex) {
                     return false;
                 }
