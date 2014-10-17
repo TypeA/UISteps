@@ -59,7 +59,7 @@ public class Browser {
         this.initializer = initializer;
     }
     
-    public void my_new_method_5() {
+    public void my_new_method_6() {
         
     }
     
