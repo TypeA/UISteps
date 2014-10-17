@@ -48,6 +48,10 @@ public class Browser {
         windowList = new WindowList(this);
     }
  
+    public void my_new_method() {
+    }
+    
+    
     public Browser(WebDriver driver, StepLibraryFactory pageFactory, Initializer initializer) {
         this();
         this.driver = driver;
