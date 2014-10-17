@@ -1,9 +1,15 @@
 package com.livejournal.uisteps.thucydides.elements;
 
-import com.livejournal.uisteps.core.UIContainer;
+
+import com.livejournal.uisteps.core.Browser;
 import com.livejournal.uisteps.thucydides.ThucydidesUtils;
-import com.livejournal.uisteps.thucydides.UIActions;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import ru.yandex.qatools.htmlelements.annotations.Block;
 import ru.yandex.qatools.htmlelements.element.TypifiedElement;
 
 /**
@@ -12,54 +18,45 @@ import ru.yandex.qatools.htmlelements.element.TypifiedElement;
  */
 public class UIElement extends TypifiedElement {
 
-    private final UIActions actions;
+    protected final Browser browser;
 
     public UIElement(WebElement wrappedElement) {
         super(wrappedElement);
-        actions = (UIActions) ThucydidesUtils.getFromSession("#UI_ACTIONS");
-    }
-
-    protected <T extends UIContainer> T on(Class<T> UIContainerClass) {
-        return actions.on(UIContainerClass);
-    }
-
-    protected <T extends UIContainer> T on(T uiContainer) {
-        return actions.on(uiContainer);
+        browser = (Browser) ThucydidesUtils.getFromSession("#BROWSER#");
     }
 
     public Object click() {
-        actions.click(this);
+        UIElement elem = this;
+        WebDriverWait wait = new WebDriverWait(browser.getDriver(), 10);    
+        wait.until(new ExpectedCondition<Boolean>() {
+            @Override
+            public Boolean apply(WebDriver driver) {
+                return elem.isDisplayed();
+            }
+        });
+        browser.click(this);
         return null;
     }
 
     public Object moveMouseOver() {
-        actions.moveMouseOver(this);
-        return this;
+        browser.moveMouseOver(this);
+        return null;
     }
 
     public Object clickOnPoint(int x, int y) {
-        actions.clickOnPoint(this, x, y);
-        return this;
+        browser.clickOnPoint(this, x, y);
+        return null;
     }
 
-    protected UIActions getActions() {
-        return actions;
+    public <T extends Page> T onOpened(Class<T> pageClass) {
+        return browser.onOpened(pageClass);
     }
-
-    public void switchToNextWindow() {
-        actions.switchToNextWindow();
+    
+    public <T extends UIBlock> T onDisplayed(Class<T> blockClass) {
+        return browser.onDisplayed(blockClass);
     }
-
-    public void switchToPreviousWindow() {
-        actions.switchToPreviousWindow();
+    
+    public WebDriver getDriver() {
+        return browser.getDriver();
     }
-
-    public void switchToDefaultWindow() {
-        actions.switchToWindowByIndex(0);
-    }
-
-    public void switchToWindowByIndex(int index) {
-        actions.switchToWindowByIndex(index);
-    }
-
 }

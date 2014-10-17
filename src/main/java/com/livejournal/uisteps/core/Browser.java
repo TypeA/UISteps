@@ -1,14 +1,31 @@
+
+/*
+ * Copyright 2014 ASolyankin.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.livejournal.uisteps.core;
 
-import com.livejournal.uisteps.thucydides.DefaultUrlFactory;
-import com.livejournal.uisteps.thucydides.ThucydidesStepListener;
-import com.livejournal.uisteps.thucydides.ThucydidesUtils;
+import com.livejournal.uisteps.thucydides.elements.Link;
+import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import net.thucydides.core.annotations.Step;
-import net.thucydides.core.steps.ScenarioSteps;
+import org.junit.Assert;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.internal.WrapsElement;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -16,150 +33,77 @@ import org.openqa.selenium.support.ui.WebDriverWait;
  *
  * @author ASolyankin
  */
-public class Browser extends ScenarioSteps {
+public class Browser {
 
-    private UIContainerFactory uiContainerFactory;
-    private UIContainerAnalizer uiContainerAnalizer;
-    private UIContainerComparator uiContainerComparator;
+    public Cache cache;
+    private WebDriver driver;
+    private StepLibraryFactory stepLibraryFactory;
+    private Initializer initializer;
+    public WindowList windowList;
     private String name;
-    private BasePage currentPage;
-    private BaseUIBlock currentBlock;
-    private boolean isOpened;
-    private final WindowList windowList;
-    private boolean isInDefaultState;
 
+    
     public Browser() {
-        ThucydidesStepListener listener = new ThucydidesStepListener(this);
-        ThucydidesUtils.registerListener(listener);
+        cache = new Cache();
         windowList = new WindowList(this);
     }
-
-    public boolean isInDefaultState() {
-        return isInDefaultState;
+ 
+    public Browser(WebDriver driver, StepLibraryFactory pageFactory, Initializer initializer) {
+        this();
+        this.driver = driver;
+        this.stepLibraryFactory = pageFactory;
+        this.initializer = initializer;
     }
 
-    public void setInDefaultState(boolean isInDefaultState) {
-        this.isInDefaultState = isInDefaultState;
-    }
-
-    
-    
-    @Step
-    public void switchToNextWindow() {
-        windowList.switchToNextWindow();
-    }
-
-    @Step
-    public void switchToPreviousWindow() {
-        windowList.switchToPreviousWindow();
-    }
-
-    @Step
-    public void switchToDefaultWindow() {
-        windowList.switchToDefaultWindow();
-    }
-
-    @Step
-    public void switchToWindowByIndex(int index) {
-        windowList.switchToWindowByIndex(index);
-    }
-
-    @Step
-    public void refreshCurrentPage() {
-        getDriver().navigate().refresh();
-    }
-
-    public void clearCache() {
-        currentPage = null;
-        currentBlock = null;
-        if (windowList.getCountOfWindows() > 1) {
-            windowList.switchToDefaultWindow();
-        }
-    }
-
-    public void deleteCookies() {
-        getDriver().manage().deleteAllCookies();
-    }
-
-    public boolean isOpened() {
-        return isOpened;
-    }
-
-    public void setOpened(boolean isOpened) {
-        this.isOpened = isOpened;
-    }
-
-    public void init(
-            UIContainerFactory uiContainerFactory,
-            UIContainerComparator uiContainerComparator,
-            UIContainerAnalizer uiContainerAnalizer) {
-        this.uiContainerFactory = uiContainerFactory;
-        this.uiContainerComparator = uiContainerComparator;
-        this.uiContainerAnalizer = uiContainerAnalizer;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    @Step
     public void openUrl(String url) {
         getDriver().get(url);
     }
 
-    public void openUrl(Url url) {
-        String urlString = url.toString();
-        openUrl(urlString);
+    public void open(Url url) {
+        getDriver().get(url.toString());
     }
 
-    private void openPageUrl(Url url) {
-        String urlString = url.toString();
-        getDriver().get(urlString);
-    }
-
-    @SuppressWarnings("unchecked")
-    public <T extends UIContainer> T on(Class<T> uiContainerClass) {
-        return on(getUIContainerCandidate(uiContainerClass), null);
-    }
-
-    @SuppressWarnings("unchecked")
-    public <T extends BasePage> T on(Class<T> pageClass, Url url) {
-        return on(getUIContainerCandidate(pageClass), url);
-
-    }
-
-    private <T extends UIContainer> T getUIContainerCandidate(Class<T> uiContainerClass) {
-        T uiContainerCandidate = getIfCurrent(uiContainerClass);
-        if (uiContainerCandidate != null) {
-            return uiContainerCandidate;
+    public <T extends UIBlock> T onDisplayed(Class<T> blockClass) {
+        if (cache.contains(blockClass)) {
+            return (T) cache.getBlock();
         } else {
-            return uiContainerFactory.instantiateUIContainer(uiContainerClass);
+            T block = stepLibraryFactory.instatiate(blockClass);
+            initializer.initialize(block, this);
+            cache.put(block, blockClass);
+            return onDisplayed(block);
         }
-
     }
 
-    @SuppressWarnings("unchecked")
-    public <T extends UIContainer> T on(Class<T> rootClass, String uiContainerClassName) {
+    public <T extends UIBlock> T onDisplayed(T block) {
+        return block;
+    }
+
+    public <T extends Page> T open(Class<T> pageClass) {
+        T page = stepLibraryFactory.instatiate(pageClass);
+        open(page.getUrl());
+        initializer.initialize(page, this);
+        cache.put(page, pageClass);
+        return open(page);
+    }
+
+    public <T extends Page> T open(Class<T> rootClass, String pageName) {
         Class<?> klass = null;
         try {
-            klass = Class.forName(uiContainerClassName);
+            klass = Class.forName(pageName);
         } catch (ClassNotFoundException ex) {
-            throw new RuntimeException("Cannot find class with such name: " + uiContainerClassName);
+            throw new AssertionError("Cannot find class with such name: " + pageName);
         }
         if (rootClass.isAssignableFrom(klass)) {
-            return on((Class<T>) klass);
+            return open((Class<T>) klass);
         }
-        throw new NotUIContainerException(klass.getName());
+        throw new AssertionError("" + klass.getName() + " is not assigned from " + rootClass + "!");
     }
-
-    @SuppressWarnings("unchecked")
-    public <T extends UIContainer> T on(T uiContainer, Url url) {
+    
+    
+    public <T extends Page> T open(Class<T> pageClass, Url url) {
+        T page = stepLibraryFactory.instatiate(pageClass);
         if (url != null) {
-            Url pageUrl = ((BasePage) uiContainer).getUrl();
+            Url pageUrl = page.getUrl();
             pageUrl.prependPrefix(url.getPrefix())
                     .appendPostfix(url.getPostfix());
             String urlHost = url.getHost();
@@ -171,115 +115,60 @@ public class Browser extends ScenarioSteps {
                 pageUrl.setPort(urlPort);
             }
         }
-        T uiContainerCandidate = (T) getIfCurrent(uiContainer.getClass());
-        if (uiContainerCandidate != null && uiContainerCandidate.isInitialized()) {
-            System.out.println("==============================================" + getUrlToTest(uiContainerCandidate));
-            return uiContainerCandidate;
-        }
-        if (uiContainerAnalizer.isPage(uiContainer)) {
-            currentBlock = null;
-            DefaultUrlFactory defaultUrlFactory = new DefaultUrlFactory();
-            defaultUrlFactory.setDefaultUrlToPage((BasePage) uiContainer);
-            if (isOn(uiContainer.getClass()) && ((BasePage) uiContainer).isOnPage()) {
-                waitUntil(new ExpectedCondition<Boolean>() {
-                    @Override
-                    public Boolean apply(WebDriver driver) {
-                        return ((JavascriptExecutor) driver)
-                        .executeScript("return document.readyState").toString()
-                        .equals("complete");
-                    }
-                    
-                }
-                );
-                System.out.println("==============================================" + getUrlToTest(uiContainer));
-                return onOpened(uiContainer);
-            }
-                System.out.println("==============================================" + getUrlToTest(uiContainer));
-            return (T) open((BasePage) uiContainer);
-        }
-        if (uiContainerAnalizer.isBlock(uiContainer)) {
-            System.out.println("==============================================" + getUrlToTest(uiContainer));
-            return onOpened(uiContainer);
-        }
-        throw new NotUIContainerException(uiContainer.getClass().getName());
+        open(page.getUrl());
+        initializer.initialize(page, this);
+        cache.put(page, page.getClass());
+        return page;
     }
-
-    @Step
-    public <T extends UIContainer> T onOpened(T uiContainer) {
-        uiContainer.initialize();
-        setCurrent(uiContainer);
-        return uiContainer;
+    
+    
+    public <T extends Page> T onOpened(Class<T> rootClass, String pageName) {
+        Class<?> klass = null;
+        try {
+            klass = Class.forName(pageName);
+        } catch (ClassNotFoundException ex) {
+            throw new AssertionError("Cannot find class with such name: " + pageName);
+        }
+        if (rootClass.isAssignableFrom(klass)) {
+            return onOpened((Class<T>) klass);
+        }
+        throw new AssertionError("" + klass.getName() + " is not assigned from " + rootClass + "!");
     }
-
-    private String getUrlToTest(UIContainer UIContainer) {
-        if(uiContainerAnalizer.isPage(UIContainer)) {
-            return ((BasePage) UIContainer).getUrl().toString();
+    
+    
+    public <T extends Page> T onOpened(Class<T> pageClass) {
+        if (cache.contains(pageClass)) {
+            return (T) cache.getPage();
         } else {
-            return "THIS IS BLOCK!";
+            T page = stepLibraryFactory.instatiate(pageClass);
+            initializer.initialize(page, this);
+            cache.put(page, pageClass);
+            return page;
         }
     }
-    
-    
-    @Step
-    public <T extends BasePage> T open(T page) {
-        openPageUrl(page.getUrl());
-        page.initialize();
-        setCurrent(page);
+
+    public <T extends Page> T open(T page) {
         return page;
     }
 
-    public void close() {
-        getDriver().quit();
+    public WebDriver getDriver() {
+        return driver;
     }
 
-    private void setCurrent(UIContainer uiContainer) {
-        if (uiContainerAnalizer.isPage(uiContainer)) {
-            currentPage = (BasePage) uiContainer;
-        } else if (uiContainerAnalizer.isBlock(uiContainer)) {
-            currentBlock = (BaseUIBlock) uiContainer;
-        } else {
-            throw new NotUIContainerException(uiContainer.getClass().getName());
-        }
+    public boolean isPage(Object obj) {
+        return isPage(obj.getClass());
     }
 
-    public boolean isCurrentPage(Class<? extends UIContainer> klass) {
-        return currentPage != null && uiContainerComparator.compare(currentPage.getClass(), klass);
+    public boolean isBlock(Object obj) {
+        return isBlock(obj.getClass());
     }
 
-    public boolean isCurrentBlock(Class<? extends UIContainer> klass) {
-        return currentBlock != null && uiContainerComparator.compare(currentBlock.getClass(), klass);
+    public boolean isPage(Class<?> klass) {
+        return Page.class.isAssignableFrom(klass);
     }
 
-    public boolean isCurrent(Class<? extends UIContainer> klass) {
-        return isCurrentPage(klass) || isCurrentBlock(klass);
-    }
-
-    public boolean isCurrent(UIContainer uiContainer) {
-        return isCurrent(uiContainer.getClass());
-    }
-
-    @SuppressWarnings("unchecked")
-    <T extends UIContainer> T getIfCurrent(Class<T> klass) {
-        if (isCurrentPage(klass)) {
-            return (T) currentPage;
-        }
-        if (isCurrentBlock(klass)) {
-            return (T) currentBlock;
-        }
-        return null;
-    }
-
-    public boolean isOn(Class<? extends UIContainer> klass) {
-        if (isCurrent(klass)) {
-            return true;
-        } else {
-            DefaultUrlFactory defaultUrlFactory = new DefaultUrlFactory();
-            Url pageUrl = defaultUrlFactory.getDefaultUrlOfPage(klass);
-            String currentUrl = getCurrentUrl();
-            Pattern pattern = Pattern.compile(pageUrl.getProtocol() + "(.*)" + pageUrl.getPrefix() + "(.*)" + pageUrl.getPostfix());
-            Matcher matcher = pattern.matcher(currentUrl);
-            return matcher.find();
-        }
+    public boolean isBlock(Class<?> klass) {
+        return UIBlock.class.isAssignableFrom(klass);
     }
 
     public String getCurrentUrl() {
@@ -290,27 +179,222 @@ public class Browser extends ScenarioSteps {
         return getDriver().getTitle();
     }
 
-    @Override
-    public String toString() {
+    public void switchToNextWindow() {
+        windowList.switchToNextWindow();
+    }
+
+    public void switchToPreviousWindow() {
+        windowList.switchToPreviousWindow();
+    }
+
+    public void switchToDefaultWindow() {
+        windowList.switchToDefaultWindow();
+    }
+
+    public void switchToWindowByIndex(int index) {
+        windowList.switchToWindowByIndex(index);
+    }
+
+    public void refreshCurrentPage() {
+        getDriver().navigate().refresh();
+    }
+
+    public void setToDefaultState() {
+        cache.clear();
+        if (windowList.getCountOfWindows() > 1) {
+            windowList.switchToDefaultWindow();
+        }
+        getDriver().manage().deleteAllCookies();
+    }
+
+    public void deleteCookies() {
+        getDriver().manage().deleteAllCookies();
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
         return name;
     }
 
-    @Override
-    public WebDriver getDriver() {
-        return super.getDriver();
+    public void click(WrapsElement element) {
+        boolean needToSwitch = false;
+        try {
+            WebElement webElement = element.getWrappedElement();
+            if (element instanceof Link) {
+                String attrTarget = webElement.getAttribute("target");
+                needToSwitch = attrTarget != null && !attrTarget.equals("") && !attrTarget.equals("_self");
+            }
+            webElement.click();
+            if (needToSwitch) {
+                switchToNextWindow();
+            }
+        } catch (Exception ex) {
+            Assert.fail("Cannot click " + element + "! " + ex);
+        }
+    }
+
+    public void clickOnPoint(WrapsElement element, int x, int y) {
+        try {
+            Actions actions = new Actions(getDriver());
+            actions.moveToElement(element.getWrappedElement(), x, y).click().build().perform();
+
+        } catch (Exception ex) {
+            Assert.fail("Cannot click " + element + "on point (" + x + "; " + y + ") \n" + ex);
+        }
+    }
+
+    public void moveMouseOver(WrapsElement element) {
+        try {
+            Actions actions = new Actions(getDriver());
+            actions.moveToElement(element.getWrappedElement()).build().perform();
+        } catch (Exception ex) {
+            Assert.fail("Cannot move mouse over " + element + "\n" + ex);
+        }
+    }
+
+    public void typeInto(WrapsElement input, CharSequence... keys) {
+        try {
+            input.getWrappedElement().sendKeys(keys);
+        } catch (Exception ex) {
+            Assert.fail("Cannot type " + Arrays.toString(keys) + " into " + input + "\n" + ex);
+        }
+    }
+
+    public void clear(WrapsElement input) {
+        try {
+            input.getWrappedElement().clear();
+
+        } catch (Exception ex) {
+            Assert.fail("Cannot clear " + input + "\n" + ex);
+        }
+    }
+
+    public void enterInto(WrapsElement input, CharSequence... text) {
+        try {
+            input.getWrappedElement().clear();
+            input.getWrappedElement().sendKeys(text);
+        } catch (Exception ex) {
+            Assert.fail("Cannot enter " + Arrays.toString(text) + " into " + input + "\n" + ex);
+        }
+    }
+
+    public String getTextFrom(WrapsElement input) {
+        try {
+            return input.getWrappedElement().getText();
+        } catch (Exception ex) {
+            Assert.fail("Cannot clear " + input + "\n" + ex);
+        }
+        return null;
     }
 
     public void waitUntil(ExpectedCondition<Boolean> condition) {
         WebDriverWait wait = new WebDriverWait(getDriver(), 10);
         wait.until(new ExpectedCondition<Boolean>() {
             public Boolean apply(WebDriver driver) {
-                try {
-                    return condition.apply(driver);
-                } catch(Exception ex) {
-                    return false;
-                }
+                return condition.apply(driver);
             }
         });
+    }
+
+    public void setDriver(WebDriver driver) {
+        this.driver = driver;
+    }
+
+    public void setStepLibraryFactory(StepLibraryFactory stepLibraryFactory) {
+        this.stepLibraryFactory = stepLibraryFactory;
+    }
+
+    public void setInitializer(Initializer initializer) {
+        this.initializer = initializer;
+    }
+
+    public StepLibraryFactory getStepLibraryFactory() {
+        return stepLibraryFactory;
+    }
+
+    public Initializer getInitializer() {
+        return initializer;
+    }
+
+    public boolean isOn(Class<?> klass) {
+        if (cache.contains(klass)) {
+            return true;
+        } else {
+            UrlFactory urlFactory = new com.livejournal.uisteps.thucydides.UrlFactory();
+            Url pageUrl = urlFactory.getDefaultUrlOfPage((Class<? extends Page>) klass);
+            String currentUrl = getCurrentUrl();
+            Pattern pattern = Pattern.compile(pageUrl.getProtocol() + "(.*)" + pageUrl.getPrefix() + "(.*)" + pageUrl.getPostfix());
+            Matcher matcher = pattern.matcher(currentUrl);
+            return matcher.find();
+        }
+    }
+
+    public void setCache(Cache cache) {
+        this.cache = cache;
+    }
+
+    public void setWindowList(WindowList windowList) {
+        this.windowList = windowList;
+    }
+    
+  
+    public Object startScript(String script) {
+        return ((JavascriptExecutor) getDriver()).executeScript(script);
+    }
+
+    public class Cache {
+
+        private Page page;
+        private Class<? extends Page> pageClass;
+        private UIBlock block;
+        private Class<? extends UIBlock> blockClass;
+
+        void put(Page page, Class<? extends Page> pageClass) {
+            clearBlock();
+            this.page = page;
+            this.pageClass = pageClass;
+        }
+
+        void put(UIBlock block, Class<? extends UIBlock> blockClass) {
+            this.block = block;
+            this.blockClass = blockClass;
+        }
+
+        void clear() {
+            clearBlock();
+            clearPage();
+        }
+
+        void clearBlock() {
+            block = null;
+            blockClass = null;
+        }
+
+        void clearPage() {
+            page = null;
+            pageClass = null;
+        }
+
+        Page getPage() {
+            return page;
+        }
+
+        UIBlock getBlock() {
+            return block;
+        }
+
+        public boolean contains(Class<?> klass) {
+            if (Page.class.isAssignableFrom(klass)) {
+                return klass.equals(pageClass);
+            }
+            if (UIBlock.class.isAssignableFrom(klass)) {
+                return klass.equals(blockClass);
+            }
+            return false;
+        }
     }
 
 }

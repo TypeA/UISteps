@@ -13,7 +13,7 @@ public class NameConvertor {
     }
 
     public static String humanize(Object obj) {
-        return NameConvertor.humanize(obj.getClass());
+        return humanize(obj.getClass());
     }
 
     public static String humanize(String string) {

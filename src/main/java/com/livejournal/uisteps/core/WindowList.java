@@ -1,5 +1,6 @@
 package com.livejournal.uisteps.core;
 
+
 import com.livejournal.uisteps.thucydides.ThucydidesUtils;
 import java.util.Set;
 import junit.framework.Assert;

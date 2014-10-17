@@ -13,6 +13,7 @@ public class Link extends UIElement {
     }
 
     public String getText() {
-        return getActions().getTextFrom(this);
+        return browser.getTextFrom(this);
     }
+
 }

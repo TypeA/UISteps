@@ -1,7 +1,22 @@
+/*
+ * Copyright 2014 ASolyankin.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.livejournal.uisteps.thucydides;
 
-import com.livejournal.uisteps.core.BasePage;
 import com.livejournal.uisteps.core.Url;
+import com.livejournal.uisteps.core.Page;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import net.thucydides.core.annotations.DefaultUrl;
@@ -10,10 +25,10 @@ import net.thucydides.core.annotations.DefaultUrl;
  *
  * @author ASolyankin
  */
-public class DefaultUrlFactory {
+public class UrlFactory implements com.livejournal.uisteps.core.UrlFactory {
 
-    
-     public Url getDefaultUrlOfPage(Class<?> pageClass) {
+    @Override
+    public Url getDefaultUrlOfPage(Class<? extends Page> pageClass) {
         Url url = new Url();
         if (url.getHost().equals("")) {
             String baseUrl = ThucydidesUtils.getBaseUrl();
@@ -47,9 +62,9 @@ public class DefaultUrlFactory {
             }
         }
     }
-    
-    
-    public void setDefaultUrlToPage(BasePage page) {
+   
+    @Override
+    public void setDefaultUrlTo(Page page) {
         Url url = page.getUrl();
         if (url.getHost().equals("")) {
             String baseUrl = ThucydidesUtils.getBaseUrl();
@@ -58,7 +73,7 @@ public class DefaultUrlFactory {
         setUrlTo(page, getPageClass(page.getClass()));
     }
 
-    private void setUrlTo(BasePage page, Class<?> clazz) {
+    private void setUrlTo(Page page, Class<?> clazz) {
         if (!RootAnalizer.isRoot(clazz)) {
             setUrlTo(page, clazz.getSuperclass());
         }

@@ -1,33 +1,47 @@
+
+/*
+ * Copyright 2014 ASolyankin.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.livejournal.uisteps.thucydides.elements;
 
-import com.livejournal.uisteps.core.BasePage;
-import com.livejournal.uisteps.core.UIContainer;
+import com.livejournal.uisteps.core.Browser;
 import com.livejournal.uisteps.core.Url;
-import com.livejournal.uisteps.thucydides.NameConvertor;
 import com.livejournal.uisteps.thucydides.ThucydidesUtils;
-import com.livejournal.uisteps.thucydides.UIActions;
-import com.livejournal.uisteps.thucydides.UIContainerInitializer;
-import net.thucydides.core.pages.PageObject;
+import com.livejournal.uisteps.thucydides.UrlFactory;
+import com.livejournal.uisteps.thucydides.NameConvertor;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.ExpectedCondition;
 
 /**
  *
  * @author ASolyankin
  */
-public class Page extends PageObject implements BasePage {
+public class Page implements com.livejournal.uisteps.core.Page {
 
+    private final Browser browser;
+    private final UrlFactory urlFactory;
     private Url url;
-    private final UIContainerInitializer initializer;
-    private final UIActions actions;
-    private boolean isInitialized;
-    private final WebDriver driver;
 
     public Page() {
-        url = new Url();
-        initializer = new UIContainerInitializer();
-        actions = (UIActions) ThucydidesUtils.getFromSession("#UI_ACTIONS");
-        driver = actions.getBrowser().getDriver();
+        urlFactory = new UrlFactory();
+        url = urlFactory.getDefaultUrlOfPage(this.getClass());
+        browser = (Browser) ThucydidesUtils.getFromSession("#BROWSER#");
+    }
+
+    @Override
+    public Url getDefaultUrl() {
+        return urlFactory.getDefaultUrlOfPage(this.getClass());
     }
 
     @Override
@@ -41,52 +55,25 @@ public class Page extends PageObject implements BasePage {
     }
 
     @Override
-    public void initElements() {
-        initializer.initializeUIContainer(this, driver);
-    }
-
-    @Override
-    public void callMethodsWhenOpens() {
-        initializer.callMethodsWhenOpens(this);
-    }
-
-    protected <T extends UIContainer> T on(Class<T> UIContainerClass) {
-        return actions.on(UIContainerClass);
-    }
-
-    protected <T extends UIContainer> T on(T uiContainer) {
-        return actions.on(uiContainer);
-    }
-
-    @Override
     public String toString() {
         return NameConvertor.humanize(getClass())
                 .replace("dot", "\\.")
                 + " by url <a href='" + getUrl() + "'>" + getUrl() + "</a>";
     }
 
-    @Override
-    public boolean isInitialized() {
-        return isInitialized;
+    public <T extends Page> T onOpened(Class<T> pageClass) {
+        return browser.onOpened(pageClass);
     }
 
-    @Override
-    public void initialized() {
-        isInitialized = true;
+    public <T extends UIBlock> T onDisplayed(Class<T> blockClass) {
+        return browser.onDisplayed(blockClass);
     }
 
-    @Override
     public WebDriver getDriver() {
-        return driver;
+        return browser.getDriver();
     }
-
-    @Override
-    public boolean isOnPage() {
-        return true;
-    }
-
-    @Override
-    public void waitUntil(ExpectedCondition<Boolean> condition) {
-        actions.waitUntil(condition);
+    
+      public Object startScript(String script) {
+        return browser.startScript(script);
     }
 }

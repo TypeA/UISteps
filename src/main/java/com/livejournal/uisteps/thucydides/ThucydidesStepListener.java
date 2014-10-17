@@ -15,9 +15,9 @@ import net.thucydides.core.steps.StepListener;
  */
 public class ThucydidesStepListener implements StepListener {
 
-    private final Browser browser;
+    private final ThucydidesBrowser browser;
 
-    public ThucydidesStepListener(Browser browser) {
+    public ThucydidesStepListener(ThucydidesBrowser browser) {
         this.browser = browser;
     }
 
@@ -97,24 +97,21 @@ public class ThucydidesStepListener implements StepListener {
 
     @Override
     public void exampleStarted(Map<String, String> data) {
-        clearBrowserCache();
+        setBrowserToDefaultState();
     }
 
     @Override
     public void exampleFinished() {
-        clearBrowserCache();
+        setBrowserToDefaultState();
     }
 
     @Override
     public void assumptionViolated(String message) {
     }
 
-    private void clearBrowserCache() {
-        if (browser != null && !browser.isInDefaultState()) {
-            browser.clearCache();
-            browser.deleteCookies();
-            browser.refreshCurrentPage();
-            browser.setInDefaultState(true);
+    private void setBrowserToDefaultState() {
+        if (browser != null) {
+            browser.setToDefaultState();
         }
     }
 

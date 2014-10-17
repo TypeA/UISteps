@@ -1,13 +1,14 @@
 package com.livejournal.uisteps.thucydides;
 
-import com.livejournal.uisteps.core.BasePage;
 import com.livejournal.uisteps.core.Browser;
-import com.livejournal.uisteps.core.UIContainer;
-import com.livejournal.uisteps.core.UIContainerAnalizer;
+import com.livejournal.uisteps.core.Page;
+import com.livejournal.uisteps.core.UIBlock;
 import com.livejournal.uisteps.core.Url;
 import com.livejournal.uisteps.thucydides.Verifications.That;
+import net.thucydides.core.annotations.Managed;
 import net.thucydides.core.annotations.Steps;
 import net.thucydides.jbehave.ThucydidesJUnitStory;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 
 /**
@@ -16,58 +17,65 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
  */
 public class WebTest extends ThucydidesJUnitStory {
 
+    @Managed
+    WebDriver driver;
     @Steps
-    Browser browser;
-    @Steps
-    UIActions uiActions;
+    ThucydidesBrowser browser;
     @Steps
     Verifications verifications;
 
-    public WebTest() {
-        ThucydidesStepListener listener = new ThucydidesStepListener(browser);
-        ThucydidesUtils.registerListener(listener);
-    }
-
-    public void openBrowser() {
+    private void openBrowser() {
         if (!browser.isOpened()) {
-            ThucydidesUIContainerFactory uiContainerFactory = new ThucydidesUIContainerFactory();
-            ThucydidesUIContainerComparator uiContainerComparator = new ThucydidesUIContainerComparator();
-            UIContainerAnalizer uiContainerAnalizer = new UIContainerAnalizer();
-            browser.init(uiContainerFactory, uiContainerComparator, uiContainerAnalizer);
-            uiActions.init(browser);
+            browser.setDriver(driver);
+            browser.setStepLibraryFactory(new StepLibraryFactory());
+            browser.setInitializer(new Initializer());
+            browser.setWindowList(browser.windowList);
+            browser.setCache(browser.cache);
+            ThucydidesUtils.putToSession("#BROWSER#", browser);
+            browser.isOpened(true);
             verifications.init(browser);
-            ThucydidesUtils.putToSession("#UI_ACTIONS", uiActions);
-            browser.setOpened(true);
+            ThucydidesStepListener listener = new ThucydidesStepListener(browser);
+            ThucydidesUtils.registerListener(listener);
         }
     }
 
+    public Browser getCurrentBrowser() {
+        return browser;
+    }
+
+    public <T extends Page> T open(Class<T> pageClass) {
+        openBrowser();
+        return browser.open(pageClass);
+    }
+
+    public <T extends Page> T open(Class<T> rootClass, String pageName) {
+        openBrowser();
+        return browser.open(rootClass, pageName);
+    }
+
+    public <T extends Page> T open(Class<T> pageClass, Url url) {
+        openBrowser();
+        return browser.open(pageClass, url);
+    }
+
+    public <T extends Page> T onOpened(Class<T> pageClass) {
+        openBrowser();
+        return browser.onOpened(pageClass);
+    }
+
+    public <T extends Page> T onOpened(Class<T> rootClass, String pageName) {
+        openBrowser();
+        return browser.onOpened(rootClass, pageName);
+    }
+
+    public <T extends UIBlock> T onDisplayed(Class<T> block) {
+        openBrowser();
+        return browser.onDisplayed(block);
+    }
+
     public void openUrl(String url) {
+        openBrowser();
         browser.openUrl(url);
-    }
-
-    public <T extends UIContainer> T on(T uiContainer) {
-        openBrowser();
-        return browser.on(uiContainer, null);
-    }
-
-    public <T extends BasePage> T on(T page, Url url) {
-        openBrowser();
-        return browser.on(page, url);
-    }
-
-    public <T extends BasePage> T on(Class<T> rootPageClass, String uiContainerClass) {
-        openBrowser();
-        return browser.on(rootPageClass, uiContainerClass);
-    }
-    
-    public <T extends UIContainer> T on(Class<T> uiContainerClass) {
-        openBrowser();
-        return browser.on(uiContainerClass);
-    }
-
-    public <T extends BasePage> T on(Class<T> pageClass, Url url) {
-        openBrowser();
-        return browser.on(pageClass, url);
     }
 
     public String getCurrentUrl() {
@@ -76,10 +84,6 @@ public class WebTest extends ThucydidesJUnitStory {
 
     public String getCurrentTitle() {
         return browser.getCurrentTitle();
-    }
-
-    public That verify() {
-        return verifications.verify();
     }
 
     public void switchToNextWindow() {
@@ -98,15 +102,19 @@ public class WebTest extends ThucydidesJUnitStory {
         browser.switchToWindowByIndex(index);
     }
 
-    public Browser getCurrentBrowser() {
-        return browser;
-    }
-
     public void refreshCurrentPage() {
         browser.refreshCurrentPage();
     }
 
     public void waitUntil(ExpectedCondition<Boolean> condition) {
         browser.waitUntil(condition);
+    }
+
+    public That verify() {
+        return verifications.verify();
+    }
+
+    public Object startScript(String script) {
+        return browser.startScript(script);
     }
 }

@@ -17,18 +17,18 @@ public class TextField extends UIElement {
     }
 
     public void type(CharSequence... keys) {
-        getActions().typeInto(this, keys);
+        browser.typeInto(this, keys);
     }
 
     public void clear() {
-        getActions().clear(this);
+        browser.clear(this);
     }
 
     public void enter(CharSequence... text) {
-        getActions().enterInto(this, text);
+        browser.enterInto(this, text);
     }
 
     public String getText() {
-        return getActions().getTextFrom(this);
+        return browser.getTextFrom(this);
     }
 }
