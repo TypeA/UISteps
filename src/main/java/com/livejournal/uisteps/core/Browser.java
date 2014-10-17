@@ -58,6 +58,10 @@ public class Browser {
         this.stepLibraryFactory = pageFactory;
         this.initializer = initializer;
     }
+    
+    public void my_new_method_2() {
+        
+    }
 
     public void openUrl(String url) {
         getDriver().get(url);
