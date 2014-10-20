@@ -5,6 +5,7 @@ import com.livejournal.uisteps.core.Page;
 import com.livejournal.uisteps.core.UIBlock;
 import com.livejournal.uisteps.core.Url;
 import com.livejournal.uisteps.thucydides.Verifications.That;
+import com.livejournal.uisteps.utils.ClassEnumerator;
 import net.thucydides.core.annotations.Managed;
 import net.thucydides.core.annotations.Steps;
 import net.thucydides.jbehave.ThucydidesJUnitStory;
@@ -23,6 +24,8 @@ public class WebTest extends ThucydidesJUnitStory {
     ThucydidesBrowser browser;
     @Steps
     Verifications verifications;
+    
+    private ClassEnumerator classEnumerator = new ClassEnumerator("com.livejournal.uitests.pages");
 
     private void openBrowser() {
         if (!browser.isOpened()) {
@@ -116,5 +119,13 @@ public class WebTest extends ThucydidesJUnitStory {
 
     public Object startScript(String script) {
         return browser.startScript(script);
+    }
+    
+    public Class<? extends Page> getPageClassByName(String pageClassName) {
+        Class<?> klass = classEnumerator.getClassBySimpleName(pageClassName);
+        if(!browser.isPage(klass)) {
+            throw new AssertionError("Object by name " + pageClassName + " is not a page!");
+        }
+        return (Class<? extends Page>) klass;
     }
 }
