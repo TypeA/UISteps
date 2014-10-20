@@ -47,24 +47,12 @@ public class Browser {
         cache = new Cache();
         windowList = new WindowList(this);
     }
- 
-    public void my_new_method() {
-    }
-    
     
     public Browser(WebDriver driver, StepLibraryFactory pageFactory, Initializer initializer) {
         this();
         this.driver = driver;
         this.stepLibraryFactory = pageFactory;
         this.initializer = initializer;
-    }
-    
-    public void my_new_method_6() {
-        
-    }
-    
-    public void my_new_method_2() {
-        
     }
 
     public void openUrl(String url) {
