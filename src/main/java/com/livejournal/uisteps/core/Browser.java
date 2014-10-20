@@ -58,7 +58,7 @@ public class Browser {
     public void openUrl(String url) {
         getDriver().get(url);
     }
-
+    
     public void open(Url url) {
         getDriver().get(url.toString());
     }
