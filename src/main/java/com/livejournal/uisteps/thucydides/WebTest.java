@@ -42,7 +42,7 @@ public class WebTest extends ThucydidesJUnitStory {
         }
     }
 
-    public Browser getCurrentBrowser() {
+    public ThucydidesBrowser getCurrentBrowser() {
         return browser;
     }
 
