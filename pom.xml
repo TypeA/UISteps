@@ -39,8 +39,8 @@
         <url>https://github.com/Solyankin/UISteps/</url>
         <connection>scm:git:git@github.com:Solyankin/UISteps.git</connection>
         <developerConnection>scm:git:git@github.com:Solyankin/UISteps.git</developerConnection>
-    <tag>HEAD</tag>
-  </scm>
+        <tag>HEAD</tag>
+    </scm>
 
     <developers>
         <developer>
@@ -50,6 +50,7 @@
             <timezone>UTC+4</timezone>
         </developer>
     </developers>
+    
 
     <dependencies>
         <dependency>
@@ -96,6 +97,15 @@
             <artifactId>htmlelements-thucydides</artifactId>
             <version>1.11</version>
         </dependency>
+        
+        <!--!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.5</version>
+        </dependency>
+        
+        
         <dependency>
             <groupId>net.thucydides.plugins.jira</groupId>
             <artifactId>thucydides-jira-plugin</artifactId>
@@ -138,6 +148,8 @@
             <artifactId>maven-clean-plugin</artifactId>
             <version>2.5</version>
         </dependency>
+       
+        
     </dependencies>
     <build>
         <plugins>
@@ -198,25 +210,27 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>
                 <version>2.5</version>
-           </plugin>
-           <!--
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-gpg-plugin</artifactId>
-                <version>1.5</version>
-                <executions>
-                    <execution>
-                        <id>sign-artifacts</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>sign</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
-           -->
+            <!--
+             <plugin>
+                 <groupId>org.apache.maven.plugins</groupId>
+                 <artifactId>maven-gpg-plugin</artifactId>
+                 <version>1.5</version>
+                 <executions>
+                     <execution>
+                         <id>sign-artifacts</id>
+                         <phase>verify</phase>
+                         <goals>
+                             <goal>sign</goal>
+                         </goals>
+                     </execution>
+                 </executions>
+             </plugin>
+            -->
         </plugins>
     </build>
+    
+
 
     <profiles>
         <profile>
@@ -263,7 +277,7 @@
             </build>
         </profile>
         
-                <!--
+        <!--
         <profile>
             <id>release-sign-artifacts</id>
             <activation>

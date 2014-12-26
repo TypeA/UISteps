@@ -17,6 +17,10 @@
 package com.livejournal.uisteps.core;
 
 import com.livejournal.uisteps.thucydides.elements.Link;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -28,6 +32,12 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.internal.WrapsElement;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import com.mysql.jdbc.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 
 /**
  *
@@ -344,6 +354,48 @@ public class Browser {
     public Object startScript(String script) {
         return ((JavascriptExecutor) getDriver()).executeScript(script);
     }
+    
+    public ArrayList<String> baseConnect(String select, String column) {
+        
+          String user = "root";//Логин пользователя
+          String password = "";//Пароль пользователя
+          String url = "jdbc:mysql://127.0.0.1:2222/livejournal";//URL адрес
+          String driver = "com.mysql.jdbc.Driver";//Имя драйвера
+          ResultSet rs=null;
+          ArrayList<String> answer = new ArrayList<>();
+          
+          try {
+               Class.forName(driver);//Регистрируем драйвер
+          } catch (ClassNotFoundException e) {
+               e.printStackTrace();
+          }
+          Connection c = null;//Соединение с БД
+          
+          try{
+               c = (Connection) DriverManager.getConnection(url, user, password);//Установка соединения с БД
+               Statement st = c.createStatement();//Готовим запрос
+               rs = st.executeQuery(select);//Выполняем запрос к БД, результат в переменной rs
+                System.out.println("!!!!!!!!!!!!!browser");
+               while(rs.next()){
+                    answer.add(rs.getString(column));
+               }
+               System.out.println("..................browser");
+          } catch(Exception e){
+               e.printStackTrace();
+          }
+          finally{
+               //Обязательно необходимо закрыть соединение
+               try {
+                    if(c != null)
+                    c.close();
+               } catch (SQLException e) {
+                    e.printStackTrace();
+               }
+          }
+          
+          return answer;
+     }
+    
 
     public class Cache {
 

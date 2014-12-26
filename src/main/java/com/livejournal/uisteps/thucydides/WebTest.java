@@ -6,6 +6,10 @@ import com.livejournal.uisteps.core.UIBlock;
 import com.livejournal.uisteps.core.Url;
 import com.livejournal.uisteps.thucydides.Verifications.That;
 import com.livejournal.uisteps.utils.ClassEnumerator;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.util.ArrayList;
 import net.thucydides.core.annotations.Managed;
 import net.thucydides.core.annotations.Steps;
 import net.thucydides.jbehave.ThucydidesJUnitStory;
@@ -24,7 +28,7 @@ public class WebTest extends ThucydidesJUnitStory {
     ThucydidesBrowser browser;
     @Steps
     Verifications verifications;
-    
+
     private ClassEnumerator classEnumerator = new ClassEnumerator("com.livejournal.uitests.pages");
 
     private void openBrowser() {
@@ -120,12 +124,18 @@ public class WebTest extends ThucydidesJUnitStory {
     public Object startScript(String script) {
         return browser.startScript(script);
     }
-    
+
+    public ArrayList<String> baseConnect(String select, String column) {
+        System.out.println("!!!!!!!!!!!!!Webtest");
+        return browser.baseConnect(select, column);
+    }
+
     public Class<? extends Page> getPageClassByName(String pageClassName) {
         Class<?> klass = classEnumerator.getClassBySimpleName(pageClassName);
-        if(!browser.isPage(klass)) {
+        if (!browser.isPage(klass)) {
             throw new AssertionError("Object by name " + pageClassName + " is not a page!");
         }
         return (Class<? extends Page>) klass;
     }
+
 }
