@@ -356,12 +356,11 @@ public class Browser {
     }
     
     public ArrayList<String> baseConnect(String select, String column) {
-        
+            
           String user = "root";//Логин пользователя
           String password = "";//Пароль пользователя
           String url = "jdbc:mysql://127.0.0.1:2222/livejournal";//URL адрес
           String driver = "com.mysql.jdbc.Driver";//Имя драйвера
-          ResultSet rs=null;
           ArrayList<String> answer = new ArrayList<>();
           
           try {
@@ -374,12 +373,11 @@ public class Browser {
           try{
                c = (Connection) DriverManager.getConnection(url, user, password);//Установка соединения с БД
                Statement st = c.createStatement();//Готовим запрос
-               rs = st.executeQuery(select);//Выполняем запрос к БД, результат в переменной rs
-                System.out.println("!!!!!!!!!!!!!browser");
+               ResultSet rs = st.executeQuery(select);//Выполняем запрос к БД, результат в переменной rs
                while(rs.next()){
                     answer.add(rs.getString(column));
                }
-               System.out.println("..................browser");
+ 
           } catch(Exception e){
                e.printStackTrace();
           }

@@ -126,7 +126,6 @@ public class WebTest extends ThucydidesJUnitStory {
     }
 
     public ArrayList<String> baseConnect(String select, String column) {
-        System.out.println("!!!!!!!!!!!!!Webtest");
         return browser.baseConnect(select, column);
     }
 
