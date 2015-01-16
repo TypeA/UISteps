@@ -38,6 +38,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import org.openqa.selenium.Cookie;
 
 /**
  *
@@ -52,12 +53,11 @@ public class Browser {
     public WindowList windowList;
     private String name;
 
-    
     public Browser() {
         cache = new Cache();
         windowList = new WindowList(this);
     }
-    
+
     public Browser(WebDriver driver, StepLibraryFactory pageFactory, Initializer initializer) {
         this();
         this.driver = driver;
@@ -68,7 +68,7 @@ public class Browser {
     public void openUrl(String url) {
         getDriver().get(url);
     }
-    
+
     public void open(Url url) {
         getDriver().get(url.toString());
     }
@@ -108,8 +108,7 @@ public class Browser {
         }
         throw new AssertionError("" + klass.getName() + " is not assigned from " + rootClass + "!");
     }
-    
-    
+
     public <T extends Page> T open(Class<T> pageClass, Url url) {
         T page = stepLibraryFactory.instatiate(pageClass);
         if (url != null) {
@@ -130,8 +129,7 @@ public class Browser {
         cache.put(page, page.getClass());
         return page;
     }
-    
-    
+
     public <T extends Page> T onOpened(Class<T> rootClass, String pageName) {
         Class<?> klass = null;
         try {
@@ -144,8 +142,7 @@ public class Browser {
         }
         throw new AssertionError("" + klass.getName() + " is not assigned from " + rootClass + "!");
     }
-    
-    
+
     public <T extends Page> T onOpened(Class<T> pageClass) {
         if (cache.contains(pageClass)) {
             return (T) cache.getPage();
@@ -349,51 +346,53 @@ public class Browser {
     public void setWindowList(WindowList windowList) {
         this.windowList = windowList;
     }
-    
-  
+
     public Object startScript(String script) {
         return ((JavascriptExecutor) getDriver()).executeScript(script);
     }
-    
+
+    public void addCookie(String cookie, String value) {
+        getDriver().manage().addCookie(new Cookie(cookie, value));
+    }
+
     public ArrayList<String> baseConnect(String select, String column) {
-            
-          String user = "root";//Логин пользователя
-          String password = "";//Пароль пользователя
-          String url = "jdbc:mysql://127.0.0.1:2222/livejournal";//URL адрес
-          String driver = "com.mysql.jdbc.Driver";//Имя драйвера
-          ArrayList<String> answer = new ArrayList<>();
-          
-          try {
-               Class.forName(driver);//Регистрируем драйвер
-          } catch (ClassNotFoundException e) {
-               e.printStackTrace();
-          }
-          Connection c = null;//Соединение с БД
-          
-          try{
-               c = (Connection) DriverManager.getConnection(url, user, password);//Установка соединения с БД
-               Statement st = c.createStatement();//Готовим запрос
-               ResultSet rs = st.executeQuery(select);//Выполняем запрос к БД, результат в переменной rs
-               while(rs.next()){
-                    answer.add(rs.getString(column));
-               }
- 
-          } catch(Exception e){
-               e.printStackTrace();
-          }
-          finally{
-               //Обязательно необходимо закрыть соединение
-               try {
-                    if(c != null)
+
+        String user = "root";//Логин пользователя
+        String password = "";//Пароль пользователя
+        String url = "jdbc:mysql://127.0.0.1:2222/livejournal";//URL адрес
+        String driver = "com.mysql.jdbc.Driver";//Имя драйвера
+        ArrayList<String> answer = new ArrayList<>();
+
+        try {
+            Class.forName(driver);//Регистрируем драйвер
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        Connection c = null;//Соединение с БД
+
+        try {
+            c = (Connection) DriverManager.getConnection(url, user, password);//Установка соединения с БД
+            Statement st = c.createStatement();//Готовим запрос
+            ResultSet rs = st.executeQuery(select);//Выполняем запрос к БД, результат в переменной rs
+            while (rs.next()) {
+                answer.add(rs.getString(column));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            //Обязательно необходимо закрыть соединение
+            try {
+                if (c != null) {
                     c.close();
-               } catch (SQLException e) {
-                    e.printStackTrace();
-               }
-          }
-          
-          return answer;
-     }
-    
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return answer;
+    }
 
     public class Cache {
 

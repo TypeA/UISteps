@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import net.thucydides.core.annotations.Managed;
 import net.thucydides.core.annotations.Steps;
 import net.thucydides.jbehave.ThucydidesJUnitStory;
+import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 
@@ -127,6 +128,10 @@ public class WebTest extends ThucydidesJUnitStory {
 
     public ArrayList<String> baseConnect(String select, String column) {
         return browser.baseConnect(select, column);
+    }
+    
+     public void addCookie(String cookie, String value) {
+        browser.addCookie(cookie, value);   
     }
 
     public Class<? extends Page> getPageClassByName(String pageClassName) {
