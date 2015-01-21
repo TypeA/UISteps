@@ -4,6 +4,7 @@ import com.livejournal.uisteps.core.Browser;
 import com.livejournal.uisteps.core.Page;
 import com.livejournal.uisteps.core.UIBlock;
 import com.livejournal.uisteps.core.Url;
+import com.livejournal.uisteps.thucydides.Databases.BaseConnect;
 import com.livejournal.uisteps.thucydides.Verifications.That;
 import com.livejournal.uisteps.utils.ClassEnumerator;
 import java.sql.Connection;
@@ -29,6 +30,8 @@ public class WebTest extends ThucydidesJUnitStory {
     ThucydidesBrowser browser;
     @Steps
     Verifications verifications;
+    @Steps
+    Databases databases;
 
     private ClassEnumerator classEnumerator = new ClassEnumerator("com.livejournal.uitests.pages");
 
@@ -122,6 +125,10 @@ public class WebTest extends ThucydidesJUnitStory {
         return verifications.verify();
     }
 
+    public BaseConnect workWithDB() {
+        return databases.workWithDB();
+    }
+
     public Object startScript(String script) {
         return browser.startScript(script);
     }
@@ -129,9 +136,13 @@ public class WebTest extends ThucydidesJUnitStory {
     public ArrayList<String> baseConnect(String select, String column) {
         return browser.baseConnect(select, column);
     }
-    
-     public void addCookie(String cookie, String value) {
-        browser.addCookie(cookie, value);   
+
+    public String getUserPassword(String user) {
+        return browser.getUserPassword(user);
+    }
+
+    public void addCookie(String cookie, String value) {
+        browser.addCookie(cookie, value);
     }
 
     public Class<? extends Page> getPageClassByName(String pageClassName) {

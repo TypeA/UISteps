@@ -17,10 +17,6 @@
 package com.livejournal.uisteps.core;
 
 import com.livejournal.uisteps.thucydides.elements.Link;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -392,6 +388,15 @@ public class Browser {
         }
 
         return answer;
+    }
+
+    public String getUserPassword(String user) {
+       String userid =  baseConnect("select * from user where user = '"  + user + "';", "userid")
+               .get(0)
+               .toString();
+        return baseConnect("select * from password where userid = '" + userid + "';", "password")
+                .get(0)
+                .toString();
     }
 
     public class Cache {

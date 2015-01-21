@@ -1,12 +1,9 @@
 package com.livejournal.uisteps.thucydides;
 
 import com.livejournal.uisteps.core.Browser;
-import com.livejournal.uisteps.core.Url;
 import com.livejournal.uisteps.thucydides.elements.Page;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import net.thucydides.core.annotations.Step;
 import org.junit.Assert;
 
