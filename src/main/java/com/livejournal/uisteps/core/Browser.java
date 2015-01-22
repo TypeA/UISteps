@@ -351,54 +351,6 @@ public class Browser {
         getDriver().manage().addCookie(new Cookie(cookie, value));
     }
 
-    public ArrayList<String> baseConnect(String select, String column) {
-
-        String user = "root";//Логин пользователя
-        String password = "";//Пароль пользователя
-        String url = "jdbc:mysql://127.0.0.1:2222/livejournal";//URL адрес
-        String driver = "com.mysql.jdbc.Driver";//Имя драйвера
-        ArrayList<String> answer = new ArrayList<>();
-
-        try {
-            Class.forName(driver);//Регистрируем драйвер
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        Connection c = null;//Соединение с БД
-
-        try {
-            c = (Connection) DriverManager.getConnection(url, user, password);//Установка соединения с БД
-            Statement st = c.createStatement();//Готовим запрос
-            ResultSet rs = st.executeQuery(select);//Выполняем запрос к БД, результат в переменной rs
-            while (rs.next()) {
-                answer.add(rs.getString(column));
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            //Обязательно необходимо закрыть соединение
-            try {
-                if (c != null) {
-                    c.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return answer;
-    }
-
-    public String getUserPassword(String user) {
-       String userid =  baseConnect("select * from user where user = '"  + user + "';", "userid")
-               .get(0)
-               .toString();
-        return baseConnect("select * from password where userid = '" + userid + "';", "password")
-                .get(0)
-                .toString();
-    }
-
     public class Cache {
 
         private Page page;

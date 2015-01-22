@@ -1,20 +1,14 @@
 package com.livejournal.uisteps.thucydides;
 
-import com.livejournal.uisteps.core.Browser;
 import com.livejournal.uisteps.core.Page;
 import com.livejournal.uisteps.core.UIBlock;
 import com.livejournal.uisteps.core.Url;
 import com.livejournal.uisteps.thucydides.Databases.BaseConnect;
 import com.livejournal.uisteps.thucydides.Verifications.That;
 import com.livejournal.uisteps.utils.ClassEnumerator;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.util.ArrayList;
 import net.thucydides.core.annotations.Managed;
 import net.thucydides.core.annotations.Steps;
 import net.thucydides.jbehave.ThucydidesJUnitStory;
-import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 
@@ -133,14 +127,6 @@ public class WebTest extends ThucydidesJUnitStory {
         return browser.startScript(script);
     }
 
-    public ArrayList<String> baseConnect(String select, String column) {
-        return browser.baseConnect(select, column);
-    }
-
-    public String getUserPassword(String user) {
-        return browser.getUserPassword(user);
-    }
-
     public void addCookie(String cookie, String value) {
         browser.addCookie(cookie, value);
     }
@@ -151,6 +137,19 @@ public class WebTest extends ThucydidesJUnitStory {
             throw new AssertionError("Object by name " + pageClassName + " is not a page!");
         }
         return (Class<? extends Page>) klass;
+    }
+
+    public String getUserPassword(String user) {
+        String select = "SELECT user.userid, user.user, password.password "
+                + "FROM user "
+                + "LEFT JOIN password "
+                + "ON user.userid=password.userid "
+                + "WHERE user.user = '" + user + "' ";
+        String password = this.workWithDB()
+                .conect()
+                .select(select, "password")
+                .finish().get(0).get(0).toString();
+        return password;
     }
 
 }
