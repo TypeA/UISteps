@@ -39,6 +39,17 @@ public class Databases {
             return new BaseSelect();
         }
 
+        public String getUserPassword(String user) {
+            String select = "SELECT user.userid, user.user, password.password "
+                    + "FROM user "
+                    + "LEFT JOIN password "
+                    + "ON user.userid=password.userid "
+                    + "WHERE user.user = '" + user + "' ";
+            String password = conect()
+                    .select(select, "password")
+                    .finish().get(0).get(0);
+            return password;
+        }
     }
 
     public class BaseSelect {
