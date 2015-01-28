@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import org.junit.Assert;
 
 /**
@@ -19,14 +20,13 @@ public class Databases {
     List<ArrayList<String>> answers = new ArrayList<ArrayList<String>>();
 
     public BaseConnect workWithDB() {
-        answers.clear();
         return new BaseConnect();
     }
 
     public class BaseConnect {
 
         public BaseSelect conect() {
-
+            answers.clear();
             String driver = "com.mysql.jdbc.Driver";//Имя драйвера
 
             try {
@@ -49,6 +49,71 @@ public class Databases {
                     .select(select, "password")
                     .finish().get(0).get(0);
             return password;
+        }
+
+        public ArrayList<String> findAllFriends(String user) {
+            String select1 = "select u.user, u.userid, f.friendid from user u "
+                    + "left join friends f on u.userid = f.userid "
+                    + "where u.user = '" + user + "';";
+            ArrayList<String> friendid = conect()
+                    .select(select1, "friendid")
+                    .finish()
+                    .get(0);
+            String select2 = "select user from user "
+                    + "where (userid = '" + friendid.get(0) + "' ";
+            for (int i = 1; i < friendid.size(); i++) {
+                select2 = select2 + " or userid = '" + friendid.get(i) + "'";
+            }
+            select2 = select2 + ");";
+            return conect()
+                    .select(select2, "user")
+                    .finish()
+                    .get(0);
+        }
+
+        public String findFriend(String user) {
+            String select1 = "select u.user, u.userid, f.friendid from user u "
+                    + "left join friends f on u.userid = f.userid "
+                    + "where u.user = '" + user + "';";
+            ArrayList<String> friendid = conect()
+                    .select(select1, "friendid")
+                    .finish()
+                    .get(0);
+            String select2 = "select user from user "
+                    + "where (userid = '" + friendid.get(0) + "' ";
+            for (int i = 1; i < friendid.size(); i++) {
+                select2 = select2 + " or userid = '" + friendid.get(i) + "'";
+            }
+            select2 = select2 + ") and user like '%test%';";
+            ArrayList<String> ans = conect()
+                    .select(select2, "user")
+                    .finish()
+                    .get(0);
+            return ans.get(new Random().nextInt(ans.size()));
+        }
+
+        public String findNotFriend(String user) {
+            String select1 = "select u.user, u.userid, f.friendid from user u "
+                    + "left join friends f on u.userid = f.userid "
+                    + "where u.user = '" + user + "';";
+            ArrayList<String> friendid = conect()
+                    .select(select1, "friendid")
+                    .finish()
+                    .get(0);
+            String select2 = "select user from user "
+                    + "where (userid != '" + friendid.get(0) + "' ";
+            for (int i = 1; i < friendid.size(); i++) {
+                select2 = select2 + " or userid = '" + friendid.get(i) + "'";
+            }
+            select2 = select2 + ") and user like '%test%' "
+                    + "and status = 'A' "
+                    + "and statusvis = 'V' "
+                    + "and statusvisdate >= adddate(now(), interval - 365 day);";
+            ArrayList<String> ans = conect()
+                    .select(select2, "user")
+                    .finish()
+                    .get(0);
+            return ans.get(new Random().nextInt(ans.size() ));
         }
     }
 

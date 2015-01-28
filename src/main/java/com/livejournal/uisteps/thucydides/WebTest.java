@@ -6,8 +6,6 @@ import com.livejournal.uisteps.core.Url;
 import com.livejournal.uisteps.thucydides.Databases.BaseConnect;
 import com.livejournal.uisteps.thucydides.Verifications.That;
 import com.livejournal.uisteps.utils.ClassEnumerator;
-import java.util.ArrayList;
-import java.util.List;
 import net.thucydides.core.annotations.Managed;
 import net.thucydides.core.annotations.Steps;
 import net.thucydides.jbehave.ThucydidesJUnitStory;
@@ -139,29 +137,6 @@ public class WebTest extends ThucydidesJUnitStory {
             throw new AssertionError("Object by name " + pageClassName + " is not a page!");
         }
         return (Class<? extends Page>) klass;
-    }
-
-    ///////////////////////////////////////////////////////////////////
-    public ArrayList<String> findFriends(String user) {
-        String select1 = "select u.user, u.userid, f.friendid from user u "
-                + "left join friends f on u.userid = f.userid "
-                + "where u.user = '" + user + "';";
-        ArrayList<String> friendid = this.workWithDB()
-                .conect()
-                .select(select1, "friendid")
-                .finish()
-                .get(0);
-        String select2 = "select user, userid from user "
-                + "where (userid = '" + friendid.get(0) + "' ";
-        for (int i = 1; i < friendid.size(); i++) {
-            select2 = select2 + " or userid = '" + friendid.get(i) + "'";
-        }
-        select2 = select2 + ") and user like '%test%';";
-        return workWithDB()
-                .conect()
-                .select(select2, "user")
-                .finish()
-                .get(0);
     }
 
 }
