@@ -27,6 +27,8 @@ public class Databases {
 
         public BaseSelect conect() {
             answers.clear();
+            c = null;
+
             String driver = "com.mysql.jdbc.Driver";//Имя драйвера
 
             try {
@@ -113,7 +115,58 @@ public class Databases {
                     .select(select2, "user")
                     .finish()
                     .get(0);
-            return ans.get(new Random().nextInt(ans.size() ));
+            return ans.get(new Random().nextInt(ans.size()));
+        }
+
+        public List<ArrayList<String>> findAllFriendsInGroups(String user) {
+
+            ArrayList<ArrayList<String>> ans = new ArrayList<ArrayList<String>>();
+            String select1 = "select * from friends "
+                    + "where userid = "
+                    + "(select userid from user where user = '" + user + "') "
+                    + "and groupmask > 1;";
+            List<ArrayList<String>> table = conect()
+                    .select(select1, "friendid")
+                    .select(select1, "groupmask")
+                    .finish();
+            ans.addAll(table);
+            ArrayList<String> usernames = new ArrayList<String>();
+            for (int j = 0; j < ans.get(0).size(); j++) {
+                String dopselect = "select user from user where userid = '" + ans.get(0).get(j) + "';";
+                String username = conect()
+                        .select(dopselect, "user")
+                        .finish()
+                        .get(0)
+                        .get(0);
+                usernames.add(username);
+            }
+            ans.set(0, usernames);
+
+            ArrayList<String> groups_list = new ArrayList<String>();
+            for (int j = 0; j < ans.get(1).size(); j++) {
+
+                char[] myCharArray = Integer
+                        .toBinaryString(Integer.valueOf(ans.get(1).get(j)))
+                        .toCharArray();
+
+                String groupsid = "";
+                for (int i = 1; i < myCharArray.length; i++) {
+                    if (myCharArray[i] == '1') {
+                        String select3 = "select groupname from lj_c2.friendgroup2 "
+                                + "where userid = (select userid from user where user = '" + user + "') "
+                                + "and groupnum = '" + i + "';";
+                        String groupname = conect()
+                        .select(select3, "groupname")
+                        .finish()
+                        .get(0)
+                        .get(0);
+                        groupsid = groupsid + groupname + ";";
+                    }
+                }
+                groups_list.add(groupsid);
+            }
+            ans.set(1, groups_list);
+            return ans;
         }
     }
 
