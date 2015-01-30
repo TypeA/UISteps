@@ -118,6 +118,30 @@ public class Databases {
             return ans.get(new Random().nextInt(ans.size()));
         }
 
+        public ArrayList<String> findNotFriends(String user, Integer limit) {
+            String select1 = "select u.user, u.userid, f.friendid from user u "
+                    + "left join friends f on u.userid = f.userid "
+                    + "where u.user = '" + user + "';";
+            ArrayList<String> friendid = conect()
+                    .select(select1, "friendid")
+                    .finish()
+                    .get(0);
+            String select2 = "select user from user "
+                    + "where (userid != '" + friendid.get(0) + "' ";
+            for (int i = 1; i < friendid.size(); i++) {
+                select2 = select2 + " or userid = '" + friendid.get(i) + "'";
+            }
+            select2 = select2 + ") and user like '%test%' "
+                    + "and status = 'A' "
+                    + "and statusvis = 'V' "
+                    + "and statusvisdate >= adddate(now(), interval - 500 day) "
+                    + "limit " + limit + ";";
+            return conect()
+                    .select(select2, "user")
+                    .finish()
+                    .get(0);
+        }
+
         public List<ArrayList<String>> findAllFriendsInGroups(String user) {
 
             ArrayList<ArrayList<String>> ans = new ArrayList<ArrayList<String>>();
@@ -156,10 +180,10 @@ public class Databases {
                                 + "where userid = (select userid from user where user = '" + user + "') "
                                 + "and groupnum = '" + i + "';";
                         String groupname = conect()
-                        .select(select3, "groupname")
-                        .finish()
-                        .get(0)
-                        .get(0);
+                                .select(select3, "groupname")
+                                .finish()
+                                .get(0)
+                                .get(0);
                         groupsid = groupsid + groupname + ";";
                     }
                 }
