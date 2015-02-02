@@ -173,6 +173,32 @@ public class Databases {
             ans.set(1, groups_list);
             return ans;
         }
+
+        public String findFriendInGroup(String user) {
+            String ans = "";
+            ArrayList<String> answer = findAllFriendsInGroups(user).get(0);
+            for (int i = 0; i < answer.size(); i++) {
+                if (answer.get(i).contains("test")) {
+                    ans = answer.get(i);
+                    i = answer.size();
+                }
+            }
+            if (ans.isEmpty()) {
+                ans = answer.get(0);
+            }
+            return ans;
+        }
+
+        public ArrayList<String> findFriendInGroup(String user, String group) {
+            ArrayList<String> ans = new ArrayList<String>();
+            List<ArrayList<String>> answer = findAllFriendsInGroups(user);
+            for (int i = 0; i < answer.get(0).size(); i++) {
+                if (answer.get(1).get(i).contains(group)) {
+                    ans.add(answer.get(0).get(i));
+                }
+            }
+            return ans;
+        }
     }
 
     public class BaseSelect {
