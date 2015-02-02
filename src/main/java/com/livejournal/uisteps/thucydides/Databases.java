@@ -94,6 +94,27 @@ public class Databases {
             return ans.get(new Random().nextInt(ans.size()));
         }
 
+        public String findFriendWithoutGroup(String user) {
+            String select1 = "select u.user, u.userid, f.friendid from user u "
+                    + "left join friends f on u.userid = f.userid "
+                    + "where u.user = '" + user + "' and groupmask = '1';";
+            ArrayList<String> friendid = conect()
+                    .select(select1, "friendid")
+                    .finish()
+                    .get(0);
+            String select2 = "select user from user "
+                    + "where (userid = '" + friendid.get(0) + "' ";
+            for (int i = 1; i < friendid.size(); i++) {
+                select2 = select2 + " or userid = '" + friendid.get(i) + "'";
+            }
+            select2 = select2 + ") and user like '%test%';";
+            ArrayList<String> ans = conect()
+                    .select(select2, "user")
+                    .finish()
+                    .get(0);
+            return ans.get(new Random().nextInt(ans.size()));
+        }
+
         public String findNotFriend(String user) {
             ArrayList<String> ans = findNotFriends(user, 100);
             return ans.get(new Random().nextInt(ans.size()));
