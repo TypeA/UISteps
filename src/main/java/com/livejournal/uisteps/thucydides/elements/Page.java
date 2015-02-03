@@ -18,9 +18,11 @@ package com.livejournal.uisteps.thucydides.elements;
 
 import com.livejournal.uisteps.core.Browser;
 import com.livejournal.uisteps.core.Url;
+import com.livejournal.uisteps.thucydides.Databases;
+import com.livejournal.uisteps.thucydides.Databases.BaseConnect;
+import com.livejournal.uisteps.thucydides.NameConvertor;
 import com.livejournal.uisteps.thucydides.ThucydidesUtils;
 import com.livejournal.uisteps.thucydides.UrlFactory;
-import com.livejournal.uisteps.thucydides.NameConvertor;
 import org.openqa.selenium.WebDriver;
 
 /**
@@ -30,10 +32,12 @@ import org.openqa.selenium.WebDriver;
 public class Page implements com.livejournal.uisteps.core.Page {
 
     private final Browser browser;
+    private final Databases databases;
     private final UrlFactory urlFactory;
     private Url url;
 
     public Page() {
+        databases = new Databases();
         urlFactory = new UrlFactory();
         url = urlFactory.getDefaultUrlOfPage(this.getClass());
         browser = (Browser) ThucydidesUtils.getFromSession("#BROWSER#");
@@ -65,6 +69,22 @@ public class Page implements com.livejournal.uisteps.core.Page {
         return browser.onOpened(pageClass);
     }
 
+    public <T extends Page> T open(Class<T> pageClass) {
+        return browser.open(pageClass);
+    }
+
+    public <T extends Page> T open(Class<T> pageClass, Url url) {
+        return browser.open(pageClass, url);
+    }
+
+    public BaseConnect workWithDB() {
+        return databases.workWithDB();
+    }
+
+    public void addCookie(String cookie, String value) {
+        browser.addCookie(cookie, value);
+    }
+
     public <T extends UIBlock> T onDisplayed(Class<T> blockClass) {
         return browser.onDisplayed(blockClass);
     }
@@ -72,8 +92,8 @@ public class Page implements com.livejournal.uisteps.core.Page {
     public WebDriver getDriver() {
         return browser.getDriver();
     }
-    
-      public Object startScript(String script) {
+
+    public Object startScript(String script) {
         return browser.startScript(script);
     }
 }
