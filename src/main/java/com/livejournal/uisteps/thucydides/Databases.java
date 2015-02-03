@@ -73,7 +73,7 @@ public class Databases {
                     .get(0);
         }
 
-        public ArrayList<String> findFriend(String user) {
+        public String findFriend(String user) {
             ArrayList<String> ans = findAllFriends(user);
             String select = "select user from user "
                     + "where (user = '" + ans.get(0) + "' ";
@@ -87,8 +87,13 @@ public class Databases {
                     .select(select, "user")
                     .finish()
                     .get(0);
-           // return ans.get(new Random().nextInt(ans.size()));
-            return ans;
+            ArrayList<String> answer = new ArrayList<String>();
+            for (int i = 0; i < ans.size(); i++) {
+                if (!getUserPassword(ans.get(i)).contains("md5:")) {
+                    answer.add(ans.get(i));
+                }
+            }
+            return answer.get(new Random().nextInt(ans.size()));
         }
 
         public ArrayList<String> findNotFriends(String user, Integer limit) {
@@ -109,10 +114,17 @@ public class Databases {
                     + "and journaltype = 'P'"
                     + "and statusvisdate >= adddate(now(), interval - 500 day) "
                     + "limit " + limit + ";";
-            return conect()
+            ArrayList<String> ans = conect()
                     .select(select2, "user")
                     .finish()
                     .get(0);
+            ArrayList<String> answer = new ArrayList<String>();
+            for (int i = 0; i < ans.size(); i++) {
+                if (!getUserPassword(ans.get(i)).contains("md5:")) {
+                    answer.add(ans.get(i));
+                }
+            }
+            return answer;
         }
 
         public String findNotFriend(String user) {
@@ -145,8 +157,16 @@ public class Databases {
             ans.set(0, usernames);
 
             ArrayList<String> groups_list = new ArrayList<String>();
-            for (int j = 0; j < ans.get(1).size(); j++) {
 
+            String dop_script = "select clusterid, user from user "
+                    + "where user = '" + user + "';";
+            String clusterid = workWithDB().conect()
+                    .select(dop_script, "clusterid")
+                    .finish()
+                    .get(0)
+                    .get(0);
+
+            for (int j = 0; j < ans.get(1).size(); j++) {
                 char[] myCharArray = Integer
                         .toBinaryString(Integer.valueOf(ans.get(1).get(j)))
                         .toCharArray();
@@ -154,7 +174,7 @@ public class Databases {
                 String groupsid = "";
                 for (int i = 1; i < myCharArray.length; i++) {
                     if (myCharArray[i] == '1') {
-                        String select3 = "select groupname from lj_c2.friendgroup2 "
+                        String select3 = "select groupname from lj_c" + clusterid + ".friendgroup2 "
                                 + "where userid = (select userid from user where user = '" + user + "') "
                                 + "and groupnum = '" + i + "';";
                         String groupname = conect()
@@ -217,7 +237,13 @@ public class Databases {
                     .select(select2, "user")
                     .finish()
                     .get(0);
-            return ans.get(new Random().nextInt(ans.size()));
+            ArrayList<String> answer = new ArrayList<String>();
+            for (int i = 0; i < ans.size(); i++) {
+                if (!getUserPassword(ans.get(i)).contains("md5:")) {
+                    answer.add(ans.get(i));
+                }
+            }
+            return answer.get(new Random().nextInt(ans.size()));
         }
     }
 
