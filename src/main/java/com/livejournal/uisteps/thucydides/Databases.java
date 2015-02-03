@@ -73,51 +73,22 @@ public class Databases {
                     .get(0);
         }
 
-        public String findFriend(String user) {
-            String select1 = "select u.user, u.userid, f.friendid from user u "
-                    + "left join friends f on u.userid = f.userid "
-                    + "where u.user = '" + user + "';";
-            ArrayList<String> friendid = conect()
-                    .select(select1, "friendid")
-                    .finish()
-                    .get(0);
-            String select2 = "select user from user "
-                    + "where (userid = '" + friendid.get(0) + "' ";
-            for (int i = 1; i < friendid.size(); i++) {
-                select2 = select2 + " or userid = '" + friendid.get(i) + "'";
+        public ArrayList<String> findFriend(String user) {
+            ArrayList<String> ans = findAllFriends(user);
+            String select = "select user from user "
+                    + "where (user = '" + ans.get(0) + "' ";
+            for (int i = 1; i < ans.size(); i++) {
+                select = select + " or user = '" + ans.get(i) + "'";
             }
-            select2 = select2 + ") and user like '%test%';";
-            ArrayList<String> ans = conect()
-                    .select(select2, "user")
+            select = select + ") and user like '%test%' "
+                    + "and statusvis = 'V'"
+                    + "and journaltype = 'P'";
+            ans = conect()
+                    .select(select, "user")
                     .finish()
                     .get(0);
-            return ans.get(new Random().nextInt(ans.size()));
-        }
-
-        public String findFriendWithoutGroup(String user) {
-            String select1 = "select u.user, u.userid, f.friendid from user u "
-                    + "left join friends f on u.userid = f.userid "
-                    + "where u.user = '" + user + "' and groupmask = '1';";
-            ArrayList<String> friendid = conect()
-                    .select(select1, "friendid")
-                    .finish()
-                    .get(0);
-            String select2 = "select user from user "
-                    + "where (userid = '" + friendid.get(0) + "' ";
-            for (int i = 1; i < friendid.size(); i++) {
-                select2 = select2 + " or userid = '" + friendid.get(i) + "'";
-            }
-            select2 = select2 + ") and user like '%test%';";
-            ArrayList<String> ans = conect()
-                    .select(select2, "user")
-                    .finish()
-                    .get(0);
-            return ans.get(new Random().nextInt(ans.size()));
-        }
-
-        public String findNotFriend(String user) {
-            ArrayList<String> ans = findNotFriends(user, 100);
-            return ans.get(new Random().nextInt(ans.size()));
+           // return ans.get(new Random().nextInt(ans.size()));
+            return ans;
         }
 
         public ArrayList<String> findNotFriends(String user, Integer limit) {
@@ -134,14 +105,19 @@ public class Databases {
                 select2 = select2 + " or userid = '" + friendid.get(i) + "'";
             }
             select2 = select2 + ") and user like '%test%' "
-                    + "and status = 'A' "
-                    + "and statusvis = 'V' "
+                    + "and statusvis = 'V'"
+                    + "and journaltype = 'P'"
                     + "and statusvisdate >= adddate(now(), interval - 500 day) "
                     + "limit " + limit + ";";
             return conect()
                     .select(select2, "user")
                     .finish()
                     .get(0);
+        }
+
+        public String findNotFriend(String user) {
+            ArrayList<String> ans = findNotFriends(user, 100);
+            return ans.get(new Random().nextInt(ans.size()));
         }
 
         public List<ArrayList<String>> findAllFriendsInGroups(String user) {
@@ -219,6 +195,29 @@ public class Databases {
                 }
             }
             return ans;
+        }
+
+        public String findFriendWithoutGroup(String user) {
+            String select1 = "select u.user, u.userid, f.friendid from user u "
+                    + "left join friends f on u.userid = f.userid "
+                    + "where u.user = '" + user + "' and groupmask = '1';";
+            ArrayList<String> friendid = conect()
+                    .select(select1, "friendid")
+                    .finish()
+                    .get(0);
+            String select2 = "select user from user "
+                    + "where (userid = '" + friendid.get(0) + "' ";
+            for (int i = 1; i < friendid.size(); i++) {
+                select2 = select2 + " or userid = '" + friendid.get(i) + "'";
+            }
+            select2 = select2 + ") and user like '%test%' "
+                    + "and statusvis = 'V'"
+                    + "and journaltype = 'P'";
+            ArrayList<String> ans = conect()
+                    .select(select2, "user")
+                    .finish()
+                    .get(0);
+            return ans.get(new Random().nextInt(ans.size()));
         }
     }
 
