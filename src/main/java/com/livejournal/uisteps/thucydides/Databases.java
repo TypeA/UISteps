@@ -107,7 +107,7 @@ public class Databases {
             String select2 = "select user from user "
                     + "where (userid != '" + friendid.get(0) + "' ";
             for (int i = 1; i < friendid.size(); i++) {
-                select2 = select2 + " or userid = '" + friendid.get(i) + "'";
+                select2 = select2 + " and userid != '" + friendid.get(i) + "'";
             }
             select2 = select2 + ") and user like '%test%' "
                     + "and statusvis = 'V'"
