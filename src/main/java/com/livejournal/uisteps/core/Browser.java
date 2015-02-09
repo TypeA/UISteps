@@ -369,7 +369,7 @@ public class Browser {
             this.blockClass = blockClass;
         }
 
-        void clear() {
+        public void clear() {
             clearBlock();
             clearPage();
         }
