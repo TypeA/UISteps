@@ -217,6 +217,7 @@ public class Databases {
             return ans;
         }
 
+
         public String findFriendWithoutGroup(String user) {
             String select1 = "select u.user, u.userid, f.friendid from user u "
                     + "left join friends f on u.userid = f.userid "
@@ -244,6 +245,36 @@ public class Databases {
                 }
             }
             return answer.get(new Random().nextInt(ans.size()));
+        }
+        
+        
+        //////////////////////////////////////////////
+        public String getCyrSetting(String user) {
+            String select1 = "SELECT caps "
+                    + "FROM user "
+                    + "WHERE user='"
+                    + user
+                    + "';";
+            String caps = conect()
+                    .select(select1, "caps")
+                    .finish()
+                    .get(0)
+                    .get(0);
+            int intcaps = Integer.valueOf(caps) & 1024;
+            String cyrSetting="";
+            switch (intcaps) {
+                case 0:
+                    cyrSetting="NONCYR";
+                    break;
+                case 1024:
+                    cyrSetting="CYR";
+                    break;
+                default:
+                    Assert.assertTrue("Unknown user type", false);
+                    break;
+            }
+            return cyrSetting;
+
         }
     }
 
