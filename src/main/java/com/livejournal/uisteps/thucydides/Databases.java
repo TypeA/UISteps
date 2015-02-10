@@ -41,6 +41,7 @@ public class Databases {
             return new BaseSelect();
         }
 
+        ////////////////////password
         public String getUserPassword(String user) {
             String select = "SELECT user.userid, user.user, password.password "
                     + "FROM user "
@@ -53,6 +54,7 @@ public class Databases {
             return password;
         }
 
+        ////////////////////friends
         public ArrayList<String> findAllFriends(String user) {
             String select1 = "select u.user, u.userid, f.friendid from user u "
                     + "left join friends f on u.userid = f.userid "
@@ -216,10 +218,37 @@ public class Databases {
             }
             return ans;
         }
+        
+                public String findFriendWithoutGroup(String user) {
+            String select1 = "select u.user, u.userid, f.friendid from user u "
+                    + "left join friends f on u.userid = f.userid "
+                    + "where u.user = '" + user + "' and groupmask = '1';";
+            ArrayList<String> friendid = conect()
+                    .select(select1, "friendid")
+                    .finish()
+                    .get(0);
+            String select2 = "select user from user "
+                    + "where (userid = '" + friendid.get(0) + "' ";
+            for (int i = 1; i < friendid.size(); i++) {
+                select2 = select2 + " or userid = '" + friendid.get(i) + "'";
+            }
+            select2 = select2 + ") and user like '%test%' "
+                    + "and statusvis = 'V'"
+                    + "and journaltype = 'P'";
+            ArrayList<String> ans = conect()
+                    .select(select2, "user")
+                    .finish()
+                    .get(0);
+            ArrayList<String> answer = new ArrayList<String>();
+            for (int i = 0; i < ans.size(); i++) {
+                if (!getUserPassword(ans.get(i)).contains("md5:")) {
+                    answer.add(ans.get(i));
+                }
+            }
+            return answer.get(new Random().nextInt(ans.size()));
+        }
 
-        ///////////////////////////
-        ///Community
-        ////////////
+        ////////////////////community
         private ArrayList<String> findUserInCommunity(String community, String type) {
             String select = "select r.targetid from user u left join reluser r on "
                     + "u.userid=r.userid where u.user = '" + community + "' and r.type='" + type + "';";
@@ -279,39 +308,8 @@ public class Databases {
             }
             return users.get(new Random().nextInt(users.size()));
         }
-
-
-        public String findFriendWithoutGroup(String user) {
-            String select1 = "select u.user, u.userid, f.friendid from user u "
-                    + "left join friends f on u.userid = f.userid "
-                    + "where u.user = '" + user + "' and groupmask = '1';";
-            ArrayList<String> friendid = conect()
-                    .select(select1, "friendid")
-                    .finish()
-                    .get(0);
-            String select2 = "select user from user "
-                    + "where (userid = '" + friendid.get(0) + "' ";
-            for (int i = 1; i < friendid.size(); i++) {
-                select2 = select2 + " or userid = '" + friendid.get(i) + "'";
-            }
-            select2 = select2 + ") and user like '%test%' "
-                    + "and statusvis = 'V'"
-                    + "and journaltype = 'P'";
-            ArrayList<String> ans = conect()
-                    .select(select2, "user")
-                    .finish()
-                    .get(0);
-            ArrayList<String> answer = new ArrayList<String>();
-            for (int i = 0; i < ans.size(); i++) {
-                if (!getUserPassword(ans.get(i)).contains("md5:")) {
-                    answer.add(ans.get(i));
-                }
-            }
-            return answer.get(new Random().nextInt(ans.size()));
-        }
         
-        
-        //////////////////////////////////////////////
+        ////////////////////user settings
         public String getCyrSetting(String user) {
             String select1 = "SELECT caps "
                     + "FROM user "
