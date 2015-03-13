@@ -17,9 +17,10 @@ import org.junit.Assert;
 public class Databases {
 
     Connection c = null;//Соединение с БД
-    List<ArrayList<String>> answers = new ArrayList<ArrayList<String>>();
+    List<ArrayList<String>> answers;
 
     public BaseConnect workWithDB() {
+        answers = new ArrayList<ArrayList<String>>();
         return new BaseConnect();
     }
 
@@ -375,6 +376,8 @@ public class Databases {
                 e.printStackTrace();
                 Assert.assertTrue("No connection", false);
             }
+            
+            
             return answers;
         }
     }
