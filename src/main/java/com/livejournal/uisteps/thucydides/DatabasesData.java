@@ -1,10 +1,5 @@
 package com.livejournal.uisteps.thucydides;
 
-import com.mysql.jdbc.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -14,54 +9,77 @@ import org.junit.Assert;
  *
  * @author m.prytkova
  */
-public class Databases {
+public class DatabasesData extends Databases {
 
-    Connection c = null;//Соединение с БД
-    List<ArrayList<String>> answers;
-
-    public BaseConnect workWithDB() {
-        answers = new ArrayList<ArrayList<String>>();
-        return new BaseConnect();
+    public UserData userData() {
+        return new UserData();
     }
 
-    public class BaseConnect {
+    public UserSettings userSettings() {
+        return new UserSettings();
+    }
 
-        public BaseSelect conect() {
-            answers.clear();
-            c = null;
+    public Friends friends() {
+        return new Friends();
+    }
 
-            String driver = "com.mysql.jdbc.Driver";//Имя драйвера
+    public Community community() {
+        return new Community();
+    }
 
-            try {
-                Class.forName(driver);//Регистрируем драйвер
-            } catch (ClassNotFoundException e) {
+    public class UserData extends DatabasesData {
 
-                e.printStackTrace();
-                Assert.assertTrue("No connection", false);
-            }
-            return new BaseSelect();
-        }
-
-        ////////////////////password
         public String getUserPassword(String user) {
             String select = "SELECT user.userid, user.user, password.password "
                     + "FROM user "
                     + "LEFT JOIN password "
                     + "ON user.userid=password.userid "
                     + "WHERE user.user = '" + user + "' ";
-            String password = conect()
+            String password = workWithDB().conect()
                     .select(select, "password")
                     .finish().get(0).get(0);
             return password;
         }
-        
-        
-        ////////////////////friends
+    }
+
+    public class UserSettings {
+
+        public String getCyrSetting(String user) {
+            String select1 = "SELECT caps "
+                    + "FROM user "
+                    + "WHERE user='"
+                    + user
+                    + "';";
+            String caps = workWithDB().conect()
+                    .select(select1, "caps")
+                    .finish()
+                    .get(0)
+                    .get(0);
+            int intcaps = Integer.valueOf(caps) & 1024;
+            String cyrSetting = "";
+            switch (intcaps) {
+                case 0:
+                    cyrSetting = "NONCYR";
+                    break;
+                case 1024:
+                    cyrSetting = "CYR";
+                    break;
+                default:
+                    Assert.assertTrue("Unknown user type", false);
+                    break;
+            }
+            return cyrSetting;
+
+        }
+    }
+
+    public class Friends extends DatabasesData {
+
         public ArrayList<String> findAllFriends(String user) {
             String select1 = "select u.user, u.userid, f.friendid from user u "
                     + "left join friends f on u.userid = f.userid "
                     + "where u.user = '" + user + "';";
-            ArrayList<String> friendid = conect()
+            ArrayList<String> friendid = workWithDB().conect()
                     .select(select1, "friendid")
                     .finish()
                     .get(0);
@@ -71,7 +89,7 @@ public class Databases {
                 select2 = select2 + " or userid = '" + friendid.get(i) + "'";
             }
             select2 = select2 + ");";
-            return conect()
+            return workWithDB().conect()
                     .select(select2, "user")
                     .finish()
                     .get(0);
@@ -87,13 +105,13 @@ public class Databases {
             select = select + ") and user like '%test%' "
                     + "and statusvis = 'V'"
                     + "and journaltype = 'P'";
-            ans = conect()
+            ans = workWithDB().conect()
                     .select(select, "user")
                     .finish()
                     .get(0);
             ArrayList<String> answer = new ArrayList<String>();
             for (int i = 0; i < ans.size(); i++) {
-                if (!getUserPassword(ans.get(i)).contains("md5:")) {
+                if (!userData().getUserPassword(ans.get(i)).contains("md5:")) {
                     answer.add(ans.get(i));
                 }
             }
@@ -104,7 +122,7 @@ public class Databases {
             String select1 = "select u.user, u.userid, f.friendid from user u "
                     + "left join friends f on u.userid = f.userid "
                     + "where u.user = '" + user + "';";
-            ArrayList<String> friendid = conect()
+            ArrayList<String> friendid = workWithDB().conect()
                     .select(select1, "friendid")
                     .finish()
                     .get(0);
@@ -118,13 +136,13 @@ public class Databases {
                     + "and journaltype = 'P'"
                     + "and statusvisdate >= adddate(now(), interval - 500 day) "
                     + "limit " + limit + ";";
-            ArrayList<String> ans = conect()
+            ArrayList<String> ans = workWithDB().conect()
                     .select(select2, "user")
                     .finish()
                     .get(0);
             ArrayList<String> answer = new ArrayList<String>();
             for (int i = 0; i < ans.size(); i++) {
-                if (!getUserPassword(ans.get(i)).contains("md5:")) {
+                if (!userData().getUserPassword(ans.get(i)).contains("md5:")) {
                     answer.add(ans.get(i));
                 }
             }
@@ -143,7 +161,7 @@ public class Databases {
                     + "where userid = "
                     + "(select userid from user where user = '" + user + "') "
                     + "and groupmask > 1;";
-            List<ArrayList<String>> table = conect()
+            List<ArrayList<String>> table = workWithDB().conect()
                     .select(select1, "friendid")
                     .select(select1, "groupmask")
                     .finish();
@@ -151,7 +169,7 @@ public class Databases {
             ArrayList<String> usernames = new ArrayList<String>();
             for (int j = 0; j < ans.get(0).size(); j++) {
                 String dopselect = "select user from user where userid = '" + ans.get(0).get(j) + "';";
-                String username = conect()
+                String username = workWithDB().conect()
                         .select(dopselect, "user")
                         .finish()
                         .get(0)
@@ -181,7 +199,7 @@ public class Databases {
                         String select3 = "select groupname from lj_c" + clusterid + ".friendgroup2 "
                                 + "where userid = (select userid from user where user = '" + user + "') "
                                 + "and groupnum = '" + i + "';";
-                        String groupname = conect()
+                        String groupname = workWithDB().conect()
                                 .select(select3, "groupname")
                                 .finish()
                                 .get(0)
@@ -220,12 +238,12 @@ public class Databases {
             }
             return ans;
         }
-        
-                public String findFriendWithoutGroup(String user) {
+
+        public String findFriendWithoutGroup(String user) {
             String select1 = "select u.user, u.userid, f.friendid from user u "
                     + "left join friends f on u.userid = f.userid "
                     + "where u.user = '" + user + "' and groupmask = '1';";
-            ArrayList<String> friendid = conect()
+            ArrayList<String> friendid = workWithDB().conect()
                     .select(select1, "friendid")
                     .finish()
                     .get(0);
@@ -237,20 +255,22 @@ public class Databases {
             select2 = select2 + ") and user like '%test%' "
                     + "and statusvis = 'V'"
                     + "and journaltype = 'P'";
-            ArrayList<String> ans = conect()
+            ArrayList<String> ans = workWithDB().conect()
                     .select(select2, "user")
                     .finish()
                     .get(0);
             ArrayList<String> answer = new ArrayList<String>();
             for (int i = 0; i < ans.size(); i++) {
-                if (!getUserPassword(ans.get(i)).contains("md5:")) {
+                if (!userData().getUserPassword(ans.get(i)).contains("md5:")) {
                     answer.add(ans.get(i));
                 }
             }
             return answer.get(new Random().nextInt(ans.size()));
         }
+    }
 
-        ////////////////////community
+    public class Community extends DatabasesData {
+
         private ArrayList<String> findUserInCommunity(String community, String type) {
             String select = "select r.targetid from user u left join reluser r on "
                     + "u.userid=r.userid where u.user = '" + community + "' and r.type='" + type + "';";
@@ -310,76 +330,6 @@ public class Databases {
             }
             return users.get(new Random().nextInt(users.size()));
         }
-        
-        ////////////////////user settings
-        public String getCyrSetting(String user) {
-            String select1 = "SELECT caps "
-                    + "FROM user "
-                    + "WHERE user='"
-                    + user
-                    + "';";
-            String caps = conect()
-                    .select(select1, "caps")
-                    .finish()
-                    .get(0)
-                    .get(0);
-            int intcaps = Integer.valueOf(caps) & 1024;
-            String cyrSetting="";
-            switch (intcaps) {
-                case 0:
-                    cyrSetting="NONCYR";
-                    break;
-                case 1024:
-                    cyrSetting="CYR";
-                    break;
-                default:
-                    Assert.assertTrue("Unknown user type", false);
-                    break;
-            }
-            return cyrSetting;
-
-        }
     }
 
-    public class BaseSelect {
-
-        public BaseSelect select(String select, String column) {
-
-            String user = "root";//Логин пользователя
-            String password = "";//Пароль пользователя
-            String url = "jdbc:mysql://127.0.0.1:2222/livejournal";//URL адрес
-            ArrayList<String> answer = new ArrayList<>();
-
-            try {
-                c = (Connection) DriverManager.getConnection(url, user, password);//Установка соединения с БД
-                ThucydidesUtils.putToSession("connect", c);
-                Statement st = c.createStatement();//Готовим запрос
-                ResultSet rs = st.executeQuery(select);//Выполняем запрос к БД, результат в переменной rs
-                while (rs.next()) {
-                    answer.add(rs.getString(column));
-                    // System.out.println(rs.getString(column));
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                Assert.assertTrue("No connection", false);
-            }
-            answers.add(answer);
-            return new BaseSelect();
-        }
-
-        public List<ArrayList<String>> finish() {
-            //Обязательно необходимо закрыть соединение
-            try {
-                if (c != null) {
-                    c.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-                Assert.assertTrue("No connection", false);
-            }
-            
-            
-            return answers;
-        }
-    }
 }

@@ -26,6 +26,8 @@ public class WebTest extends ThucydidesJUnitStory {
     Verifications verifications;
     @Steps
     Databases databases;
+    @Steps
+    DatabasesData databasesData;
 
     private ClassEnumerator classEnumerator = new ClassEnumerator("com.livejournal.uitests.pages");
 
@@ -117,6 +119,10 @@ public class WebTest extends ThucydidesJUnitStory {
 
     public That verify() {
         return verifications.verify();
+    }
+
+    public DatabasesData getDBDate() {
+        return databasesData;
     }
 
     public BaseConnect workWithDB() {
