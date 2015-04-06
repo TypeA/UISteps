@@ -294,7 +294,7 @@ public class Browser {
     }
 
     public void waitUntil(ExpectedCondition<Boolean> condition) {
-        WebDriverWait wait = new WebDriverWait(getDriver(), 10);
+        WebDriverWait wait = new WebDriverWait(getDriver(), 15);
         wait.until(new ExpectedCondition<Boolean>() {
             public Boolean apply(WebDriver driver) {
                 return condition.apply(driver);
