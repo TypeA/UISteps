@@ -3,13 +3,10 @@ package com.livejournal.uisteps.thucydides.elements;
 
 import com.livejournal.uisteps.core.Browser;
 import com.livejournal.uisteps.thucydides.ThucydidesUtils;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import ru.yandex.qatools.htmlelements.annotations.Block;
 import ru.yandex.qatools.htmlelements.element.TypifiedElement;
 
 /**
