@@ -58,7 +58,6 @@ public class Databases {
                 ResultSet rs = st.executeQuery(select);//Выполняем запрос к БД, результат в переменной rs
                 while (rs.next()) {
                     answer.add(rs.getString(column));
-                    // System.out.println(rs.getString(column));
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -78,8 +77,6 @@ public class Databases {
                 e.printStackTrace();
                 Assert.assertTrue("No connection", false);
             }
-            
-            
             return answers;
         }
     }

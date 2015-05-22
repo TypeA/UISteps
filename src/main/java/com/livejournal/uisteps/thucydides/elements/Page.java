@@ -24,6 +24,7 @@ import com.livejournal.uisteps.thucydides.DatabasesData;
 import com.livejournal.uisteps.thucydides.NameConvertor;
 import com.livejournal.uisteps.thucydides.ThucydidesUtils;
 import com.livejournal.uisteps.thucydides.UrlFactory;
+import net.thucydides.core.guice.Injectors;
 import org.openqa.selenium.WebDriver;
 
 /**
@@ -37,6 +38,7 @@ public class Page implements com.livejournal.uisteps.core.Page {
     private final DatabasesData databasesData;
     private final UrlFactory urlFactory;
     private Url url;
+    private net.thucydides.core.webdriver.Configuration systemConfiguration;
 
     public Page() {
         databases = new Databases();
@@ -102,5 +104,12 @@ public class Page implements com.livejournal.uisteps.core.Page {
 
     public Object startScript(String script) {
         return browser.startScript(script);
+    }
+
+    public net.thucydides.core.webdriver.Configuration getSystemConfiguration() {
+        if (systemConfiguration == null) {
+            systemConfiguration = Injectors.getInjector().getInstance(net.thucydides.core.webdriver.Configuration.class);
+        }
+        return systemConfiguration;
     }
 }

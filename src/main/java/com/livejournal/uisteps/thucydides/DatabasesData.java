@@ -26,8 +26,9 @@ public class DatabasesData extends Databases {
     public Community community() {
         return new Community();
     }
-    public BannedUser bannedUser(){
-    return new BannedUser();
+
+    public BannedUser bannedUser() {
+        return new BannedUser();
     }
 
     public class UserData extends DatabasesData {
@@ -106,6 +107,7 @@ public class DatabasesData extends Databases {
                 select = select + " or user = '" + ans.get(i) + "'";
             }
             select = select + ") and user like '%test%' "
+                    + "and user !='" + user + "'"
                     + "and statusvis = 'V'"
                     + "and journaltype = 'P'";
             ans = workWithDB().conect()
@@ -138,6 +140,7 @@ public class DatabasesData extends Databases {
                     + "and statusvis = 'V'"
                     + "and journaltype = 'P'"
                     + "and statusvisdate >= adddate(now(), interval - 500 day) "
+                    + "and user !='" + user + "'"
                     + "limit " + limit + ";";
             ArrayList<String> ans = workWithDB().conect()
                     .select(select2, "user")
