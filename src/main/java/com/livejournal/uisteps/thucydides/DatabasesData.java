@@ -115,9 +115,9 @@ public class DatabasesData extends Databases {
                     .finish()
                     .get(0);
             ArrayList<String> answer = new ArrayList<String>();
-            for (int i = 0; i < ans.size(); i++) {
-                if (!userData().getUserPassword(ans.get(i)).contains("md5:")) {
-                    answer.add(ans.get(i));
+            for (String an : ans) {
+                if (!userData().getUserPassword(an).contains("md5:")) {
+                    answer.add(an);
                 }
             }
             return answer.get(new Random().nextInt(ans.size()));
@@ -147,9 +147,9 @@ public class DatabasesData extends Databases {
                     .finish()
                     .get(0);
             ArrayList<String> answer = new ArrayList<String>();
-            for (int i = 0; i < ans.size(); i++) {
-                if (!userData().getUserPassword(ans.get(i)).contains("md5:")) {
-                    answer.add(ans.get(i));
+            for (String an : ans) {
+                if (!userData().getUserPassword(an).contains("md5:")) {
+                    answer.add(an);
                 }
             }
             return answer;
@@ -266,9 +266,9 @@ public class DatabasesData extends Databases {
                     .finish()
                     .get(0);
             ArrayList<String> answer = new ArrayList<String>();
-            for (int i = 0; i < ans.size(); i++) {
-                if (!userData().getUserPassword(ans.get(i)).contains("md5:")) {
-                    answer.add(ans.get(i));
+            for (String an : ans) {
+                if (!userData().getUserPassword(an).contains("md5:")) {
+                    answer.add(an);
                 }
             }
             return answer.get(new Random().nextInt(ans.size()));
@@ -285,14 +285,13 @@ public class DatabasesData extends Databases {
                     .finish()
                     .get(0);
             ArrayList<String> user = new ArrayList<String>();
-            for (int i = 0; i < targetid.size(); i++) {
-                String select2 = "Select user from user where userid = " + targetid.get(i);
+            for (String targetid1 : targetid) {
+                String select2 = "Select user from user where userid = " + targetid1;
                 String ans = workWithDB().conect()
                         .select(select2, "user")
                         .finish()
                         .get(0)
                         .get(0);
-
                 user.add(ans);
             }
             return user;
@@ -325,8 +324,8 @@ public class DatabasesData extends Databases {
                     .finish()
                     .get(0);
             ArrayList<String> users = new ArrayList<String>();
-            for (int i = 0; i < ans.size(); i++) {
-                String select2 = "Select user from user where userid = " + ans.get(i);
+            for (String an : ans) {
+                String select2 = "Select user from user where userid = " + an;
                 String ans1 = workWithDB().conect()
                         .select(select2, "user")
                         .finish()
