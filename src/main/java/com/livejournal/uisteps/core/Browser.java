@@ -28,12 +28,6 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.internal.WrapsElement;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import com.mysql.jdbc.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
 import org.openqa.selenium.Cookie;
 
 /**

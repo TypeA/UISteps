@@ -13,11 +13,11 @@ import ru.yandex.qatools.htmlelements.element.HtmlElement;
 public class UIBlock extends HtmlElement implements com.livejournal.uisteps.core.UIBlock {
 
     protected final Browser browser;
-    
+
     public UIBlock() {
         browser = (Browser) ThucydidesUtils.getFromSession("#BROWSER#");
     }
-    
+
     @Override
     public void click() {
         browser.click(this);
@@ -36,20 +36,20 @@ public class UIBlock extends HtmlElement implements com.livejournal.uisteps.core
     public <T extends Page> T onOpened(Class<T> pageClass) {
         return browser.onOpened(pageClass);
     }
-    
+
     public <T extends UIBlock> T onDisplayed(Class<T> blockClass) {
         return browser.onDisplayed(blockClass);
     }
-    
+
     public WebDriver getDriver() {
         return browser.getDriver();
     }
-    
+
     @Override
     public String toString() {
         return NameConvertor.humanize(getClass());
     }
-    
+
     public Object startScript(String script) {
         return browser.startScript(script);
     }
