@@ -1,6 +1,5 @@
 package com.livejournal.uisteps.thucydides;
 
-import com.livejournal.uisteps.core.Browser;
 import java.util.Map;
 import net.thucydides.core.model.DataTable;
 import net.thucydides.core.model.Story;

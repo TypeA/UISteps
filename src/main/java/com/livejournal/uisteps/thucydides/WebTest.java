@@ -10,6 +10,7 @@ import net.thucydides.core.annotations.Managed;
 import net.thucydides.core.annotations.Steps;
 import net.thucydides.jbehave.ThucydidesJUnitStory;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 
 /**
@@ -20,6 +21,8 @@ public class WebTest extends ThucydidesJUnitStory {
 
     @Managed
     WebDriver driver;
+    @Managed
+    FirefoxProfile profile;
     @Steps
     ThucydidesBrowser browser;
     @Steps
