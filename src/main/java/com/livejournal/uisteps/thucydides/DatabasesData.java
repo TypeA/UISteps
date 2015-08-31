@@ -46,7 +46,7 @@ public class DatabasesData extends Databases {
         }
     }
 
-    public class UserSettings {
+    public class UserSettings extends DatabasesData {
 
         public String getCyrSetting(String user) {
             String select1 = "SELECT caps "
@@ -74,6 +74,69 @@ public class DatabasesData extends Databases {
             }
             return cyrSetting;
 
+        }
+
+        public Boolean isCustomAdaptive(String user) {
+            Boolean isAdaptive = false;
+            String select1 = "SELECT clusterid "
+                    + "FROM user "
+                    + "WHERE user='"
+                    + user
+                    + "';";
+            String select2 = "SELECT userid "
+                    + "FROM user "
+                    + "WHERE user='"
+                    + user
+                    + "';";
+            String clusterId = workWithDB().conect()
+                    .select(select1, "clusterid")
+                    .finish()
+                    .get(0)
+                    .get(0);
+            String userId = workWithDB().conect()
+                    .select(select2, "userid")
+                    .finish()
+                    .get(0)
+                    .get(0);
+            String select3 = "SELECT value "
+                    + "FROM lj_c"
+                    + clusterId
+                    + ".userproplite2 "
+                    + "WHERE upropid = '402' and userid='"
+                    + userId
+                    + "';";
+            String value;
+            try {
+                value = workWithDB().conect()
+                        .select(select3, "value")
+                        .finish()
+                        .get(0)
+                        .get(0);
+            } catch (Exception ex) {
+                value = "0";
+            }
+            if (value.equals("1")) {
+                isAdaptive = true;
+            }
+            return isAdaptive;
+        }
+
+        public Boolean isPaid(String user) {
+            Boolean isPaid = false;
+            String select1 = "SELECT caps & 1<<3 = 8 as paid "
+                    + "FROM user "
+                    + "WHERE user='"
+                    + user
+                    + "';";
+            String paid = workWithDB().conect()
+                    .select(select1, "paid")
+                    .finish()
+                    .get(0)
+                    .get(0);
+            if (paid.equals("1")) {
+                isPaid = true;
+            }
+            return isPaid;
         }
     }
 
