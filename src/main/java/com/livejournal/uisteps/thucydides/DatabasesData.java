@@ -1,5 +1,6 @@
 package com.livejournal.uisteps.thucydides;
 
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -77,65 +78,48 @@ public class DatabasesData extends Databases {
         }
 
         public Boolean isCustomAdaptive(String user) {
-            Boolean isAdaptive = false;
-            String select1 = "SELECT clusterid "
+            Boolean isAdaptive;
+            String select1 = "SELECT * "
                     + "FROM user "
                     + "WHERE user='"
                     + user
                     + "';";
-            String select2 = "SELECT userid "
-                    + "FROM user "
-                    + "WHERE user='"
-                    + user
-                    + "';";
-            String clusterId = workWithDB().conect()
+            List<ArrayList<String>> user_atr = workWithDB().conect()
                     .select(select1, "clusterid")
-                    .finish()
-                    .get(0)
-                    .get(0);
-            String userId = workWithDB().conect()
-                    .select(select2, "userid")
-                    .finish()
-                    .get(0)
-                    .get(0);
-            String select3 = "SELECT value "
+                    .select(select1, "userid")
+                    .finish();
+            String select2 = "SELECT value "
                     + "FROM lj_c"
-                    + clusterId
+                    + user_atr.get(0).get(0)
                     + ".userproplite2 "
                     + "WHERE upropid = '402' and userid='"
-                    + userId
+                    + user_atr.get(1).get(0)
                     + "';";
-            String value;
+            System.out.println("");
             try {
-                value = workWithDB().conect()
-                        .select(select3, "value")
+                isAdaptive = "1".equals(workWithDB().conect()
+                        .select(select2, "value")
                         .finish()
                         .get(0)
-                        .get(0);
+                        .get(0));
             } catch (Exception ex) {
-                value = "0";
+                isAdaptive = false;
             }
-            if (value.equals("1")) {
-                isAdaptive = true;
-            }
+
             return isAdaptive;
         }
 
         public Boolean isPaid(String user) {
-            Boolean isPaid = false;
             String select1 = "SELECT caps & 1<<3 = 8 as paid "
                     + "FROM user "
                     + "WHERE user='"
                     + user
                     + "';";
-            String paid = workWithDB().conect()
+            Boolean isPaid = "1".equals(workWithDB().conect()
                     .select(select1, "paid")
                     .finish()
                     .get(0)
-                    .get(0);
-            if (paid.equals("1")) {
-                isPaid = true;
-            }
+                    .get(0));
             return isPaid;
         }
     }
