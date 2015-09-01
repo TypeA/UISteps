@@ -20,15 +20,19 @@ import com.livejournal.uisteps.thucydides.elements.Link;
 import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import net.thucydides.core.Thucydides;
 import org.junit.Assert;
+import org.openqa.selenium.Cookie;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.internal.WrapsElement;
+import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.openqa.selenium.Cookie;
 
 /**
  *
@@ -38,6 +42,7 @@ public class Browser {
 
     public Cache cache;
     private WebDriver driver;
+    private FirefoxProfile profile;
     private StepLibraryFactory stepLibraryFactory;
     private Initializer initializer;
     public WindowList windowList;
@@ -297,6 +302,20 @@ public class Browser {
     }
 
     public void setDriver(WebDriver driver) {
+       /* String userAgent = "Mozilla/5.0 (Android; Mobile; rv:40.0) Gecko/40.0 Firefox/40.0";
+        profile.setPreference("general.useragent.override", userAgent);
+        System.out.println("!!!!!!!!!!!!!!!!!!!! set profile");
+        
+        
+        String userAgent = "Mozilla/5.0 (Android; Mobile; rv:40.0) Gecko/40.0 Firefox/40.0";
+        
+        FirefoxProfile profile = new FirefoxProfile();
+        profile.setPreference("general.useragent.override", userAgent);
+        DesiredCapabilities cap = DesiredCapabilities.firefox();
+
+        cap.setCapability(FirefoxDriver.PROFILE, profile);
+        driver = new FirefoxDriver(cap);
+        */
         this.driver = driver;
     }
 
