@@ -50,15 +50,16 @@ public class Databases {
             String password = "";//Пароль пользователя
             String url = "jdbc:mysql://127.0.0.1:2222/livejournal";//URL адрес
             ArrayList<String> answer = new ArrayList<>();
-            String[] column = columns.split(",");
+            String[] column = columns.split(", ");
 
             try {
                 c = (Connection) DriverManager.getConnection(url, user, password);//Установка соединения с БД
                 ThucydidesUtils.putToSession("connect", c);
                 Statement st = c.createStatement();//Готовим запрос
                 ResultSet rs = st.executeQuery(select);//Выполняем запрос к БД, результат в переменной rs
-                for (int i=0; i>column.length; i++ ) {
-                    while (rs.next()) {
+
+                while (rs.next()) {
+                    for (int i = 0; i < column.length; i++) {
                         answer.add(rs.getString(column[i]));
                     }
                 }
