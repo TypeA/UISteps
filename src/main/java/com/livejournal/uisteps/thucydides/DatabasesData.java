@@ -91,7 +91,7 @@ public class DatabasesData extends Databases {
                     + user_atr.get(0).get(0)
                     + ".userproplite2 "
                     + "WHERE upropid = '402' and userid='"
-                    + user_atr.get(1).get(0)
+                    + user_atr.get(0).get(1)
                     + "';";
             try {
                 isAdaptive = "1".equals(workWithDB().conect()
@@ -107,18 +107,52 @@ public class DatabasesData extends Databases {
         }
 
         public Boolean isPaid(String user) {
-            String select1 = "SELECT caps & 1<<3 = 8 as paid "
+            String select1 = "SELECT caps & 1<<3 = 8 as paid, caps & 1<<4=16 as perm "
                     + "FROM user "
                     + "WHERE user='"
                     + user
                     + "';";
-            Boolean isPaid = "1".equals(workWithDB().conect()
-                    .select(select1, "paid")
-                    .finish()
-                    .get(0)
-                    .get(0));
+            List<ArrayList<String>> paid = workWithDB().conect()
+                    .select(select1, "paid, perm")
+                    .finish();
+            Boolean isPaid = ("1".equals(paid.get(0).get(0))||"1".equals(paid.get(0).get(1)));
             return isPaid;
         }
+
+        public String getStyle(String user) {
+            String select1 = "SELECT * "
+                    + "FROM user "
+                    + "WHERE user='"
+                    + user
+                    + "';";
+            List<ArrayList<String>> user_atr = workWithDB().conect()
+                    .select(select1, "clusterid, userid")
+                    .finish();
+            String select2 = "SELECT * "
+                    + "FROM lj_c"
+                    + user_atr.get(0).get(0)
+                    + ".userproplite2 "
+                    + "WHERE upropid = '96' and userid = '"
+                    + user_atr.get(0).get(1)
+                    + "';";
+            String styleid = workWithDB().conect()
+                    .select(select2, "value")
+                    .finish()
+                    .get(0)
+                    .get(0);
+            String select3 = "SELECT name "
+                    + "FROM s2styles "
+                    + "WHERE userid= '"
+                    + user_atr.get(0).get(1)
+                    + "' and styleid = '" + styleid + "';";
+            String styleName = workWithDB().conect()
+                    .select(select3, "name")
+                    .finish()
+                    .get(0)
+                    .get(0);
+            return styleName;
+        }
+
     }
 
     public class Friends extends DatabasesData {
