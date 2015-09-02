@@ -1,6 +1,5 @@
 package com.livejournal.uisteps.thucydides;
 
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -85,8 +84,7 @@ public class DatabasesData extends Databases {
                     + user
                     + "';";
             List<ArrayList<String>> user_atr = workWithDB().conect()
-                    .select(select1, "clusterid")
-                    .select(select1, "userid")
+                    .select(select1, "clusterid, userid")
                     .finish();
             String select2 = "SELECT value "
                     + "FROM lj_c"
@@ -95,7 +93,6 @@ public class DatabasesData extends Databases {
                     + "WHERE upropid = '402' and userid='"
                     + user_atr.get(1).get(0)
                     + "';";
-            System.out.println("");
             try {
                 isAdaptive = "1".equals(workWithDB().conect()
                         .select(select2, "value")
