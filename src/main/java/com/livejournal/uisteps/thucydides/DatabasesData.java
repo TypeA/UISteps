@@ -44,6 +44,19 @@ public class DatabasesData extends Databases {
                     .finish().get(0).get(0);
             return password;
         }
+
+        public Boolean isPaid(String user) {
+            String select1 = "SELECT caps & 1<<3 = 8 as paid, caps & 1<<4=16 as perm "
+                    + "FROM user "
+                    + "WHERE user='"
+                    + user
+                    + "';";
+            List<ArrayList<String>> paid = workWithDB().conect()
+                    .select(select1, "paid, perm")
+                    .finish();
+            Boolean isPaid = ("1".equals(paid.get(0).get(0)) || "1".equals(paid.get(0).get(1)));
+            return isPaid;
+        }
     }
 
     public class UserSettings extends DatabasesData {
@@ -104,19 +117,6 @@ public class DatabasesData extends Databases {
             }
 
             return isAdaptive;
-        }
-
-        public Boolean isPaid(String user) {
-            String select1 = "SELECT caps & 1<<3 = 8 as paid, caps & 1<<4=16 as perm "
-                    + "FROM user "
-                    + "WHERE user='"
-                    + user
-                    + "';";
-            List<ArrayList<String>> paid = workWithDB().conect()
-                    .select(select1, "paid, perm")
-                    .finish();
-            Boolean isPaid = ("1".equals(paid.get(0).get(0))||"1".equals(paid.get(0).get(1)));
-            return isPaid;
         }
 
         public String getStyle(String user) {
