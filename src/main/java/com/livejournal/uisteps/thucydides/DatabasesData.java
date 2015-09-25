@@ -54,8 +54,7 @@ public class DatabasesData extends Databases {
             List<ArrayList<String>> paid = workWithDB().conect()
                     .select(select1, "paid, perm")
                     .finish();
-            Boolean isPaid = ("1".equals(paid.get(0).get(0)) || "1".equals(paid.get(0).get(1)));
-            return isPaid;
+            return "1".equals(paid.get(0).get(0)) || "1".equals(paid.get(0).get(1));
         }
     }
 
@@ -72,25 +71,18 @@ public class DatabasesData extends Databases {
                     .finish()
                     .get(0)
                     .get(0);
-            int intcaps = Integer.valueOf(caps) & 1024;
-            String cyrSetting = "";
-            switch (intcaps) {
+            switch (Integer.valueOf(caps) & 1024) {
                 case 0:
-                    cyrSetting = "NONCYR";
-                    break;
+                    return "NONCYR";
                 case 1024:
-                    cyrSetting = "CYR";
-                    break;
+                    return "CYR";
                 default:
                     Assert.assertTrue("Unknown user type", false);
-                    break;
+                    return "Unknown user type";
             }
-            return cyrSetting;
-
         }
 
-        public Boolean isCustomAdaptive(String user) {
-            Boolean isAdaptive;
+        public Boolean getAdaptiveSetting(String user) {
             String select1 = "SELECT * "
                     + "FROM user "
                     + "WHERE user='"
@@ -107,29 +99,14 @@ public class DatabasesData extends Databases {
                     + user_atr.get(0).get(1)
                     + "';";
             try {
-                isAdaptive = "1".equals(workWithDB().conect()
+                return "1".equals(workWithDB().conect()
                         .select(select2, "value")
                         .finish()
                         .get(0)
                         .get(0));
             } catch (Exception ex) {
-                isAdaptive = false;
+                return false;
             }
-
-            return isAdaptive;
-        }
-
-        public Boolean isPaid(String user) {
-            String select1 = "SELECT caps & 1<<3 = 8 as paid, caps & 1<<4=16 as perm "
-                    + "FROM user "
-                    + "WHERE user='"
-                    + user
-                    + "';";
-            List<ArrayList<String>> paid = workWithDB().conect()
-                    .select(select1, "paid, perm")
-                    .finish();
-            Boolean isPaid = ("1".equals(paid.get(0).get(0)) || "1".equals(paid.get(0).get(1)));
-            return isPaid;
         }
 
         public String getStyle(String user) {
@@ -158,16 +135,15 @@ public class DatabasesData extends Databases {
                     + "WHERE userid= '"
                     + user_atr.get(0).get(1)
                     + "' and styleid = '" + styleid + "';";
-            String styleName = workWithDB().conect()
+            return workWithDB().conect()
                     .select(select3, "name")
                     .finish()
                     .get(0)
                     .get(0);
-            return styleName;
         }
 
-        public String getViewInMyOnStyleSetting(String user) {
-            String result="n";
+        public String getInMyOnStyleSetting(String user) {
+
             String select1 = "SELECT * "
                     + "FROM user "
                     + "WHERE user='"
@@ -184,15 +160,14 @@ public class DatabasesData extends Databases {
                     + user_atr.get(0).get(1)
                     + "';";
             try {
-                result = workWithDB().conect()
+                return workWithDB().conect()
                         .select(select2, "value")
                         .finish()
                         .get(0)
                         .get(0);
             } catch (Exception ex) {
-                result="n";
+                return "n";
             }
-            return result;
         }
 
     }
