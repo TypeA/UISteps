@@ -119,6 +119,19 @@ public class DatabasesData extends Databases {
             return isAdaptive;
         }
 
+        public Boolean isPaid(String user) {
+            String select1 = "SELECT caps & 1<<3 = 8 as paid, caps & 1<<4=16 as perm "
+                    + "FROM user "
+                    + "WHERE user='"
+                    + user
+                    + "';";
+            List<ArrayList<String>> paid = workWithDB().conect()
+                    .select(select1, "paid, perm")
+                    .finish();
+            Boolean isPaid = ("1".equals(paid.get(0).get(0)) || "1".equals(paid.get(0).get(1)));
+            return isPaid;
+        }
+
         public String getStyle(String user) {
             String select1 = "SELECT * "
                     + "FROM user "
@@ -151,6 +164,35 @@ public class DatabasesData extends Databases {
                     .get(0)
                     .get(0);
             return styleName;
+        }
+
+        public String getViewInMyOnStyleSetting(String user) {
+            String result="n";
+            String select1 = "SELECT * "
+                    + "FROM user "
+                    + "WHERE user='"
+                    + user
+                    + "';";
+            List<ArrayList<String>> user_atr = workWithDB().conect()
+                    .select(select1, "clusterid, userid")
+                    .finish();
+            String select2 = "SELECT value "
+                    + "FROM lj_c"
+                    + user_atr.get(0).get(0)
+                    + ".userproplite2 "
+                    + "WHERE upropid = '175' and userid='"
+                    + user_atr.get(0).get(1)
+                    + "';";
+            try {
+                result = workWithDB().conect()
+                        .select(select2, "value")
+                        .finish()
+                        .get(0)
+                        .get(0);
+            } catch (Exception ex) {
+                result="n";
+            }
+            return result;
         }
 
     }
