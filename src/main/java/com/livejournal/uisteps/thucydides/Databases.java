@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import net.thucydides.core.guice.Injectors;
+import net.thucydides.core.util.EnvironmentVariables;
 import org.junit.Assert;
 
 /**
@@ -48,7 +50,8 @@ public class Databases {
 
             String user = "root";//Логин пользователя
             String password = "";//Пароль пользователя
-            String url = "jdbc:mysql://127.0.0.1:2222/livejournal";//URL адрес
+           
+            String url=Injectors.getInjector().getInstance(EnvironmentVariables.class).copy().getProperty("database.url");
             ArrayList<String> answer = new ArrayList<>();
             String[] column = columns.split(", ");
 

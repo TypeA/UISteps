@@ -4,6 +4,7 @@ import com.livejournal.uisteps.core.Page;
 import com.livejournal.uisteps.core.UIBlock;
 import com.livejournal.uisteps.core.Url;
 import com.livejournal.uisteps.thucydides.Databases.BaseConnect;
+import com.livejournal.uisteps.thucydides.RedisData.WorkWithRedis;
 import com.livejournal.uisteps.thucydides.Verifications.That;
 import com.livejournal.uisteps.utils.ClassEnumerator;
 import net.thucydides.core.annotations.Managed;
@@ -31,7 +32,9 @@ public class WebTest extends ThucydidesJUnitStory {
     Databases databases;
     @Steps
     DatabasesData databasesData;
-
+    @Steps
+    RedisData redisData;
+    
     private ClassEnumerator classEnumerator = new ClassEnumerator("com.livejournal.uitests.pages");
 
     private void openBrowser() {
@@ -126,6 +129,9 @@ public class WebTest extends ThucydidesJUnitStory {
 
     public DatabasesData getDBDate() {
         return databasesData;
+    }
+    public  WorkWithRedis workWithRedis() {       
+        return redisData.workWithRedis();
     }
 
     public BaseConnect workWithDB() {
