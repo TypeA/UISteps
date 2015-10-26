@@ -15,6 +15,10 @@ public class DatabasesData extends Databases {
         return new UserData();
     }
 
+    public Discovery discovery() {
+        return new Discovery();
+    }
+
     public UserSettings userSettings() {
         return new UserSettings();
     }
@@ -23,12 +27,20 @@ public class DatabasesData extends Databases {
         return new Friends();
     }
 
+    public PostsUser postsUser() {
+        return new PostsUser();
+    }
+
     public Community community() {
         return new Community();
     }
 
     public BannedUser bannedUser() {
         return new BannedUser();
+    }
+
+    public PrivilegeUser privUser() {
+        return new PrivilegeUser();
     }
 
     public class UserData extends DatabasesData {
@@ -370,6 +382,74 @@ public class DatabasesData extends Databases {
                     .finish()
                     .get(0);
             return ans.get(new Random().nextInt(ans.size()));
+        }
+    }
+
+    public class PrivilegeUser extends DatabasesData {
+
+        public String findUserWithPrivDiscovery() {
+            String select = "select user.user, priv_list.privcode, priv_map.arg  from user "
+                    + "left join priv_map on priv_map.userid=user.userid "
+                    + "left join priv_list on priv_list.prlid=priv_map.prlid "
+                    + "where priv_list.privcode='siteadmin' "
+                    + "and (priv_map.arg='discovery' or priv_map.arg='*') "
+                    + "and user.user like '%test%';";
+            ArrayList<String> ans = workWithDB().conect()
+                    .select(select, "user")
+                    .finish()
+                    .get(0);
+            return ans.get(new Random().nextInt(ans.size()));
+        }
+    }
+
+    public class Discovery extends DatabasesData {
+
+        public String selectIdCategories(String usualCategories) {
+            int specialCategories = (Boolean.valueOf(usualCategories)) ? 0 : 1;
+            String select = "select id from discovery_categories where special=" + specialCategories;
+            ArrayList<String> ans = workWithDB().conect()
+                    .select(select, "id")
+                    .finish()
+                    .get(0);
+            return ans.get(new Random().nextInt(ans.size()));
+        }
+
+        public String selectKeywordCategories(String idCategory) {
+            String select = "select keyword from discovery_categories where id = " + idCategory;
+            String ans = workWithDB().conect()
+                    .select(select, "keyword")
+                    .finish().get(0).get(0);
+            return ans;
+        }
+
+        public String selectNameCategory(String idCategory) {
+            String select = "select name from discovery_categories where id = " + idCategory;
+            String ans = workWithDB().conect()
+                    .select(select, "name")
+                    .finish().get(0).get(0);
+            return ans;
+        }
+
+        public String selectJItemIdMagazine() {
+            String select = "select max(magazine_jitemid) from magazine";
+            String ans = workWithDB().conect()
+                    .select(select, "magazine_jitemid*256")
+                    .finish().get(0).get(0);
+            return ans;
+        }
+    }
+
+    public class PostsUser extends DatabasesData {
+
+        public String getJitemidPost(String security, String user) {
+            String select = "select jitemid*256+anum from lj_c2.log2 "
+                    + "where journalid in(select userid from user where user='" + user + "') "
+                    + "and security '" + security + "' order "
+                    + "by rand() limit 1";
+            String ans = workWithDB().conect()
+                    .select(select, "jitemid*256+anum")
+                    .finish().get(0).get(0);
+            return ans;
         }
     }
 }
