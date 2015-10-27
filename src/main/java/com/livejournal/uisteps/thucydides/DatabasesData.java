@@ -15,10 +15,6 @@ public class DatabasesData extends Databases {
         return new UserData();
     }
 
-    public Discovery discovery() {
-        return new Discovery();
-    }
-
     public UserSettings userSettings() {
         return new UserSettings();
     }
@@ -27,20 +23,24 @@ public class DatabasesData extends Databases {
         return new Friends();
     }
 
-    public PostsUser postsUser() {
-        return new PostsUser();
+    public BannedUser bannedUser() {
+        return new BannedUser();
     }
 
     public Community community() {
         return new Community();
     }
 
-    public BannedUser bannedUser() {
-        return new BannedUser();
+    public Discovery discovery() {
+        return new Discovery();
     }
 
-    public PrivilegeUser privUser() {
-        return new PrivilegeUser();
+    public Posts posts() {
+        return new Posts();
+    }
+
+    public Privileges privileges() {
+        return new Privileges();
     }
 
     public class UserData extends DatabasesData {
@@ -51,10 +51,9 @@ public class DatabasesData extends Databases {
                     + "LEFT JOIN password "
                     + "ON user.userid=password.userid "
                     + "WHERE user.user = '" + user + "' ";
-            String password = workWithDB().conect()
+            return workWithDB().conect()
                     .select(select, "password")
                     .finish().get(0).get(0);
-            return password;
         }
 
         public Boolean isPaid(String user) {
@@ -414,11 +413,10 @@ public class DatabasesData extends Databases {
                     + "(select userid from friends where friendid = "
                     + "(select userid as comm from user where user='" + community + "')and userid "
                     + "not in (select targetid from reluser where userid =friendid))";
-            ArrayList<String> user = workWithDB().conect()
+            return workWithDB().conect()
                     .select(select, "user")
                     .finish()
                     .get(0);
-            return user;
         }
 
         public String findMemberInCommunityNotInGroup(String community) {
@@ -464,6 +462,7 @@ public class DatabasesData extends Databases {
         }
 
         public String findUserInBannedList(String user) {
+            
             String select1 = "Select userid from user where user='" + user + "'";
             String userid = workWithDB().conect()
                     .select(select1, "userid")
@@ -480,9 +479,9 @@ public class DatabasesData extends Databases {
         }
     }
 
-    public class PrivilegeUser extends DatabasesData {
+    public class Privileges extends DatabasesData {
 
-        public String findUserWithPrivDiscovery() {
+        public String getUserWithPrivDiscovery() {
             String select = "select user.user, priv_list.privcode, priv_map.arg  from user "
                     + "left join priv_map on priv_map.userid=user.userid "
                     + "left join priv_list on priv_list.prlid=priv_map.prlid "
@@ -499,7 +498,7 @@ public class DatabasesData extends Databases {
 
     public class Discovery extends DatabasesData {
 
-        public String selectIdCategories(String usualCategories) {
+        public String getIdCategories(String usualCategories) {
             int specialCategories = (Boolean.valueOf(usualCategories)) ? 0 : 1;
             String select = "select id from discovery_categories where special=" + specialCategories;
             ArrayList<String> ans = workWithDB().conect()
@@ -509,42 +508,38 @@ public class DatabasesData extends Databases {
             return ans.get(new Random().nextInt(ans.size()));
         }
 
-        public String selectKeywordCategories(String idCategory) {
+        public String getKeywordCategories(String idCategory) {
             String select = "select keyword from discovery_categories where id = " + idCategory;
-            String ans = workWithDB().conect()
+            return workWithDB().conect()
                     .select(select, "keyword")
                     .finish().get(0).get(0);
-            return ans;
         }
 
-        public String selectNameCategory(String idCategory) {
+        public String getNameCategory(String idCategory) {
             String select = "select name from discovery_categories where id = " + idCategory;
-            String ans = workWithDB().conect()
+            return workWithDB().conect()
                     .select(select, "name")
                     .finish().get(0).get(0);
-            return ans;
         }
 
-        public String selectJItemIdMagazine() {
+        public String getJItemIdMagazine() {
             String select = "select max(magazine_jitemid) from magazine";
-            String ans = workWithDB().conect()
+            return workWithDB().conect()
                     .select(select, "magazine_jitemid*256")
                     .finish().get(0).get(0);
-            return ans;
         }
     }
 
-    public class PostsUser extends DatabasesData {
+    public class Posts extends DatabasesData {
 
-        public String getJitemidPost(String security, String user) {
+        public String getUserPostId(String security, String user) {
             String select = "select jitemid*256+anum from lj_c2.log2 "
                     + "where journalid in(select userid from user where user='" + user + "') "
                     + "and security '" + security + "' order "
                     + "by rand() limit 1";
-            String ans = workWithDB().conect()
+            return workWithDB().conect()
                     .select(select, "jitemid*256+anum")
                     .finish().get(0).get(0);
-            return ans;
         }
     }
 }
