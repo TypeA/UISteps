@@ -1,26 +1,9 @@
-
-/*
- * Copyright 2014 ASolyankin.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package com.livejournal.uisteps.thucydides.elements;
 
 import com.livejournal.uisteps.core.Browser;
 import com.livejournal.uisteps.core.Url;
 import com.livejournal.uisteps.thucydides.Databases;
 import com.livejournal.uisteps.thucydides.Databases.BaseConnect;
-import com.livejournal.uisteps.thucydides.DatabasesData;
 import com.livejournal.uisteps.thucydides.NameConvertor;
 import com.livejournal.uisteps.thucydides.RedisData;
 import com.livejournal.uisteps.thucydides.ThucydidesUtils;
@@ -36,7 +19,6 @@ public class Page implements com.livejournal.uisteps.core.Page {
 
     private final Browser browser;
     private final Databases databases;
-    private final DatabasesData databasesData;
     private final RedisData redisData;
     private final UrlFactory urlFactory;
     private Url url;
@@ -44,7 +26,6 @@ public class Page implements com.livejournal.uisteps.core.Page {
 
     public Page() {
         databases = new Databases();
-        databasesData = new DatabasesData();
         urlFactory = new UrlFactory();
         url = urlFactory.getDefaultUrlOfPage(this.getClass());
         redisData = new RedisData();
@@ -89,10 +70,7 @@ public class Page implements com.livejournal.uisteps.core.Page {
         return databases.workWithDB();
     }
 
-    public DatabasesData getDBDate() {
-        return databasesData;
-    }
-     public  RedisData workWithRedis() {
+    public RedisData workWithRedis() {
         return redisData;
     }
 
