@@ -30,7 +30,7 @@ public class WebTest extends ThucydidesJUnitStory {
     @Steps
     Databases databases;
     @Steps
-    RedisData redisData;
+    RedisDatabase redisDatabase;
 
     private ClassEnumerator classEnumerator = new ClassEnumerator("com.livejournal.uitests.pages");
 
@@ -124,8 +124,8 @@ public class WebTest extends ThucydidesJUnitStory {
         return verifications.verify();
     }
 
-    public RedisData getRedisData() {
-        return redisData;
+    public RedisDatabase workWithRedis() {
+        return redisDatabase;
     }
 
     public BaseConnect workWithDB() {

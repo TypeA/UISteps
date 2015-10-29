@@ -10,11 +10,11 @@ import redis.clients.jedis.Jedis;
  */
 public class RedisDatabase {
 
-    public GetData redisConnect() {
+    public GetData redis() {
         return new GetData();
     }
 
-    public Jedis connectToRedis() {
+    private Jedis connectToRedis() {
         return new Jedis("localhost", Injectors.getInjector().getInstance(EnvironmentVariables.class).copy().getPropertyAsInteger("redis.port", 1222));
     }
 

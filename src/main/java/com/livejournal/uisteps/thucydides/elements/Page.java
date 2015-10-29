@@ -5,7 +5,7 @@ import com.livejournal.uisteps.core.Url;
 import com.livejournal.uisteps.thucydides.Databases;
 import com.livejournal.uisteps.thucydides.Databases.BaseConnect;
 import com.livejournal.uisteps.thucydides.NameConvertor;
-import com.livejournal.uisteps.thucydides.RedisData;
+import com.livejournal.uisteps.thucydides.RedisDatabase;
 import com.livejournal.uisteps.thucydides.ThucydidesUtils;
 import com.livejournal.uisteps.thucydides.UrlFactory;
 import net.thucydides.core.guice.Injectors;
@@ -19,7 +19,7 @@ public class Page implements com.livejournal.uisteps.core.Page {
 
     private final Browser browser;
     private final Databases databases;
-    private final RedisData redisData;
+    private final RedisDatabase redisDatabase;
     private final UrlFactory urlFactory;
     private Url url;
     private net.thucydides.core.webdriver.Configuration systemConfiguration;
@@ -28,7 +28,7 @@ public class Page implements com.livejournal.uisteps.core.Page {
         databases = new Databases();
         urlFactory = new UrlFactory();
         url = urlFactory.getDefaultUrlOfPage(this.getClass());
-        redisData = new RedisData();
+        redisDatabase = new RedisDatabase();
         browser = (Browser) ThucydidesUtils.getFromSession("#BROWSER#");
     }
 
@@ -70,8 +70,8 @@ public class Page implements com.livejournal.uisteps.core.Page {
         return databases.workWithDB();
     }
 
-    public RedisData workWithRedis() {
-        return redisData;
+    public RedisDatabase workWithRedis() {
+        return redisDatabase;
     }
 
     public void addCookie(String cookie, String value) {
