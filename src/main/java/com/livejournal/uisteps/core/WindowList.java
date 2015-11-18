@@ -1,6 +1,5 @@
 package com.livejournal.uisteps.core;
 
-
 import com.livejournal.uisteps.thucydides.ThucydidesUtils;
 import java.util.Set;
 import junit.framework.Assert;
@@ -36,7 +35,7 @@ public class WindowList {
     public void reloadCurrentIndexCounter() {
         currentHandleIndex = 0;
     }
-    
+
     public void switchToWindowByIndex(int index) {
         WebDriver driver = browser.getDriver();
         WebDriverWait wait = new WebDriverWait(driver, ThucydidesUtils.getImplementTimeoutInSec());
@@ -57,8 +56,8 @@ public class WindowList {
         driver.switchTo().window((String) handles[index]);
         currentHandleIndex = index;
     }
-    
-    public int getCountOfWindows(){
+
+    public int getCountOfWindows() {
         return this.browser.getDriver().getWindowHandles().size();
-    } 
+    }
 }
