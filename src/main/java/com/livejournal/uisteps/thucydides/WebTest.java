@@ -28,6 +28,8 @@ public class WebTest extends ThucydidesJUnitStory {
     @Steps
     Verifications verifications;
     @Steps
+    AddTables addTable;
+    @Steps
     Databases databases;
     @Steps
     RedisDatabase redisDatabase;
@@ -122,6 +124,10 @@ public class WebTest extends ThucydidesJUnitStory {
 
     public That verify() {
         return verifications.verify();
+    }
+
+    public AddTables.PageOpen addTable() {
+        return addTable.addTable();
     }
 
     public RedisDatabase workWithRedis() {

@@ -135,7 +135,7 @@ public class Verifications {
                     + "     resultsTable.find('.actual-result').css('display','none');"
                     + "     }"
                     + "</script>";
-
+            
             verifications(new ResultCondition(resultCondition, resultMessage));
         }
     }
