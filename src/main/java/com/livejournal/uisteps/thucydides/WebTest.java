@@ -3,6 +3,7 @@ package com.livejournal.uisteps.thucydides;
 import com.livejournal.uisteps.core.Page;
 import com.livejournal.uisteps.core.UIBlock;
 import com.livejournal.uisteps.core.Url;
+import com.livejournal.uisteps.thucydides.AddTables.PageOpen;
 import com.livejournal.uisteps.thucydides.Databases.BaseConnect;
 import com.livejournal.uisteps.thucydides.Verifications.That;
 import com.livejournal.uisteps.utils.ClassEnumerator;
@@ -126,7 +127,7 @@ public class WebTest extends ThucydidesJUnitStory {
         return verifications.verify();
     }
 
-    public AddTables.PageOpen addTable() {
+    public PageOpen addTable() {
         return addTable.addTable();
     }
 

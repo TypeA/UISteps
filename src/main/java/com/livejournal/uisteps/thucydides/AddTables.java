@@ -13,10 +13,10 @@ public class AddTables {
     public class Condition {
 
         public final String page;
-        public final String important;
-        public final String other;
+        public final ArrayList<String> important;
+        public final ArrayList<String> other;
 
-        public Condition(String page, String important, String other) {
+        public Condition(String page, ArrayList<String> important, ArrayList<String> other) {
             this.page = page;
             this.important = important;
             this.other = other;
@@ -52,7 +52,7 @@ public class AddTables {
 
         }
 
-        public OtherErrors importantErrors(String important) {
+        public OtherErrors importantErrors(ArrayList<String> important) {
             return new OtherErrors(conditions, page, important);
         }
     }
@@ -61,15 +61,15 @@ public class AddTables {
 
         private final List<Condition> conditions;
         private final String page;
-        private final String important;
+        private final ArrayList<String> important;
 
-        public OtherErrors(List<Condition> conditions, String page, String important) {
+        public OtherErrors(List<Condition> conditions, String page, ArrayList<String> important) {
             this.conditions = conditions;
             this.page = page;
             this.important = important;
         }
 
-        public Result otherErrors(String other) {
+        public Result otherErrors(ArrayList<String> other) {
             conditions.add(new Condition(page, important, other));
             return new Result(conditions);
         }
@@ -91,31 +91,40 @@ public class AddTables {
 
             String resultMessage = "";
             for (Condition condition : conditions) {
-                
-                resultMessage = "<table border='1' cellpadding='2'>"
-                        + "<caption>Page " + condition.page + "</caption>"
+                int size = condition.important.size();
+                resultMessage += "<table border='1' cellpadding='2'>"
                         + "<tr>"
-                        + "<th>SEVERE</th>"
-                        + "<th>WARNING</th></tr>";
+                        + "<th>SEVERE</th>";
 
-                resultMessage += "<tr><td>" + condition.important + "</td>";
-                resultMessage += "<td>" + condition.other + "</td></tr>";
+                if (condition.other != null) {
+                    resultMessage += "<th width='350'>WARNING</th></tr>";
+                    if (size < condition.other.size()) {
+                        size = condition.other.size();
+                    }
+                }
 
+                resultMessage += "<caption>Page " + condition.page + "</caption>";
+
+                for (int i = 0; i < size; i++) {
+                   
+                    if (i < condition.important.size()) {
+                        resultMessage += "<tr><td>" + condition.important.get(i) + "</td>";
+                    } else {
+                        resultMessage += "<tr><td></td>";
+                    }
+                    
+                    if (condition.other != null) {
+                        if (i < condition.other.size()) {
+                            resultMessage += "<td width='350'>" + condition.other.get(i) + "</td></tr>";
+                        } else {
+                            resultMessage += "<td width='350'></td></tr>";
+                        }
+                    } else {
+                        resultMessage += "</tr>";
+                    }
+                }
+                resultMessage += "</table>";
             }
-            resultMessage += "</table>";
-            /*  + "<script>"
-             + " var flag = true;"
-             + " var resultsTable = $('table').last();"
-             + " resultsTable.find('td.actual-result').each(function() {"
-             + "     if( $(this).text() !== '') {"
-             + "         flag = false;"
-             + "     }"
-             + "     return flag;"
-             + " });"
-             + "     if(flag) {"
-             + "     resultsTable.find('.actual-result').css('display','none');"
-             + "     }"
-             + "</script>";*/
 
             verifications(resultMessage);
         }
