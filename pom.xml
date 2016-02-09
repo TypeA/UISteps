@@ -36,9 +36,9 @@
     </parent>
     
     <scm>
-        <url>https://github.com/Solyankin/UISteps/</url>
-        <connection>scm:git:git@github.com:Solyankin/UISteps.git</connection>
-        <developerConnection>scm:git:git@github.com:Solyankin/UISteps.git</developerConnection>
+        <url>https://github.com/maxapryg/UISteps/</url>
+        <connection>scm:git:git@github.com:maxapryg/UISteps.git</connection>
+        <developerConnection>scm:git:git@github.com:maxapryg/UISteps.git</developerConnection>
         <tag>HEAD</tag>
     </scm>
 
