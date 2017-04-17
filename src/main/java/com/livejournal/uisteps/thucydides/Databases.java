@@ -48,10 +48,13 @@ public class Databases {
 
         public BaseSelect select(String select, String columns) {
 
-            String user = "root";//Логин пользователя
-            String password = "";//Пароль пользователя
+            //String user = "root";//Логин пользователя
+            //String password = "";//Пароль пользователя
            
-            String url=Injectors.getInjector().getInstance(EnvironmentVariables.class).copy().getProperty("database.url");
+            String url=Injectors.getInjector().getInstance(EnvironmentVariables.class).copy().getProperty("database.url"); //URL базы
+            String user=Injectors.getInjector().getInstance(EnvironmentVariables.class).copy().getProperty("database.user"); //Логин пользователя
+            String password=Injectors.getInjector().getInstance(EnvironmentVariables.class).copy().getProperty("database.password"); //Пароль пользователя
+            
             ArrayList<String> answer = new ArrayList<>();
             String[] column = columns.split(", ");
 
